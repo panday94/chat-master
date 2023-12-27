@@ -1,0 +1,96 @@
+# Tomcat
+server:
+  # 应用服务 WEB 访问端口
+  port: 8088
+  servlet:
+    context-path: /chat-master
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # 连接数满后的排队数，默认为100
+    accept-count: 1000
+    threads:
+      # tomcat最大线程数，默认为200
+      max: 800
+      # Tomcat启动初始化的线程数，默认值10
+      min-spare: 100
+  # 请求头内容大小
+  max-http-header-size: 102400
+# Actuator Web 访问端口
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    shutdown:
+      enabled: true #允许admin工程远程停止本应用
+    health:
+      show-details: always
+# mybatis-plus
+spring:
+  # 环境 dev|test|prod
+  profiles:
+    active: test
+  # 应用名称
+  application:
+    name: chat-master
+  # bean定义允许覆盖
+  main:
+    allow-bean-definition-overriding: true
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  # 文件上传限制
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  # 指定静态资源的路径
+  resources:
+    static-locations: classpath:/static/,classpath:/templates/
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.master.chat.gpt.entity;com.master.chat.sys.entity
+  # 支持统配符 * 或者 ; 分割
+  typeEnumsPackage: com.master.chat.gpt.enums;com.master.chat.sys.enums
+  global-config:
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+      id-type: 0
+      #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+      field-strategy: 2
+      #驼峰下划线转换
+      db-column-underline: true
+      #刷新mapper 调试神器
+      refresh-mapper: true
+      #数据库大写下划线转换
+      #capital-mode: true
+      #序列接口实现类配置
+      #key-generator: cn.jeefast.xxx
+      #逻辑删除配置
+      logic-delete-field: flag  # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      #自定义填充策略接口实现
+      #meta-object-handler: cn.jeefast.xxx
+      #自定义SQL注入器
+      #sql-injector: cn.jeefast.xxx
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+# 防止XSS攻击
+xss:
+  # 过滤开关
+  enabled: true
+  # 排除链接（多个用逗号分隔）
+  excludes: /notice
+  # 匹配链接
+  urlPatterns: /monitor/*,/tool/*

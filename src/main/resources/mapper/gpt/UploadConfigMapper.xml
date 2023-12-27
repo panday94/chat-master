@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.gpt.mapper.UploadConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.gpt.pojo.entity.UploadConfig" >
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="title" property="title"/>
+        <result column="upload_replace" property="uploadReplace"/>
+        <result column="thumb_status" property="thumbStatus"/>
+        <result column="thumb_width" property="thumbWidth"/>
+        <result column="thumb_height" property="thumbHeight"/>
+        <result column="thumb_type" property="thumbType"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.title, t.upload_replace, t.thumb_status, t.thumb_width, t.thumb_height, t.thumb_type
+    </sql>
+
+    <!-- 通用查询条件 -->
+    <sql id="BaseSelect">
+        select <include refid="Base_Column_List"></include>
+        from gpt_upload_config t
+        <where>
+            <if test="q.id != null and q.id != ''"> and t.id = #{q.id} </if>
+            <if test="q.title != null and q.title != ''"> and t.title = #{q.title}</if>
+            <if test="q.uploadReplace != null"> and t.upload_replace = #{q.uploadReplace}</if>
+            <if test="q.thumbStatus != null"> and t.thumb_status = #{q.thumbStatus}</if>
+            <if test="q.thumbWidth != null and q.thumbWidth != ''"> and t.thumb_width = #{q.thumbWidth}</if>
+            <if test="q.thumbHeight != null and q.thumbHeight != ''"> and t.thumb_height = #{q.thumbHeight}</if>
+            <if test="q.thumbType != null"> and t.thumb_type = #{q.thumbType}</if>
+            <if test="q.startDate != null and q.startDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &gt;= #{q.startDate} </if>
+            <if test="q.endDate != null and q.endDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &lt;= #{q.endDate} </if>
+            <if test="q.dataScope != null and q.dataScope != ''"> ${q.dataScope} </if>
+        </where>
+        order by t.id desc
+    </sql>
+
+    <select id="pageUploadConfig" resultType="com.master.chat.gpt.pojo.vo.UploadConfigVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="listUploadConfig" resultType="com.master.chat.gpt.pojo.vo.UploadConfigVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="getUploadConfig" resultType="com.master.chat.gpt.pojo.vo.UploadConfigVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+</mapper>

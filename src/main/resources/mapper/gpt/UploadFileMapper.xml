@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.gpt.mapper.UploadFileMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.gpt.pojo.entity.UploadFile" >
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="filepath" property="filepath"/>
+        <result column="hash" property="hash"/>
+        <result column="disk" property="disk"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.filepath, t.hash, t.disk, t.type
+    </sql>
+
+    <!-- 通用查询条件 -->
+    <sql id="BaseSelect">
+        select <include refid="Base_Column_List"></include>
+        from gpt_file t
+        <where>
+            <if test="q.id != null and q.id != ''"> and t.id = #{q.id} </if>
+            <if test="q.filepath != null and q.filepath != ''"> and t.filepath = #{q.filepath}</if>
+            <if test="q.hash != null and q.hash != ''"> and t.hash = #{q.hash}</if>
+            <if test="q.disk != null and q.disk != ''"> and t.disk = #{q.disk}</if>
+            <if test="q.type != null"> and t.type = #{q.type}</if>
+            <if test="q.startDate != null and q.startDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &gt;= #{q.startDate} </if>
+            <if test="q.endDate != null and q.endDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &lt;= #{q.endDate} </if>
+            <if test="q.dataScope != null and q.dataScope != ''"> ${q.dataScope} </if>
+        </where>
+        order by t.id desc
+    </sql>
+
+    <select id="pageFile" resultType="com.master.chat.gpt.pojo.vo.UploadFileVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="listFile" resultType="com.master.chat.gpt.pojo.vo.UploadFileVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="getFile" resultType="com.master.chat.gpt.pojo.vo.UploadFileVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+</mapper>

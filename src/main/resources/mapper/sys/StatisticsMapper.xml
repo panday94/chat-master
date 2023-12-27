@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.master.chat.sys.mapper.StatisticsMapper">
+
+    <select id="getTotalData" resultType="java.util.Map">
+        SELECT
+                (SELECT count(1) FROM sys_user t where t.deleted = 0) AS allUserCount,
+                (SELECT count(1) FROM sys_dept t where t.deleted = 0) AS allDeptCount,
+                (SELECT count(1) FROM sys_role t WHERE t.deleted = 0) AS allRoleCount,
+                (SELECT count(1) FROM sys_log t WHERE t.deleted = 0) AS allAccessCount,
+                (SELECT count(1) FROM sys_job t WHERE t.deleted = 0) AS allJobCount
+    </select>
+
+    <select id="getLineData" resultType="java.util.Map">
+        SELECT t.date_string as dateString, IFNULL(t1.count,0) as `loginCount`, IFNULL(t2.count,0) as `operCount`
+        FROM sys_date t
+        LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date,count(1) as `count`
+        FROM sys_login_log t WHERE t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t1
+        ON t.date_string = t1.date
+        LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date,count(1) as `count`
+        FROM sys_log t WHERE t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t2
+        ON t.date_string = t2.date
+        WHERE t.date_time >= #{q.startDate} AND t.date_time &lt;= #{q.endDate} ORDER BY t.date_time
+    </select>
+
+    <select id="getRaddarData" resultType="java.util.Map">
+        SELECT t.date_string as `date`, IFNULL(t1.insertCount,0) as insertCount, IFNULL(t1.updateCount,0) AS updateCount, IFNULL(t1.deleteCount,0) AS deleteCount
+        FROM sys_date t
+        LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date,SUM(if(t.business_type = 'INSERT',1,0)) AS insertCount,
+                    SUM(if(t.business_type = 'UPDATE',1,0)) AS updateCount, SUM(if(t.business_type = 'DELETE',1,0)) AS deleteCount
+        FROM sys_log t WHERE t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t1
+        ON t.date_string = t1.date
+        WHERE t.date_time >= #{q.startDate} AND t.date_time &lt;= #{q.endDate} ORDER BY t.date_time
+    </select>
+
+    <select id="getPieData" resultType="java.util.Map">
+        SELECT SUM(q.a) as a, SUM(q.b) as b, SUM(q.c) as c, SUM(q.d) as d, SUM(q.e) as e
+        FROM (SELECT
+        (CASE WHEN t.title = '系统配置' THEN 1 ELSE 0 END) as a,
+        (CASE WHEN t.title = '系统账号' THEN 1 ELSE 0 END) as b,
+        (CASE WHEN t.title = '资源模块' THEN 1 ELSE 0 END) as c,
+        (CASE WHEN t.title = '角色模块' THEN 1 ELSE 0 END) as d,
+        (CASE WHEN t.title = '代码生成' THEN 1 ELSE 0 END) as e
+        FROM sys_log t) as q
+    </select>
+
+    <select id="getBarData" resultType="java.util.Map">
+        SELECT t.date_string as `date`, IFNULL(t1.count,0) AS 'value'
+        FROM sys_date t
+        LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date,count(1) as `count`
+        FROM sys_log t WHERE t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t1
+        ON t.date_string = t1.date
+        WHERE t.date_time >= #{q.startDate} AND t.date_time &lt;= #{q.endDate} ORDER BY t.date_time
+    </select>
+
+</mapper>

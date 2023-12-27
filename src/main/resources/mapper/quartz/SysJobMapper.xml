@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.quartz.mapper.SysJobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.quartz.pojo.entity.SysJob">
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="name" property="name"/>
+        <result column="job_group" property="jobGroup"/>
+        <result column="invoke_target" property="invokeTarget"/>
+        <result column="cron_expression" property="cronExpression"/>
+        <result column="misfire_policy" property="misfirePolicy"/>
+        <result column="concurrent" property="concurrent"/>
+        <result column="status" property="status"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_user,
+        create_time,
+        update_user, update_time, `name`, `job_group`, invoke_target, cron_expression, misfire_policy, `concurrent`, `status`, deleted
+    </sql>
+
+    <sql id="searchByJob">
+        <where>
+            deleted = 0
+            <if test="q.name != null and q.name != ''">
+                AND `name` like concat('%', #{q.name}, '%')
+            </if>
+            <if test="q.jobGroup != null and q.jobGroup != ''">
+                AND `job_group` = #{q.jobGroup}
+            </if>
+            <if test="q.status != null and q.status != ''">
+                AND `status` = #{q.status}
+            </if>
+            <if test="q.invokeTarget != null and q.invokeTarget != ''">
+                AND invoke_target like concat('%', #{q.invokeTarget}, '%')
+            </if>
+        </where>
+        order by id desc
+    </sql>
+
+    <select id="pageJob" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from sys_job
+        <include refid="searchByJob"></include>
+    </select>
+
+    <select id="listJob" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from sys_job
+        <include refid="searchByJob"></include>
+    </select>
+
+</mapper> 

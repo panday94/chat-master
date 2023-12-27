@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.gpt.mapper.ModelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.gpt.pojo.entity.Model" >
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="model" property="model"/>
+        <result column="version" property="version"/>
+        <result column="status" property="status"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.name, t.icon, t.model, t.version, t.status, t.deleted
+    </sql>
+
+    <!-- 通用查询条件 -->
+    <sql id="BaseSelect">
+        select <include refid="Base_Column_List"></include>
+        from gpt_model t
+        <where>
+            t.deleted = 0
+            <if test="q.id != null and q.id != ''"> and t.id = #{q.id} </if>
+            <if test="q.name != null and q.name != ''"> and t.name like concat('%', #{q.name}, '%')</if>
+            <if test="q.icon != null and q.icon != ''"> and t.icon = #{q.icon}</if>
+            <if test="q.model != null and q.model != ''"> and t.model = #{q.model}</if>
+            <if test="q.status != null"> and t.status = #{q.status}</if>
+            <if test="q.startDate != null and q.startDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &gt;= #{q.startDate} </if>
+            <if test="q.endDate != null and q.endDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &lt;= #{q.endDate} </if>
+            <if test="q.dataScope != null and q.dataScope != ''"> ${q.dataScope} </if>
+        </where>
+        order by t.id desc
+    </sql>
+
+    <select id="pageModel" resultType="com.master.chat.gpt.pojo.vo.ModelVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="listModel" resultType="com.master.chat.gpt.pojo.vo.ModelVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="getModel" resultType="com.master.chat.gpt.pojo.vo.ModelVO">
+        <include refid="BaseSelect"></include>
+        limit 1
+    </select>
+
+</mapper>

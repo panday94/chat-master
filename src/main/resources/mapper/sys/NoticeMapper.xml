@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.sys.mapper.NoticeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.sys.pojo.entity.Notice">
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="agreement" property="agreement"/>
+        <result column="status" property="status"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        t.id,
+        t.create_user,
+        t.create_time,
+        t.update_user,
+        t.update_time,
+        t.type, t.title, t.agreement, t.status, t.deleted
+    </sql>
+
+
+    <select id="pageNotice" resultType="com.master.chat.sys.pojo.vo.NoticeVO">
+        select <include refid="Base_Column_List"></include>
+        from sys_notice t
+        left join sys_notice_read t1 on t.id = t1.notice_id and t1.sys_user_id = #{q.sysUserId}
+        <where>
+            <if test="q.type != null">
+                <choose>
+                    <when test="q.type == 1">
+                        t1.id is not null
+                    </when>
+                    <otherwise>
+                        t1.id is null
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="getUnreadCount" resultType="java.lang.Integer">
+        select count(1) from sys_notice t
+                                 left join sys_notice_read t1 on t.id = t1.notice_id and t1.sys_user_id = #{sysUserId}
+        where t1.id is null
+    </select>
+
+</mapper>
