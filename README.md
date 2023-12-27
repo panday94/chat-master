@@ -44,7 +44,7 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json
 9. 系统监控：针对系统运行状态进行查看及定时任务配置管理
 
 ## 环境搭建/运行&提示
-> ChatGPT需要科学上网，如本地代理可修改InitBean中proxy为自己的代理地址，如有代理域名在后台的站点配置中配置代理方案改为反向代理输然后填写返代服务器域名即可。
+> ChatGPT需要在后台配置管理中进行站点配置或添加微信交流
 
 ``` 
 1、下载[master-common](https://gitee.com/panday94/master-common)打包到本地maven仓库
