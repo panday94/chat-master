@@ -36,13 +36,14 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json
 
 > 版本记录请查看这里[版本记录](./CHANGELOG.md)
 
-| 模型       | 是否支持System     | 天气查询       |  绘画       |
-|-----------|----------------|------------|
-| ChatGPT   | 支持             | 不支持        | 支持 ｜
-| 文心一言    | 不支持(传递会报错)  | 可以回复(不准)   | 使用Stable-Diffusion-XL｜
-| 通义千问    | 支持             | 支持(效果没讯飞好) | ｜
-| 讯飞星火    | 不支持(传递不会报错) | 支持(准)      | 不支持 ｜
-| 智谱清言    | 不支持(传递会报错)   | 不支持        |  不支持（API未提供）｜   
+| 模型       | 是否支持System     | 天气查询       | 绘画                    |
+|-----------|----------------|------------|-----------------------|
+| ChatGPT   | 支持             | 不支持        | 支持                    |
+| 文心一言    | 不支持(传递会报错)  | 可以回复(不准)   | 使用Stable-Diffusion-XL |
+| 通义千问    | 支持             | 支持(效果没讯飞好) | 未接入                   |
+| 讯飞星火    | 不支持(传递不会报错) | 支持(准)      | 不支持                   |
+| 智谱清言    | 不支持(传递会报错)   | 不支持        | 不支持（API未提供            |
+
 
 ## 内置功能
 1. 工作台：集成多个应用和功能的系统页面，该页面主要为用户提供快速访问、信息聚会、个性化等功能。
@@ -61,9 +62,10 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json
 ``` 
 1、下载[master-common](https://gitee.com/panday94/master-common)打包到本地maven仓库
 2、idea导入chat-master项目，请更换spring.profiles.active为dev
-3、执行doc文件夹下面sys.sql、sys_date.sql、chat-gpt.sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息。
-4、更改application-dev中redis连接和mysql连接配置
-5、启动ChatApplication中main方法
+3、执行doc文件夹下面sys.sql、sys_date.sql、chat-gpt.sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
+4、版本更新时候需执行doc/update.sql
+5、更改application-dev中redis连接和mysql连接配置
+6、启动ChatApplication中main方法
 ```
 - com.master.chat.api.base.config.InitBean 初始化模型
 - com.master.chat.gpt.service.IGptService 接口调用
