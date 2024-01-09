@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/SpringBoot-2.3.7-brightgreen.svg)
 
 # 项目简介
-ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json返回及流式响应，完美呈现打印机效果。支持ChatGPT模型，同时也支持国内文心一言、通义千问、讯飞星火、智谱清言等主流模型，后续模型持续对接中。
+ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出同步响应及流式响应，完美呈现打印机效果。支持ChatGPT模型，同时也支持国内文心一言、通义千问、讯飞星火、智谱清言等主流模型，后续模型持续对接中。
 项目包含java后台、网页端、移动端及管理后台配置，欢迎小伙伴一起加入交流[添加微信](#联系我们)。参考下面具体介绍：
 
 * 支持文心一言Stable-Diffusion-XL作图功能
