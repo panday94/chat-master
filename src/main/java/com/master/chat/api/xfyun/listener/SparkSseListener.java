@@ -4,22 +4,24 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.master.chat.api.base.entity.ChatData;
+import com.master.chat.api.base.enums.ChatContentEnum;
 import com.master.chat.api.base.enums.ChatModelEnum;
 import com.master.chat.api.base.enums.ChatRoleEnum;
-import com.master.chat.api.base.entity.ChatData;
 import com.master.chat.api.xfyun.constant.SparkStatusConstant;
-import com.master.chat.api.xfyun.exception.SparkException;
 import com.master.chat.api.xfyun.entity.SparkMessage;
 import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.entity.response.SparkResponse;
 import com.master.chat.api.xfyun.entity.response.SparkResponseChoices;
 import com.master.chat.api.xfyun.entity.response.SparkResponseHeader;
 import com.master.chat.api.xfyun.entity.response.SparkResponseUsage;
+import com.master.chat.api.xfyun.exception.SparkException;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.common.utils.ApplicationContextUtil;
 import com.master.common.validator.ValidatorUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.WebSocket;
@@ -47,12 +49,15 @@ public class SparkSseListener extends WebSocketListener {
     private SparkRequest request;
     private HttpServletResponse response;
     private final StringBuilder output = new StringBuilder();
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
     private Long chatId;
     private String parentMessageId;
     private String conversationId;
     private String finishReason;
     private String version;
-    private CountDownLatch countDownLatch = new CountDownLatch(1);
+    private Boolean error;
+    private String errTxt;
+
 
     private static final String FINISH = "[finish]";
 
@@ -65,6 +70,7 @@ public class SparkSseListener extends WebSocketListener {
         this.chatId = chatId;
         this.parentMessageId = parentMessageId;
         this.version = version;
+        this.error = false;
     }
 
     @Override
@@ -137,7 +143,7 @@ public class SparkSseListener extends WebSocketListener {
             String text = output.toString();
             ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                     .parentMessageId(parentMessageId)
-                    .role(ChatRoleEnum.ASSISTANT.getValue()).text(text).build();
+                    .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
             response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
             response.getWriter().flush();
         } catch (Exception e) {
@@ -149,7 +155,7 @@ public class SparkSseListener extends WebSocketListener {
                 log.info("科大讯飞返回数据结束了");
                 ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
                         .model(ChatModelEnum.SPARK.getValue()).modelVersion(version)
-                        .content(output.toString()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(FINISH)
+                        .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(FINISH)
                         .status(ChatStatusEnum.SUCCESS.getValue()).appKey("").usedTokens(usage.getText().getTotalTokens().longValue())
                         .build();
                 ApplicationContextUtil.getBean(IChatMessageService.class).saveChatMessage(chatMessage);
@@ -157,15 +163,32 @@ public class SparkSseListener extends WebSocketListener {
         }
     }
 
+    @SneakyThrows
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, Response response) {
+        log.error("讯飞星火连接异常，异常：{}", t.getMessage());
+        ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
+                .parentMessageId(parentMessageId)
+                .role(ChatRoleEnum.ASSISTANT.getValue()).content("讯飞星火接口请求失败，无法响应！").contentType(ChatContentEnum.TEXT.getValue()).build();
+        this.error = true;
+        this.errTxt = "讯飞星火接口连接异常";
+        this.response.getWriter().write(JSON.toJSONString(chatData));
+        this.response.getWriter().flush();
         super.onFailure(webSocket, t, response);
         countDownLatch.countDown();
-        throw new SparkException(500, "讯飞星火api连接异常：" + t.getMessage(), t);
     }
 
     public CountDownLatch getCountDownLatch() {
         return this.countDownLatch;
+    }
+
+
+    public Boolean getError() {
+        return error;
+    }
+
+    public String getErrTxt() {
+        return errTxt;
     }
 
 }

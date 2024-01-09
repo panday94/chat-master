@@ -1,17 +1,19 @@
 package com.master.chat.api.base.listener;
 
 import com.alibaba.fastjson.JSON;
+import com.master.chat.api.base.entity.ChatData;
+import com.master.chat.api.base.enums.ChatContentEnum;
+import com.master.chat.api.base.enums.ChatModelEnum;
 import com.master.chat.api.base.enums.ChatRoleEnum;
+import com.master.chat.api.openai.entity.chat.ChatCompletionResponse;
+import com.master.chat.api.wenxin.entity.ChatResponse;
 import com.master.chat.api.zhipu.entity.ZhiPuChoice;
 import com.master.chat.api.zhipu.entity.ZhiPuResponse;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
-import com.master.chat.api.base.enums.ChatModelEnum;
-import com.master.chat.api.base.entity.ChatData;
-import com.master.chat.api.openai.entity.chat.ChatCompletionResponse;
-import com.master.chat.api.wenxin.entity.ChatResponse;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.common.exception.BusinessException;
+import com.master.common.exception.ErrorException;
 import com.master.common.utils.ApplicationContextUtil;
 import com.master.common.validator.ValidatorUtil;
 import com.zhipu.oapi.service.v3.ModelEventSourceListener;
@@ -19,7 +21,6 @@ import com.zhipu.oapi.service.v3.SseMeta;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import okhttp3.sse.EventSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,6 +52,8 @@ public class SSEListener extends ModelEventSourceListener {
     private String finishReason;
     private String model;
     private String version;
+    private Boolean error;
+    private String errTxt;
 
     private static final String FINISH = "[finish]";
 
@@ -61,6 +64,7 @@ public class SSEListener extends ModelEventSourceListener {
         this.parentMessageId = parentMessageId;
         this.model = model;
         this.version = version;
+        this.error = false;
     }
 
     /**
@@ -107,53 +111,24 @@ public class SSEListener extends ModelEventSourceListener {
                 sseEmitter.complete();
                 ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
                         .model(model).modelVersion(version)
-                        .content(output.toString()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
+                        .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
                         .status(ChatStatusEnum.SUCCESS.getValue()).appKey("").usedTokens(tokens)
                         .build();
                 ApplicationContextUtil.getBean(IChatMessageService.class).saveChatMessage(chatMessage);
                 return;
             }
-
             chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                     .parentMessageId(parentMessageId)
-                    .role(ChatRoleEnum.ASSISTANT.getValue()).text(text).build();
-            //response.getWriter().write(ValidatorUtil.isNull(text) ? "" : "\n");
-            //response.getWriter().write("event:" + "add" + "\n");
-            //response.getWriter().write("id:" + completionResponse.getId() + "\n");
-            //response.getWriter().write("data:" + text);
+                    .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
             response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
             response.getWriter().flush();
         } catch (Exception e) {
             log.error("消息错误", e);
             eventSource.cancel();
             countDownLatch.countDown();
-            throw new RuntimeException(e);
+            throw new ErrorException();
         }
     }
-
-    @Override
-    public void onClosed(EventSource eventSource) {
-        log.info("{}关闭sse连接，流式输出返回值总共{}tokens", model, tokens() - 2);
-        eventSource.cancel();
-        countDownLatch.countDown();
-    }
-
-    @SneakyThrows
-    @Override
-    public void onFailure(EventSource eventSource, Throwable t, Response response) {
-        if (Objects.isNull(response)) {
-            return;
-        }
-        ResponseBody body = response.body();
-        if (Objects.nonNull(body)) {
-            log.error("sse连接异常data：{}，异常：{}", body.string(), t);
-        } else {
-            log.error("sse连接异常data：{}，异常：{}", response, t);
-        }
-        countDownLatch.countDown();
-        eventSource.cancel();
-    }
-
 
     /**
      * 处理openai流式返回
@@ -176,9 +151,7 @@ public class SSEListener extends ModelEventSourceListener {
         if (ValidatorUtil.isNull(finishReason) && ValidatorUtil.isNotNull(completionResponse.getChoices().get(0).getFinishReason())) {
             finishReason = completionResponse.getChoices().get(0).getFinishReason();
         }
-        if (ValidatorUtil.isNotNull(content)) {
-            output.append(content).toString();
-        }
+        output.append(content).toString();
         return output.toString();
     }
 
@@ -198,9 +171,7 @@ public class SSEListener extends ModelEventSourceListener {
             conversationId = completionResponse.getId();
         }
         finishReason = FINISH;
-        if (ValidatorUtil.isNotNull(content)) {
-            output.append(content).toString();
-        }
+        output.append(content).toString();
         return output.toString();
     }
 
@@ -221,21 +192,38 @@ public class SSEListener extends ModelEventSourceListener {
         }
         String content = completionResponse.getData();
         finishReason = FINISH;
-        if (ValidatorUtil.isNotNull(content)) {
-            output.append(content).toString();
-        }
+        output.append(content).toString();
         return output.toString();
     }
 
-    /**
-     * tokens
-     *
-     * @return
-     */
-    public long tokens() {
-        return tokens;
+
+    @Override
+    public void onClosed(EventSource eventSource) {
+        log.info("{}关闭sse连接，流式输出返回值总共{}tokens", model, tokens() - 2);
+        eventSource.cancel();
+        countDownLatch.countDown();
     }
 
+    @SneakyThrows
+    @Override
+    public void onFailure(EventSource eventSource, Throwable t, Response response) {
+        if (ValidatorUtil.isNotNull(response) && Objects.nonNull(response.body())) {
+            log.error("sse连接异常data.body：{}，异常：{}", response.body().string(), t);
+        } else {
+            log.error("sse连接异常data：{}，异常：{}", response, t);
+        }
+        ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
+                .parentMessageId(parentMessageId)
+                .role(ChatRoleEnum.ASSISTANT.getValue()).content("AI大模型接口请求失败，无法响应！").contentType(ChatContentEnum.TEXT.getValue()).build();
+        this.error = true;
+        this.errTxt = "大模型接口连接异常";
+        this.response.getWriter().write(JSON.toJSONString(chatData));
+        this.response.getWriter().flush();
+        eventSource.cancel();
+        countDownLatch.countDown();
+    }
+
+    @Override
     public CountDownLatch getCountDownLatch() {
         return this.countDownLatch;
     }
@@ -248,6 +236,23 @@ public class SSEListener extends ModelEventSourceListener {
     @Override
     public SseMeta getMeta() {
         return null;
+    }
+
+    /**
+     * tokens
+     *
+     * @return
+     */
+    public long tokens() {
+        return tokens;
+    }
+
+    public Boolean getError() {
+        return error;
+    }
+
+    public String getErrTxt() {
+        return errTxt;
     }
 
 }

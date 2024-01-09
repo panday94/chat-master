@@ -4,13 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.master.chat.api.base.enums.ChatContentEnum;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-;
 
 /**
  * 对话消息对象 gpt_chat_message
@@ -81,6 +80,12 @@ public class ChatMessage implements Serializable {
      * 消息内容
      */
     private String content;
+
+    /**
+     * 消息类型 text、image
+     */
+    @Builder.Default
+    private String contentType = ChatContentEnum.TEXT.getValue();
 
     /**
      * 结束原因

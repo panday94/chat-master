@@ -3,7 +3,7 @@ package com.master.chat.api.openai.entity.images;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -64,11 +64,11 @@ public class ImageEdit implements Serializable {
     public ImageEdit setPrompt(String prompt) {
         if(StrUtil.isEmpty(prompt)){
             log.error("参数异常");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         if(prompt.length() > 1000){
             log.error("长度超过1000");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         this.prompt = prompt;
         return this;

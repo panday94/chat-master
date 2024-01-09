@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.master.chat.api.base.enums.ChatContentEnum;
 import com.master.chat.api.base.enums.ChatRoleEnum;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.mapper.AssistantMapper;
@@ -124,7 +125,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
         }
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatId(chat.getId()).messageId(UUID.fastUUID().toString()).model(command.getModel())
-                .content(command.getPrompt()).role(ChatRoleEnum.USER.getValue()).status(ChatStatusEnum.REPLY.getValue())
+                .content(command.getPrompt()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.USER.getValue()).status(ChatStatusEnum.REPLY.getValue())
                 .build();
         chatMessage.setCreateUser(command.getOperater());
         chatMessageMapper.insert(chatMessage);

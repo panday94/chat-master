@@ -61,6 +61,11 @@ public class ChatMessageDTO implements Serializable {
     private String content;
 
     /**
+     * 消息类型 text、image
+     */
+    private String contentType;
+
+    /**
      * 回复状态
      */
     private Integer status;

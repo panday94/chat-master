@@ -2,8 +2,8 @@ package com.master.chat.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.master.chat.sys.mapper.SysUserGroupMapper;
-import com.master.chat.sys.service.ISysUserGroupService;
 import com.master.chat.sys.pojo.entity.SysUserGroup;
+import com.master.chat.sys.service.ISysUserGroupService;
 import org.springframework.stereotype.Service;
 
 /**

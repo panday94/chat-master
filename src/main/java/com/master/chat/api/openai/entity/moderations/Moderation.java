@@ -1,6 +1,6 @@
 package com.master.chat.api.openai.entity.moderations;
 
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class Moderation implements Serializable {
     public void setInput(List<String> input) {
         if (Objects.isNull(input) || input.size() == 0) {
             log.error("input不能为空");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         this.input = input;
     }

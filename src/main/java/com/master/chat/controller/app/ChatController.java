@@ -1,10 +1,10 @@
 package com.master.chat.controller.app;
 
 import com.master.chat.framework.base.BaseAppController;
-import com.master.chat.gpt.pojo.command.ChatCommand;
-import com.master.chat.gpt.pojo.vo.ChatVO;
 import com.master.chat.gpt.enums.ChatStatusEnum;
+import com.master.chat.gpt.pojo.command.ChatCommand;
 import com.master.chat.gpt.pojo.command.GptCommand;
+import com.master.chat.gpt.pojo.vo.ChatVO;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.gpt.service.IChatService;
 import com.master.chat.gpt.service.IGptService;

@@ -2,8 +2,8 @@ package com.master.chat.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.master.chat.sys.mapper.SysUserPostMapper;
-import com.master.chat.sys.service.ISysUserPostService;
 import com.master.chat.sys.pojo.entity.SysUserPost;
+import com.master.chat.sys.service.ISysUserPostService;
 import com.master.common.api.ResponseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

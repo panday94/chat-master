@@ -1,11 +1,11 @@
 package com.master.chat.api.xfyun;
 
-import com.master.chat.api.xfyun.entity.SparkSyncChatResponse;
 import com.master.chat.api.xfyun.constant.SparkApiVersion;
+import com.master.chat.api.xfyun.entity.SparkSyncChatResponse;
+import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.exception.SparkException;
 import com.master.chat.api.xfyun.listener.SparkBaseListener;
 import com.master.chat.api.xfyun.listener.SparkSyncChatListener;
-import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,9 +51,13 @@ public class SparkClient {
      */
     public SparkSyncChatResponse chat(SparkRequest sparkRequest) {
         SparkSyncChatResponse chatResponse = new SparkSyncChatResponse();
+        chatResponse.setSuccess(true);
         SparkSyncChatListener syncChatListener = new SparkSyncChatListener(chatResponse);
         this.chatSync(sparkRequest, syncChatListener);
         while (!chatResponse.isOk()) {
+            if (!chatResponse.isSuccess()) {
+                return chatResponse;
+            }
             try {
                 Thread.sleep(200);
             } catch (InterruptedException ignored) {

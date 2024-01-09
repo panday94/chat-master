@@ -5,14 +5,13 @@ import cn.hutool.http.ContentType;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.master.chat.api.wenxin.entity.ChatBody;
-import com.master.chat.api.wenxin.entity.ChatResponse;
-import com.master.chat.api.wenxin.entity.MessageItem;
 import com.master.chat.api.wenxin.config.WenXinConfig;
 import com.master.chat.api.wenxin.constant.ModelE;
+import com.master.chat.api.wenxin.entity.*;
 import com.master.chat.api.wenxin.exception.WenXinException;
 import com.master.chat.api.wenxin.interceptor.WenXinInterceptor;
 import com.master.chat.api.wenxin.interceptor.WenXinLogger;
+import com.master.common.api.ResponseInfo;
 import com.master.common.validator.ValidatorUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,6 @@ import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
 
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -73,49 +71,60 @@ public class WenXinClient {
         okHttpClient = builder.okHttpClient;
     }
 
-
-    public void streamChat(List<MessageItem> messages, EventSourceListener eventSourceListener, ModelE modelE) {
-        ChatBody chatBody = ChatBody.builder().messages(messages).stream(true).build();
-        this.streamChat(chatBody, eventSourceListener, modelE);
-    }
-
-    public ChatResponse chat(List<MessageItem> messages, ModelE modelE) {
+    /**
+     * 同步响应
+     *
+     * @param messages
+     * @param model
+     * @return
+     */
+    public ResponseInfo<ChatResponse> chat(List<MessageItem> messages, ModelE model) {
         ChatBody chatBody = ChatBody.builder().messages(messages).build();
-        return this.chat(chatBody, modelE);
+        return this.chat(chatBody, model);
     }
 
-    public ChatResponse chat(ChatBody chatBody, ModelE modelE) {
+    private ResponseInfo<ChatResponse> chat(ChatBody chatBody, ModelE model) {
         try {
-            Request request = new Request.Builder().url(assembleUrl(modelE))
+            Request request = new Request.Builder().url(assembleUrl(model))
                     .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()),
                             new ObjectMapper().writeValueAsString(chatBody))).build();
-            Response response = null;
-            try {
-                response = okHttpClient.newCall(request).execute();
-                String result = response.body().string();
-                JSONObject jsonObject = JSONUtil.parseObj(result);
-                if (ValidatorUtil.isNotNull(jsonObject.get("error_msg"))) {
-                    log.error("文心一言大模型接口请求异常，异常原因：{}", jsonObject.getStr("error_msg"));
-                }
-                return jsonObject.toBean(ChatResponse.class);
-            } catch (IOException e) {
-                throw new IOException(e);
+            Response response;
+            response = okHttpClient.newCall(request).execute();
+            String result = response.body().string();
+            JSONObject jsonObject = JSONUtil.parseObj(result);
+            if (ValidatorUtil.isNotNull(jsonObject.get("error_msg"))) {
+                log.error("文心一言大模型接口请求异常，异常原因：{}", jsonObject.getStr("error_msg"));
+                return ResponseInfo.error(jsonObject.getStr("error_msg"));
             }
+            return ResponseInfo.success(jsonObject.toBean(ChatResponse.class));
+
         } catch (Exception e) {
             log.error("请求参数解析异常：", e);
             e.printStackTrace();
+            return ResponseInfo.error("文心一言大模型接口请求异常");
         }
-        return new ChatResponse();
     }
 
-    public void streamChat(ChatBody chatBody, EventSourceListener eventSourceListener, ModelE modelE) {
+    /**
+     * 流式响应
+     *
+     * @param messages
+     * @param eventSourceListener
+     * @param model
+     */
+    public void streamChat(List<MessageItem> messages, EventSourceListener eventSourceListener, ModelE model) {
+        ChatBody chatBody = ChatBody.builder().messages(messages).stream(true).build();
+        this.streamChat(chatBody, eventSourceListener, model);
+    }
+
+    private void streamChat(ChatBody chatBody, EventSourceListener eventSourceListener, ModelE model) {
         if (Objects.isNull(eventSourceListener)) {
             throw new WenXinException("参数异常：EventSourceListener不能为空");
         }
         chatBody.setStream(true);
         try {
             EventSource.Factory factory = EventSources.createFactory(this.okHttpClient);
-            Request request = new Request.Builder().url(assembleUrl(modelE))
+            Request request = new Request.Builder().url(assembleUrl(model))
                     .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()),
                             new ObjectMapper().writeValueAsString(chatBody))).build();
             factory.newEventSource(request, eventSourceListener);
@@ -125,10 +134,37 @@ public class WenXinClient {
         }
     }
 
+    /**
+     * 文本生成图片
+     *
+     * @param body 文本生成图片
+     * @return
+     */
+    public ResponseInfo<ImageResponse> image(ImagesBody body) {
+        try {
+            Request request = new Request.Builder().url(assembleUrl(ModelE.STABLE_DIFFUSION_XL))
+                    .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()),
+                            new ObjectMapper().writeValueAsString(body))).build();
+            Response response;
+            response = okHttpClient.newCall(request).execute();
+            String result = response.body().string();
+            JSONObject jsonObject = JSONUtil.parseObj(result);
+            if (ValidatorUtil.isNotNull(jsonObject.get("error_msg"))) {
+                log.error("文心一言文生图大模型接口请求异常，异常原因：{}", jsonObject.getStr("error_msg"));
+                return ResponseInfo.error(jsonObject.getStr("error_msg"));
+            }
+            return ResponseInfo.success(jsonObject.toBean(ImageResponse.class));
 
-    private String assembleUrl(ModelE modelE) {
+        } catch (Exception e) {
+            log.error("请求参数解析异常：", e);
+            e.printStackTrace();
+            return ResponseInfo.error("文心一言文生图大模型接口请求异常");
+        }
+    }
+
+    private String assembleUrl(ModelE model) {
         accessToken = WenXinConfig.refreshAccessToken();
-        return modelE.getApiHost() + "?access_token=" + accessToken;
+        return model.getApiHost() + "?access_token=" + accessToken;
     }
 
     /**

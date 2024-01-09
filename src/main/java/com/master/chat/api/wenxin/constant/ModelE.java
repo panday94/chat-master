@@ -19,6 +19,10 @@ public enum ModelE {
     ERNIE_Bot_turbo("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant", "ERNIE_Bot_turbo"),
 
     ERNIE_Bot_4("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro", "ERNIE_Bot 4.0"),
+
+    // 绘画模型
+    STABLE_DIFFUSION_XL("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/text2image/sd_xl", "Stable-Diffusion-XL"),
+
     ;
     private final String apiHost;
     private final String label;

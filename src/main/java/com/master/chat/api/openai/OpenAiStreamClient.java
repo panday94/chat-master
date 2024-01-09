@@ -16,7 +16,7 @@ import com.master.chat.api.openai.entity.chat.Functions;
 import com.master.chat.api.openai.entity.chat.OpenAiMessage;
 import com.master.chat.api.openai.entity.common.OpenAiResponse;
 import com.master.chat.api.openai.entity.completions.Completion;
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import com.master.chat.api.openai.function.KeyRandomStrategy;
 import com.master.chat.api.openai.function.KeyStrategyFunction;
@@ -99,7 +99,7 @@ public class OpenAiStreamClient {
      */
     private OpenAiStreamClient(Builder builder) {
         if (CollectionUtil.isEmpty(builder.apiKey)) {
-            throw new BaseException(CommonError.API_KEYS_NOT_NUL);
+            throw new OpenAIException(CommonError.API_KEYS_NOT_NUL);
         }
         apiKey = builder.apiKey;
 
@@ -168,11 +168,11 @@ public class OpenAiStreamClient {
     public void streamCompletions(Completion completion, EventSourceListener eventSourceListener) {
         if (Objects.isNull(eventSourceListener)) {
             log.error("参数异常：EventSourceListener不能为空，可以参考：com.master.chat.api.openai.sse.ConsoleEventSourceListener");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         if (StrUtil.isBlank(completion.getPrompt())) {
             log.error("参数异常：Prompt不能为空");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         if (!completion.isStream()) {
             completion.setStream(true);
@@ -221,7 +221,7 @@ public class OpenAiStreamClient {
     public <T extends BaseChatCompletion> void streamChatCompletion(T chatCompletion, EventSourceListener eventSourceListener) {
         if (Objects.isNull(eventSourceListener)) {
             log.error("参数异常：EventSourceListener不能为空，可以参考：com.master.chat.api.openai.sse.ConsoleEventSourceListener");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         if (!chatCompletion.isStream()) {
             chatCompletion.setStream(true);
@@ -280,7 +280,7 @@ public class OpenAiStreamClient {
             return;
         }
         if (CollectionUtil.isEmpty(chatCompletion.getMessages())) {
-            throw new BaseException(CommonError.MESSAGE_NOT_NUL);
+            throw new OpenAIException(CommonError.MESSAGE_NOT_NUL);
         }
         Functions functions = Functions.builder()
                 .name(plugin.getFunction())
@@ -372,15 +372,15 @@ public class OpenAiStreamClient {
                     || response.code() == CommonError.OPENAI_SERVER_ERROR.code()) {
                 OpenAiResponse openAiResponse = JSONUtil.toBean(bodyStr, OpenAiResponse.class);
                 log.error(openAiResponse.getError().getMessage());
-                throw new BaseException(openAiResponse.getError().getMessage());
+                throw new OpenAIException(openAiResponse.getError().getMessage());
             }
             log.error("询余额请求异常：{}", bodyStr);
             OpenAiResponse openAiResponse = JSONUtil.toBean(bodyStr, OpenAiResponse.class);
             if (Objects.nonNull(openAiResponse.getError())) {
                 log.error(openAiResponse.getError().getMessage());
-                throw new BaseException(openAiResponse.getError().getMessage());
+                throw new OpenAIException(openAiResponse.getError().getMessage());
             }
-            throw new BaseException(CommonError.RETRY_ERROR);
+            throw new OpenAIException(CommonError.RETRY_ERROR);
         }
         ObjectMapper mapper = new ObjectMapper();
         // 读取Json 返回值

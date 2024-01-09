@@ -4,7 +4,7 @@ package com.master.chat.api.openai.interceptor;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import com.master.chat.api.openai.function.KeyStrategyFunction;
 import lombok.Getter;
@@ -61,7 +61,7 @@ public abstract class OpenAiAuthInterceptor implements Interceptor {
     public final String getKey() {
         if (CollectionUtil.isEmpty(apiKey)) {
             this.noHaveActiveKeyWarring();
-            throw new BaseException(CommonError.NO_ACTIVE_API_KEYS);
+            throw new OpenAIException(CommonError.NO_ACTIVE_API_KEYS);
         }
         return keyStrategy.apply(apiKey);
     }

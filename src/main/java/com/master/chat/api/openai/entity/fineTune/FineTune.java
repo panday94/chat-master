@@ -2,7 +2,7 @@ package com.master.chat.api.openai.entity.fineTune;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -103,7 +103,7 @@ public class FineTune implements Serializable {
     public void setSuffix(String suffix) {
         if(Objects.nonNull(suffix) && !"".equals(suffix) && suffix.length() > 40){
             log.error("后缀长度不能大于40");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         this.suffix = suffix;
     }

@@ -2,8 +2,8 @@ package com.master.chat.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.master.chat.sys.mapper.GroupRoleMapper;
-import com.master.chat.sys.service.IGroupRoleService;
 import com.master.chat.sys.pojo.entity.GroupRole;
+import com.master.chat.sys.service.IGroupRoleService;
 import org.springframework.stereotype.Service;
 
 /**

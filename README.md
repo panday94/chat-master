@@ -8,16 +8,17 @@
 
 # 项目简介
 ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json返回及流式响应，完美呈现打印机效果。支持ChatGPT模型，同时也支持国内文心一言、通义千问、讯飞星火、智谱清言等主流模型，后续模型持续对接中。
-项目包含java后台、网页端、移动端及管理后台配置，欢迎小伙伴一起加入交流。参考下面具体介绍：
+项目包含java后台、网页端、移动端及管理后台配置，欢迎小伙伴一起加入交流[添加微信](#联系我们)。参考下面具体介绍：
 
+* 支持文心一言Stable-Diffusion-XL作图功能
+* 支持使用assistant模版，按指定prompt输出
+* 支持切换模型对话聊天，保存对话记录及根据上下文输出
+* 管理端采用Vue2、Element UI，Chat网页端使用Vue3、TypeScript、NaiveUI进行开发
+* 后端采用Spring Boot、Spring Security + JWT、Mybatis-Plus、Lombok、 Mysql & Redis，代码通俗易懂，上手即用
+* 完善的权限控制，权限认证使用Jwt，支持多终端认证系统
 * 管理端前端项目，请移步[chat-master-admin](https://gitee.com/panday94/chat-master-admin)
 * 网页端项目，请移步[chat-master-web](https://gitee.com/panday94/chat-master-web)
 * 移动端开发中。。。
-* 管理端采用Vue2、Element UI，Chat网页端使用Vue3、TypeScript、NaiveUI进行开发。
-* 后端采用Spring Boot、Spring Security + JWT、Mybatis-Plus、Lombok、 Mysql & Redis，代码通俗易懂，上手即用。
-* 完善的权限控制，权限认证使用Jwt，支持多终端认证系统。
-* 支持切换模型对话聊天，保存对话记录及根据上下文输出。
-* 支持使用assistant模版，按指定prompt输出。
 
 ## 演示
 
@@ -27,10 +28,21 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json
 ![cover](./doc/file/login.jpg)
 ![cover2](./doc/file/chat.gif)
 
-# 待实现功能
+## 待实现功能
 1. 会员充值
 2. 邀请用户
-3. 作图。。。
+
+## 模型功能对比
+
+> 版本记录请查看这里[版本记录](./CHANGELOG.md)
+
+| 模型       | 是否支持System     | 天气查询       |  绘画       |
+|-----------|----------------|------------|
+| ChatGPT   | 支持             | 不支持        | 支持 ｜
+| 文心一言    | 不支持(传递会报错)  | 可以回复(不准)   | 使用Stable-Diffusion-XL｜
+| 通义千问    | 支持             | 支持(效果没讯飞好) | ｜
+| 讯飞星火    | 不支持(传递不会报错) | 支持(准)      | 不支持 ｜
+| 智谱清言    | 不支持(传递会报错)   | 不支持        |  不支持（API未提供）｜   
 
 ## 内置功能
 1. 工作台：集成多个应用和功能的系统页面，该页面主要为用户提供快速访问、信息聚会、个性化等功能。
@@ -82,7 +94,7 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json
 | OSS                    | 对象存储                 | https://github.com/aliyun/aliyun-oss-java-sdk        |
 | quartz                 | 定时任务                 | https://github.com/quartz-scheduler/quartz           |
 
-## 框架特点
+### 框架特点
 
 1. 使用@RepeatSubmit(interval = 1000)注解对接口进行重复提交限制，interval默认值为5s内，可以自定义时间范围。
 2. 使用@RateLimiter注解对接口进行限流。
@@ -108,6 +120,12 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json
 		<p>WeChat Pay</p>
 	</div>
 </div>
+
+## 参与贡献
+
+贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md)
+
+感谢所有做过贡献的人!
 
 ## 联系我们
 

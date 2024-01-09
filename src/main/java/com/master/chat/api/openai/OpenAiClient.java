@@ -6,11 +6,6 @@ import cn.hutool.json.JSONUtil;
 import com.master.chat.api.openai.constant.OpenAIConst;
 import com.master.chat.api.openai.entity.Tts.TextToSpeech;
 import com.master.chat.api.openai.entity.assistant.*;
-import com.master.chat.api.openai.entity.assistant.run.*;
-import com.master.chat.api.openai.entity.chat.*;
-import com.master.chat.api.openai.entity.images.*;
-import com.master.chat.api.openai.entity.images.Image;
-import com.master.chat.api.openai.entity.assistant.*;
 import com.master.chat.api.openai.entity.assistant.message.MessageFileResponse;
 import com.master.chat.api.openai.entity.assistant.message.MessageResponse;
 import com.master.chat.api.openai.entity.assistant.message.ModifyMessage;
@@ -43,6 +38,7 @@ import com.master.chat.api.openai.entity.fineTune.job.FineTuneJob;
 import com.master.chat.api.openai.entity.fineTune.job.FineTuneJobEvent;
 import com.master.chat.api.openai.entity.fineTune.job.FineTuneJobListResponse;
 import com.master.chat.api.openai.entity.fineTune.job.FineTuneJobResponse;
+import com.master.chat.api.openai.entity.images.Image;
 import com.master.chat.api.openai.entity.images.*;
 import com.master.chat.api.openai.entity.models.Model;
 import com.master.chat.api.openai.entity.models.ModelResponse;
@@ -51,7 +47,7 @@ import com.master.chat.api.openai.entity.moderations.ModerationResponse;
 import com.master.chat.api.openai.entity.whisper.Transcriptions;
 import com.master.chat.api.openai.entity.whisper.Translations;
 import com.master.chat.api.openai.entity.whisper.WhisperResponse;
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import com.master.chat.api.openai.function.KeyRandomStrategy;
 import com.master.chat.api.openai.function.KeyStrategyFunction;
@@ -144,7 +140,7 @@ public class OpenAiClient {
      */
     private OpenAiClient(Builder builder) {
         if (CollectionUtil.isEmpty(builder.apiKey)) {
-            throw new BaseException(CommonError.API_KEYS_NOT_NUL);
+            throw new OpenAIException(CommonError.API_KEYS_NOT_NUL);
         }
         apiKey = builder.apiKey;
 
@@ -221,7 +217,7 @@ public class OpenAiClient {
      */
     public Model model(String id) {
         if (Objects.isNull(id) || "".equals(id)) {
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         Single<Model> model = this.openAiApi.model(id);
         return model.blockingGet();
@@ -404,7 +400,7 @@ public class OpenAiClient {
     private void checkImage(java.io.File image) {
         if (Objects.isNull(image)) {
             log.error("image不能为空");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
     }
 
@@ -416,7 +412,7 @@ public class OpenAiClient {
     private void checkImageFormat(java.io.File image) {
         if (!(image.getName().endsWith("png") || image.getName().endsWith("PNG"))) {
             log.error("image格式错误");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
     }
 
@@ -428,7 +424,7 @@ public class OpenAiClient {
     private void checkImageSize(java.io.File image) {
         if (image.length() > 4 * 1024 * 1024) {
             log.error("image最大支持4MB");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
     }
 
@@ -729,7 +725,7 @@ public class OpenAiClient {
             return this.chatCompletion(chatCompletion);
         }
         if (CollectionUtil.isEmpty(chatCompletion.getMessages())) {
-            throw new BaseException(CommonError.MESSAGE_NOT_NUL);
+            throw new OpenAIException(CommonError.MESSAGE_NOT_NUL);
         }
         List<OpenAiMessage> openAiMessages = chatCompletion.getMessages();
         Functions functions = Functions.builder()
@@ -1381,7 +1377,7 @@ public class OpenAiClient {
     public RunStepResponse retrieveRunStep(String threadId, String runId, String stepId) {
         if (StrUtil.isBlank(stepId)) {
             log.error("step id不能为空");
-            throw new BaseException(CommonError.PARAM_ERROR);
+            throw new OpenAIException(CommonError.PARAM_ERROR);
         }
         return this.openAiApi.retrieveRunStep(threadId, runId, stepId).blockingGet();
     }

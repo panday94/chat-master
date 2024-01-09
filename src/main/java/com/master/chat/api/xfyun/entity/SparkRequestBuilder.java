@@ -1,7 +1,7 @@
 package com.master.chat.api.xfyun.entity;
 
-import com.master.chat.api.xfyun.entity.request.*;
 import com.master.chat.api.xfyun.constant.SparkApiVersion;
+import com.master.chat.api.xfyun.entity.request.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.master.chat.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.master.chat.sys.mapper.NoticeReadMapper;
-import com.master.chat.sys.service.INoticeReadService;
 import com.master.chat.sys.pojo.entity.NoticeRead;
+import com.master.chat.sys.service.INoticeReadService;
 import org.springframework.stereotype.Service;
 
 /**

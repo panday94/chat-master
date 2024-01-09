@@ -36,5 +36,5 @@ public class ChatResponse implements Serializable {
     @JsonProperty("ban_round")
     private Long ban_round;
 
-    private ChatUsage usage;
+    private Usage usage;
 }

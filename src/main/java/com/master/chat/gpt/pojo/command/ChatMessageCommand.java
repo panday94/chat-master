@@ -55,6 +55,11 @@ public class ChatMessageCommand extends CommonCommand implements Serializable {
     private String content;
 
     /**
+     * 消息类型 text、image
+     */
+    private String contentType;
+
+    /**
      * 角色模型
      */
     private String role;

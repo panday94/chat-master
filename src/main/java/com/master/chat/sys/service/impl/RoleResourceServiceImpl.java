@@ -2,8 +2,8 @@ package com.master.chat.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.master.chat.sys.mapper.RoleResourceMapper;
-import com.master.chat.sys.service.IRoleResourceService;
 import com.master.chat.sys.pojo.entity.RoleResource;
+import com.master.chat.sys.service.IRoleResourceService;
 import com.master.common.api.ResponseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

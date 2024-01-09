@@ -2,7 +2,7 @@ package com.master.chat.api.openai.interceptor;
 
 import cn.hutool.json.JSONUtil;
 import com.master.chat.api.openai.entity.common.OpenAiResponse;
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Interceptor;
@@ -31,16 +31,16 @@ public class OpenAiResponseInterceptor implements Interceptor {
                     || response.code() == CommonError.OPENAI_SERVER_ERROR.code()) {
                 OpenAiResponse openAiResponse = JSONUtil.toBean(response.body().string(), OpenAiResponse.class);
                 log.error(openAiResponse.getError().getMessage());
-                throw new BaseException(openAiResponse.getError().getMessage());
+                throw new OpenAIException(openAiResponse.getError().getMessage());
             }
             String errorMsg = response.body().string();
             log.error("--------> 请求异常：{}", errorMsg);
             OpenAiResponse openAiResponse = JSONUtil.toBean(errorMsg, OpenAiResponse.class);
             if (Objects.nonNull(openAiResponse.getError())) {
                 log.error(openAiResponse.getError().getMessage());
-                throw new BaseException(openAiResponse.getError().getMessage());
+                throw new OpenAIException(openAiResponse.getError().getMessage());
             }
-            throw new BaseException(CommonError.RETRY_ERROR);
+            throw new OpenAIException(CommonError.RETRY_ERROR);
         }
         return response;
     }

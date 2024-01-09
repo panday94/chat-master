@@ -7,16 +7,15 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.master.chat.common.constant.ResourceConstants;
+import com.master.chat.framework.security.JWTPasswordEncoder;
 import com.master.chat.sys.mapper.DeptMapper;
 import com.master.chat.sys.mapper.SysUserMapper;
 import com.master.chat.sys.pojo.command.SysUserCommand;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
-import com.master.chat.sys.pojo.entity.Dept;
-import com.master.chat.sys.service.*;
-import com.master.chat.common.constant.ResourceConstants;
-import com.master.chat.framework.security.JWTPasswordEncoder;
 import com.master.chat.sys.pojo.dto.SysUserPreDTO;
 import com.master.chat.sys.pojo.dto.SysUserRolesDTO;
+import com.master.chat.sys.pojo.entity.Dept;
 import com.master.chat.sys.pojo.entity.SysUser;
 import com.master.chat.sys.pojo.vo.ContactUserVO;
 import com.master.chat.sys.pojo.vo.DeptVO;
@@ -240,10 +239,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = getSysUser(command.getOperaterId());
         boolean isBcrypt = JWTPasswordEncoder.matchesBcrypt(sysUser.getPassword());
         if (isBcrypt) {
-            if (!JWTPasswordEncoder.matchesBcrypt(JWTPasswordEncoder.bcryptEncode(command.getOldPassword()), sysUser.getPassword())) {
+            if (!JWTPasswordEncoder.matchesBcrypt(command.getOldPassword(), sysUser.getPassword())) {
                 return ResponseInfo.businessFail("旧密码错误，您还有5次机会或者联系管理员重置密码");
             }
-            if (JWTPasswordEncoder.matchesBcrypt(JWTPasswordEncoder.bcryptEncode(command.getNewPassword()), sysUser.getPassword())) {
+            if (JWTPasswordEncoder.matchesBcrypt(command.getNewPassword(), sysUser.getPassword())) {
                 return ResponseInfo.businessFail("新密码与旧密码相同，无需重置");
             }
         } else {

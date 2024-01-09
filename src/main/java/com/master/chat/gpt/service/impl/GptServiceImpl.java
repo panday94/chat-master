@@ -7,11 +7,23 @@ import com.alibaba.dashscope.aigc.generation.GenerationResult;
 import com.alibaba.dashscope.aigc.generation.models.QwenParam;
 import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.MessageManager;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.InputRequiredException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.fastjson.JSON;
 import com.master.chat.api.base.enums.ChatModelEnum;
 import com.master.chat.api.base.enums.ChatRoleEnum;
+import com.master.chat.api.base.exception.ChatMasterException;
 import com.master.chat.api.openai.OpenAiClient;
+import com.master.chat.api.openai.entity.chat.ChatChoice;
+import com.master.chat.api.openai.entity.chat.ChatCompletion;
+import com.master.chat.api.openai.entity.chat.ChatCompletionResponse;
+import com.master.chat.api.openai.entity.chat.OpenAiMessage;
 import com.master.chat.api.qianwen.QianWenClient;
+import com.master.chat.api.wenxin.WenXinClient;
+import com.master.chat.api.wenxin.constant.ModelE;
+import com.master.chat.api.wenxin.entity.ChatResponse;
+import com.master.chat.api.wenxin.entity.MessageItem;
 import com.master.chat.api.xfyun.SparkClient;
 import com.master.chat.api.xfyun.constant.SparkApiVersion;
 import com.master.chat.api.xfyun.entity.SparkMessage;
@@ -29,18 +41,9 @@ import com.master.chat.gpt.pojo.dto.ChatMessageDTO;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.ChatMessageVO;
 import com.master.chat.gpt.pojo.vo.ModelVO;
-import com.master.chat.gpt.service.IGptService;
-import com.master.chat.api.openai.entity.chat.ChatChoice;
-import com.master.chat.api.openai.entity.chat.ChatCompletion;
-import com.master.chat.api.openai.entity.chat.ChatCompletionResponse;
-import com.master.chat.api.openai.entity.chat.OpenAiMessage;
-import com.master.chat.api.wenxin.WenXinClient;
-import com.master.chat.api.wenxin.constant.ModelE;
-import com.master.chat.api.wenxin.entity.ChatResponse;
-import com.master.chat.api.wenxin.entity.MessageItem;
-import com.master.chat.api.wenxin.exception.WenXinException;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.gpt.service.IChatService;
+import com.master.chat.gpt.service.IGptService;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
 import com.master.common.enums.IntegerEnum;
@@ -109,6 +112,7 @@ public class GptServiceImpl implements IGptService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseInfo<ChatMessageVO> chat(GptCommand command) {
         BaseAssert.isBlankOrNull(command.getModel(), "缺少模型信息");
+        BaseAssert.isBlankOrNull(command.getPrompt(), "缺少prompt");
         ChatModelEnum modelEnum = ChatModelEnum.getEnum(command.getModel());
         if (ValidatorUtil.isNull(modelEnum)) {
             throw new BusinessException("未知的模型类型，功能未接入");
@@ -122,28 +126,29 @@ public class GptServiceImpl implements IGptService {
         if (ValidatorUtil.isNullIncludeArray(messages)) {
             throw new BusinessException("消息发送失败");
         }
-        ChatMessageCommand chatMessage;
-        switch (modelEnum) {
-            case CHAT_GPT:
-                chatMessage = chatByOpenAi(chatId, command.getModelVersion(), messages);
-                break;
-            case WENXIN:
-                chatMessage = chatByWenXin(chatId, command.getModelVersion(), messages);
-                break;
-            case QIANWEN:
-                chatMessage = chatByQianWen(chatId, command.getModelVersion(), messages);
-                break;
-            case SPARK:
-                chatMessage = chatBySpark(chatId, command.getModelVersion(), messages);
-                break;
-            case ZHIPU:
-                chatMessage = chatByZhiPu(chatId, command.getModelVersion(), messages);
-                break;
-            default:
-                throw new BusinessException("未知的模型类型，功能未接入");
-        }
         ChatMessageDTO userMessage = messages.get(messages.size() - 1);
-        if (ValidatorUtil.isNull(chatMessage) || ValidatorUtil.isNull(chatMessage.getContent())) {
+        ChatMessageCommand chatMessage;
+        try {
+            switch (modelEnum) {
+                case CHAT_GPT:
+                    chatMessage = chatByOpenAi(chatId, command.getModelVersion(), messages);
+                    break;
+                case WENXIN:
+                    chatMessage = chatByWenXin(chatId, command.getModelVersion(), messages);
+                    break;
+                case QIANWEN:
+                    chatMessage = chatByQianWen(chatId, command.getModelVersion(), messages);
+                    break;
+                case SPARK:
+                    chatMessage = chatBySpark(chatId, command.getModelVersion(), messages);
+                    break;
+                case ZHIPU:
+                    chatMessage = chatByZhiPu(chatId, command.getModelVersion(), messages, command.getQuery());
+                    break;
+                default:
+                    throw new BusinessException("未知的模型类型，功能未接入");
+            }
+        } catch (ChatMasterException e) {
             chatMessageService.updateMessageStatus(userMessage.getMessageId(), IntegerEnum.THREE.getValue());
             return ResponseInfo.success();
         }
@@ -174,7 +179,12 @@ public class GptServiceImpl implements IGptService {
                 .messages(openAiMessages)
                 .model(ValidatorUtil.isNotNull(version) ? version : ChatCompletion.Model.GPT_3_5_TURBO.getName())
                 .build();
-        ChatCompletionResponse response = openAiClient.chatCompletion(chatCompletion);
+        ChatCompletionResponse response;
+        try {
+            response = openAiClient.chatCompletion(chatCompletion);
+        } catch (Exception e) {
+            throw new ChatMasterException("OpenAi接口请求异常，请稍后再试");
+        }
         ChatChoice choice = response.getChoices().get(0);
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(response.getId())
                 .model(ChatModelEnum.CHAT_GPT.getValue()).modelVersion(response.getModel())
@@ -197,7 +207,7 @@ public class GptServiceImpl implements IGptService {
             throw new BusinessException("文心一言无有效token，请切换其他模型进行聊天");
         }
         List<MessageItem> messages = new ArrayList<>();
-        chatMessages.stream().forEach(v -> {
+        chatMessages.stream().filter(d -> !d.getRole().equals(ChatRoleEnum.SYSTEM.getValue())).forEach(v -> {
             messages.add(MessageItem.builder().role(v.getRole()).content(v.getContent()).build());
         });
         ModelE modelE = ModelE.ERNIE_Bot_turbo;
@@ -205,16 +215,60 @@ public class GptServiceImpl implements IGptService {
             modelE = ModelE.getEnum(version);
         }
         if (ValidatorUtil.isNull(modelE)) {
-            throw new WenXinException("未知的模型");
+            throw new BusinessException("未知的模型");
         }
-        ChatResponse response = wenXinClient.chat(messages, modelE);
-        if (ValidatorUtil.isNull(response.getId())) {
-            return null;
+        ResponseInfo<ChatResponse> wenxinResponse = wenXinClient.chat(messages, modelE);
+        if (!wenxinResponse.isSuccess()) {
+            throw new ChatMasterException(wenxinResponse.getMsg());
         }
+        ChatResponse response = wenxinResponse.getData();
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(response.getId())
                 .model(ChatModelEnum.WENXIN.getValue()).modelVersion(modelE.getLabel())
                 .content(response.getResult()).role(ChatRoleEnum.ASSISTANT.getValue())
                 .status(ChatStatusEnum.SUCCESS.getValue()).appKey(wenXinClient.getApiKey()).usedTokens(response.getUsage().getTotalTokens())
+                .response(JSON.toJSONString(response))
+                .build();
+        return chatMessage;
+    }
+
+    /**
+     * 智谱清言模型聊天
+     * 支持超拟人大模型，将modelId替换为characterglm
+     * query中增加参数{meta：{"user_info": "我是陆星辰","bot_info:"苏梦远，本名苏远心，是一位当红的国内女歌手及演员。", "user_name": "陆星辰", "bot_name": "苏梦远"}}
+     *
+     * @param chatId
+     * @param chatMessages
+     * @return
+     */
+    private ChatMessageCommand chatByZhiPu(Long chatId, String version, List<ChatMessageDTO> chatMessages, Query query) {
+        if (ValidatorUtil.isNull(zhiPuClient)) {
+            throw new BusinessException("智谱清言无有效token，请切换其他模型进行聊天");
+        }
+        List<ModelApiRequest.Prompt> prompts = new ArrayList<>();
+        chatMessages.stream().filter(d -> !d.getRole().equals(ChatRoleEnum.SYSTEM.getValue())).forEach(v -> {
+            ModelApiRequest.Prompt prompt = new ModelApiRequest.Prompt(v.getRole(), v.getContent());
+            prompts.add(prompt);
+        });
+        ModelApiRequest request = new ModelApiRequest();
+        request.setModelId(ValidatorUtil.isNotNull(version) ? version : Constants.ModelChatGLM6BAsync);
+        request.setPrompt(prompts);
+        // 关闭搜索示例
+        //  modelApiRequest.setRef(new HashMap<String, Object>(){{
+        //    put("enable",false);
+        // }});
+        // 开启搜索示例
+        // modelApiRequest.setRef(new HashMap<String, Object>(){{
+        //    put("enable",true);
+        //    put("search_query","历史");
+        //  }});
+        ModelApiResponse response = zhiPuClient.chat(request, query);
+        if (!response.isSuccess()) {
+            throw new ChatMasterException(response.getMsg());
+        }
+        ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(response.getData().getTaskId())
+                .model(ChatModelEnum.ZHIPU.getValue()).modelVersion(request.getModelId())
+                .content(response.getData().getChoices().get(0).getContent()).role(ChatRoleEnum.ASSISTANT.getValue())
+                .status(ChatStatusEnum.SUCCESS.getValue()).appKey(zhiPuClient.getAppKey()).usedTokens(Long.valueOf(response.getData().getUsage().getTotalTokens()))
                 .response(JSON.toJSONString(response))
                 .build();
         return chatMessage;
@@ -252,10 +306,10 @@ public class GptServiceImpl implements IGptService {
                     .response(JSON.toJSONString(response))
                     .build();
             return chatMessage;
-        } catch (Exception e) {
+        } catch (ApiException | NoApiKeyException | InputRequiredException e) {
             e.printStackTrace();
+            throw new ChatMasterException(e.getMessage());
         }
-        return null;
     }
 
     /**
@@ -270,7 +324,7 @@ public class GptServiceImpl implements IGptService {
             throw new BusinessException("讯飞星火无有效token，请切换其他模型进行聊天");
         }
         List<SparkMessage> messages = new ArrayList<>();
-        chatMessages.stream().forEach(v -> {
+        chatMessages.stream().filter(d -> !d.getRole().equals(ChatRoleEnum.SYSTEM.getValue())).forEach(v -> {
             SparkMessage currentMessage = new SparkMessage(v.getRole(), v.getContent());
             messages.add(currentMessage);
         });
@@ -286,6 +340,9 @@ public class GptServiceImpl implements IGptService {
                 .chatId(chatId.toString())
                 .build();
         SparkSyncChatResponse response = sparkClient.chat(sparkRequest);
+        if (!response.isSuccess()) {
+            throw new ChatMasterException(response.getErrTxt());
+        }
         SparkTextUsage textUsage = response.getTextUsage();
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(UUID.fastUUID().toString())
                 .model(ChatModelEnum.SPARK.getValue()).modelVersion(SparkApiVersion.V2_0.getVersion())
@@ -295,45 +352,6 @@ public class GptServiceImpl implements IGptService {
                 .build();
         return chatMessage;
     }
-
-    /**
-     * 智谱清言模型聊天
-     *
-     * @param chatId
-     * @param chatMessages
-     * @return
-     */
-    private ChatMessageCommand chatByZhiPu(Long chatId, String version, List<ChatMessageDTO> chatMessages) {
-        if (ValidatorUtil.isNull(zhiPuClient)) {
-            throw new BusinessException("智谱清言无有效token，请切换其他模型进行聊天");
-        }
-        List<ModelApiRequest.Prompt> prompts = new ArrayList<>();
-        chatMessages.stream().forEach(v -> {
-            ModelApiRequest.Prompt prompt = new ModelApiRequest.Prompt(v.getRole(), v.getContent());
-            prompts.add(prompt);
-        });
-        ModelApiRequest request = new ModelApiRequest();
-        request.setModelId(ValidatorUtil.isNotNull(version) ? version : Constants.ModelChatGLM6BAsync);
-        request.setPrompt(prompts);
-        // 关闭搜索示例
-        //  modelApiRequest.setRef(new HashMap<String, Object>(){{
-        //    put("enable",false);
-        // }});
-        // 开启搜索示例
-        // modelApiRequest.setRef(new HashMap<String, Object>(){{
-        //    put("enable",true);
-        //    put("search_query","历史");
-        //  }});
-        ModelApiResponse response = zhiPuClient.chat(request);
-        ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(response.getData().getTaskId())
-                .model(ChatModelEnum.ZHIPU.getValue()).modelVersion(request.getModelId())
-                .content(response.getData().getChoices().get(0).getContent()).role(ChatRoleEnum.ASSISTANT.getValue())
-                .status(ChatStatusEnum.SUCCESS.getValue()).appKey(zhiPuClient.getAppKey()).usedTokens(Long.valueOf(response.getData().getUsage().getTotalTokens()))
-                .response(JSON.toJSONString(response))
-                .build();
-        return chatMessage;
-    }
-
 
     /**
      * 扣账户余额

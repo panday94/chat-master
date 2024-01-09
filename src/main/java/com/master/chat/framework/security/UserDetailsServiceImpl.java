@@ -1,10 +1,10 @@
 package com.master.chat.framework.security;
 
 import com.master.chat.gpt.pojo.vo.UserVO;
-import com.master.chat.sys.service.IResourceService;
-import com.master.chat.sys.service.ISysUserService;
 import com.master.chat.gpt.service.IUserService;
 import com.master.chat.sys.pojo.vo.SysUserVO;
+import com.master.chat.sys.service.IResourceService;
+import com.master.chat.sys.service.ISysUserService;
 import com.master.common.constant.AuthConstant;
 import com.master.common.enums.ResponseEnum;
 import com.master.common.validator.ValidatorUtil;

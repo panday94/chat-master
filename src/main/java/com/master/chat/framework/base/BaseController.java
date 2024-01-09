@@ -1,9 +1,9 @@
 package com.master.chat.framework.base;
 
-import com.master.chat.sys.service.ISysUserService;
 import com.master.chat.framework.security.JwtTokenUtils;
 import com.master.chat.framework.security.UserDetail;
 import com.master.chat.sys.pojo.entity.SysUser;
+import com.master.chat.sys.service.ISysUserService;
 import com.master.common.api.ResponseInfo;
 import com.master.common.constant.AuthConstant;
 import com.master.common.constant.StringPoolConstant;

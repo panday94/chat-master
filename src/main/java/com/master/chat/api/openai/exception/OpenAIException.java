@@ -9,24 +9,24 @@ import lombok.Getter;
  *  2023-02-11
  */
 @Getter
-public class BaseException extends RuntimeException {
+public class OpenAIException extends RuntimeException {
 
     private final String msg;
     private final int code;
 
-    public BaseException(IError error) {
+    public OpenAIException(IError error) {
         super(error.msg());
         this.code = error.code();
         this.msg = error.msg();
     }
 
-    public BaseException(String msg) {
+    public OpenAIException(String msg) {
         super(msg);
         this.code = CommonError.SYS_ERROR.code();
         this.msg = msg;
     }
 
-    public BaseException() {
+    public OpenAIException() {
         super(CommonError.SYS_ERROR.msg());
         this.code = CommonError.SYS_ERROR.code();
         this.msg = CommonError.SYS_ERROR.msg();

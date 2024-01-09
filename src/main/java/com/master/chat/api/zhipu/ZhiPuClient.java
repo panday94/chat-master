@@ -2,11 +2,13 @@ package com.master.chat.api.zhipu;
 
 import cn.hutool.core.util.StrUtil;
 import com.master.chat.api.zhipu.interceptor.ZhiPuLogger;
+import com.master.common.api.Query;
 import com.master.common.exception.BusinessException;
-import com.zhipu.oapi.ClientV3;
 import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.core.httpclient.OkHttpTransport;
-import com.zhipu.oapi.service.v3.*;
+import com.zhipu.oapi.service.v3.ModelApiRequest;
+import com.zhipu.oapi.service.v3.ModelApiResponse;
+import com.zhipu.oapi.service.v3.ModelEventSourceListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +17,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +46,7 @@ public class ZhiPuClient {
     private OkHttpClient okHttpClient;
 
     @Getter
-    private ClientV3 clientV3;
+    private ZhiPuApi clientV3;
 
     // 请自定义自己的业务id
     private static final String requestIdTemplate = "master-%d";
@@ -66,7 +66,7 @@ public class ZhiPuClient {
             builder.okHttpClient = this.okHttpClient(builder.logLevel);
         }
         okHttpClient = builder.okHttpClient;
-        clientV3 = new ClientV3.Builder(appKey, appSecret)
+        clientV3 = new ZhiPuApi.Builder(appKey, appSecret)
                 .httpTransport(new OkHttpTransport(okHttpClient))
                 //.devMode(true)
                 .build();
@@ -78,12 +78,12 @@ public class ZhiPuClient {
      * @param request
      * @param eventSourceListener
      */
-    public ModelApiResponse chat(ModelApiRequest request) {
+    public ModelApiResponse chat(ModelApiRequest request, Query query) {
         request.setInvokeMethod(Constants.invokeMethod);
         // returnType 非必填参数
         request.setReturnType(Constants.RETURN_TYPE_TEXT);
         request.setRequestId(String.format(requestIdTemplate, System.currentTimeMillis()));
-        ModelApiResponse invokeModelApiResp = this.clientV3.invokeModelApi(request);
+        ModelApiResponse invokeModelApiResp = this.clientV3.invokeModelApi(request, query);
         return invokeModelApiResp;
     }
 
@@ -93,7 +93,7 @@ public class ZhiPuClient {
      * @param request
      * @param eventSourceListener
      */
-    public void streamChat(ModelApiRequest request, ModelEventSourceListener eventSourceListener) {
+    public void streamChat(ModelApiRequest request, Query query, ModelEventSourceListener eventSourceListener) {
         // 可自定义sse listener
         //request.setSseListener(new StandardEventSourceListener());
         request.setSseListener(eventSourceListener);
@@ -101,33 +101,8 @@ public class ZhiPuClient {
         // returnType 非必填参数
         request.setReturnType(Constants.RETURN_TYPE_JSON);
         request.setRequestId(String.format(requestIdTemplate, System.currentTimeMillis()));
-        this.clientV3.invokeModelApi(request);
+        this.clientV3.invokeModelApi(request, query);
     }
-
-    private static ModelApiRequest invokeRequest() {
-        ModelApiRequest modelApiRequest = new ModelApiRequest();
-        modelApiRequest.setModelId(Constants.ModelChatGLM6BAsync);
-        modelApiRequest.setInvokeMethod(Constants.invokeMethod);
-        // returnType 非必填参数
-        modelApiRequest.setReturnType(Constants.RETURN_TYPE_TEXT);
-        ModelApiRequest.Prompt prompt = new ModelApiRequest.Prompt(ModelConstants.roleUser, "ChatGPT和你哪个更强大");
-        List<ModelApiRequest.Prompt> prompts = new ArrayList<>();
-        prompts.add(prompt);
-        modelApiRequest.setPrompt(prompts);
-        // 关闭搜索示例
-        //  modelApiRequest.setRef(new HashMap<String, Object>(){{
-        //    put("enable",false);
-        // }});
-        // 开启搜索示例
-        // modelApiRequest.setRef(new HashMap<String, Object>(){{
-        //    put("enable",true);
-        //    put("search_query","历史");
-        //  }});
-        String requestId = String.format(requestIdTemplate, System.currentTimeMillis());
-        modelApiRequest.setRequestId(requestId);
-        return modelApiRequest;
-    }
-
 
     /**
      * 创建默认的OkHttpClient
@@ -138,11 +113,12 @@ public class ZhiPuClient {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
                 .retryOnConnectionFailure(true)
-                .connectTimeout(300, TimeUnit.SECONDS)//连接超时
-                .writeTimeout(300, TimeUnit.SECONDS)//写入超时
-                .readTimeout(300, TimeUnit.SECONDS)//读取超时
+                .connectTimeout(300, TimeUnit.SECONDS)
+                .writeTimeout(300, TimeUnit.SECONDS)
+                .readTimeout(300, TimeUnit.SECONDS)
                 .build();
-        okHttpClient.dispatcher().setMaxRequestsPerHost(200); //设置最大并发请求数，避免等待延迟
+        //设置最大并发请求数，避免等待延迟
+        okHttpClient.dispatcher().setMaxRequestsPerHost(200);
         okHttpClient.dispatcher().setMaxRequests(200);
         return okHttpClient;
     }

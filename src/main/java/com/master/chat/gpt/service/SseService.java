@@ -1,6 +1,7 @@
 package com.master.chat.gpt.service;
 
 import com.master.chat.framework.security.UserDetail;
+import com.master.common.api.ResponseInfo;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletResponse;

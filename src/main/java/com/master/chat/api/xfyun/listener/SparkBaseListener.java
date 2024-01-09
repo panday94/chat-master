@@ -3,13 +3,13 @@ package com.master.chat.api.xfyun.listener;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.master.chat.api.xfyun.exception.SparkException;
 import com.master.chat.api.xfyun.entity.SparkMessage;
 import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.entity.response.SparkResponse;
 import com.master.chat.api.xfyun.entity.response.SparkResponseChoices;
 import com.master.chat.api.xfyun.entity.response.SparkResponseHeader;
 import com.master.chat.api.xfyun.entity.response.SparkResponseUsage;
+import com.master.chat.api.xfyun.exception.SparkException;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -109,8 +109,14 @@ public class SparkBaseListener extends WebSocketListener {
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, Response response) {
         super.onFailure(webSocket, t, response);
+        this.onError(webSocket, t, response);
         throw new SparkException(500, "讯飞星火api连接异常：" + t.getMessage(), t);
     }
+
+    public void onError(@NotNull WebSocket webSocket, @NotNull Throwable t, Response response) {
+        super.onFailure(webSocket, t, response);
+    }
+
 
     public SparkRequest getSparkRequest() {
         return sparkRequest;

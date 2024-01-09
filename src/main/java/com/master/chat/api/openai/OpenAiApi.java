@@ -2,8 +2,6 @@ package com.master.chat.api.openai;
 
 import com.master.chat.api.openai.entity.Tts.TextToSpeech;
 import com.master.chat.api.openai.entity.assistant.*;
-import com.master.chat.api.openai.entity.assistant.run.*;
-import com.master.chat.api.openai.entity.assistant.*;
 import com.master.chat.api.openai.entity.assistant.message.MessageFileResponse;
 import com.master.chat.api.openai.entity.assistant.message.MessageResponse;
 import com.master.chat.api.openai.entity.assistant.message.ModifyMessage;

@@ -2,7 +2,7 @@ package com.master.chat.api.openai.interceptor;
 
 import cn.hutool.json.JSONUtil;
 import com.master.chat.api.openai.entity.common.OpenAiResponse;
-import com.master.chat.api.openai.exception.BaseException;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -69,16 +69,16 @@ public class DynamicKeyOpenAiAuthInterceptor extends OpenAiAuthInterceptor {
                 if (ACCOUNT_DEACTIVATED.equals(errorCode) || INVALID_API_KEY.equals(errorCode)) {
                     super.setApiKey(this.onErrorDealApiKeys(key));
                 }
-                throw new BaseException(openAiResponse.getError().getMessage());
+                throw new OpenAIException(openAiResponse.getError().getMessage());
             }
             //非官方定义的错误code
             log.error("--------> 请求异常：{}", errorMsg);
             OpenAiResponse openAiResponse = JSONUtil.toBean(errorMsg, OpenAiResponse.class);
             if (Objects.nonNull(openAiResponse.getError())) {
                 log.error(openAiResponse.getError().getMessage());
-                throw new BaseException(openAiResponse.getError().getMessage());
+                throw new OpenAIException(openAiResponse.getError().getMessage());
             }
-            throw new BaseException(CommonError.RETRY_ERROR);
+            throw new OpenAIException(CommonError.RETRY_ERROR);
         }
         return response;
     }

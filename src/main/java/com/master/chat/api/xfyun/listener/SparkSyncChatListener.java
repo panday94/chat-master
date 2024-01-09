@@ -4,7 +4,10 @@ import com.master.chat.api.xfyun.entity.SparkSyncChatResponse;
 import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.entity.response.SparkResponse;
 import com.master.chat.api.xfyun.entity.response.SparkResponseUsage;
+import okhttp3.Response;
 import okhttp3.WebSocket;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 讯飞星火同步回答监听
@@ -32,6 +35,12 @@ public class SparkSyncChatListener extends SparkBaseListener {
             sparkSyncChatResponse.setTextUsage(usage.getText());
             sparkSyncChatResponse.setOk(true);
         }
+    }
+
+    @Override
+    public void onError(@NotNull WebSocket webSocket, @NotNull Throwable t, Response response) {
+        sparkSyncChatResponse.setErrTxt(t.getMessage());
+        sparkSyncChatResponse.setSuccess(false);
     }
 
 }

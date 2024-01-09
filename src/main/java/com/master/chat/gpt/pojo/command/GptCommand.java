@@ -1,6 +1,7 @@
 package com.master.chat.gpt.pojo.command;
 
 import com.master.common.api.CommonCommand;
+import com.master.common.api.Query;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -71,5 +72,10 @@ public class GptCommand extends CommonCommand implements Serializable {
      * 是否api请求
      */
     private Boolean api;
+
+    /**
+     * 额外参数 如智谱清言 角色大模型参数{meta}
+     */
+    private Query query;
 
 }

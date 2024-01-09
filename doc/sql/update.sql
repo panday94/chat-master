@@ -1,0 +1,2 @@
+# 2024-01-09 增加内容类型字段
+ALTER TABLE `chat_gpt`.`gpt_chat_message` ADD COLUMN `content_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '内容类型：text：文字 image : 图片' AFTER `content`;

@@ -1,10 +1,10 @@
 package com.master.chat.controller.gpt;
 
 import com.master.chat.framework.base.BaseController;
-import com.master.chat.gpt.pojo.vo.RedemptionVO;
-import com.master.chat.sys.constant.SysLogTypeConstant;
 import com.master.chat.gpt.pojo.command.RedemptionCommand;
+import com.master.chat.gpt.pojo.vo.RedemptionVO;
 import com.master.chat.gpt.service.IRedemptionService;
+import com.master.chat.sys.constant.SysLogTypeConstant;
 import com.master.common.annotation.Log;
 import com.master.common.api.IPageInfo;
 import com.master.common.api.Query;

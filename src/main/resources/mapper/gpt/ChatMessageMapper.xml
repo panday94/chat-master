@@ -14,6 +14,7 @@
         <result column="model_version" property="modelVersion"/>
         <result column="role" property="role"/>
         <result column="content" property="content"/>
+        <result column="content_type" property="contentType"/>
         <result column="app_key" property="appKey"/>
         <result column="finish_reason" property="finishReason"/>
         <result column="status" property="status"/>
@@ -24,7 +25,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        t.id, t.create_user, t.create_time, t.chat_id, parent_message_id, t.message_id, t.model, t.model_version, t.role, t.content, t.finish_reason,
+        t.id, t.create_user, t.create_time, t.chat_id, parent_message_id, t.message_id, t.model, t.model_version, t.role, t.content, t.content_type, t.finish_reason,
             t.status, t.app_key, t.used_tokens, t.response, t.deleted
     </sql>
 

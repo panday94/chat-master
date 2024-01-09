@@ -30,6 +30,10 @@ public class SparkSyncChatResponse implements Serializable {
      */
     private boolean ok = false;
 
+    private boolean success = false;
+
+    private String errTxt;
+
     public String getContent() {
         return content;
     }
@@ -53,4 +57,21 @@ public class SparkSyncChatResponse implements Serializable {
     public void setOk(boolean ok) {
         this.ok = ok;
     }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getErrTxt() {
+        return errTxt;
+    }
+
+    public void setErrTxt(String errTxt) {
+        this.errTxt = errTxt;
+    }
+
 }
