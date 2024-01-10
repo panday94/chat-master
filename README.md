@@ -132,10 +132,10 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出同�
 ## 联系我们
 
 <div style="display: flex; gap: 20px;">
-	<div style="text-align: center">
+	<div>
 		<img style="max-width: 100%" src="./doc/file/wechat_group.jpg" alt="交流群" />
 	</div>
-	<div style="text-align: center">
+	<div>
 		<img style="max-width: 100%" src="./doc/file/wxcode.jpg" alt="微信" />
 		<p>添加微信，加入交流群</p>
 	</div>
