@@ -133,7 +133,7 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出同�
 
 <div style="display: flex; gap: 20px;">
 	<div style="text-align: center">
-		<img style="max-width: 100%" src="./doc/file/mpqrcode.jpg" alt="公众号" />
+		<img style="max-width: 100%" src="./doc/file/wechat_group.jpg" alt="公众号" />
 		<p>公众号</p>
 	</div>
 	<div style="text-align: center">
