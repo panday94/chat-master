@@ -25,4 +25,9 @@ public interface SysConfigConstants {
      */
     String ALL_LOGIN = "sys.account.allLogin";
 
+    /**
+     * 是否限制访问ChatMaster开关
+     */
+    String CHAT_MASTER_ON_OFF = "sys.chat.master";
+
 }

@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/SpringBoot-2.3.7-brightgreen.svg)
 
 # 项目简介
-ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出同步响应及流式响应，完美呈现打印机效果。支持ChatGPT模型，同时也支持国内文心一言、通义千问、讯飞星火、智谱清言等主流模型，后续模型持续对接中。
+ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步响应及流式响应，完美呈现打印机效果。支持ChatGPT模型，同时也支持国内文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型，后续模型持续对接中。
 项目包含java后台、网页端、移动端及管理后台配置，欢迎小伙伴一起加入交流[添加微信](#联系我们)。参考下面具体介绍：
 
 * 支持文心一言Stable-Diffusion-XL作图功能
@@ -18,7 +18,7 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出同�
 * 完善的权限控制，权限认证使用Jwt，支持多终端认证系统
 * 管理端前端项目，请移步[chat-master-admin](https://gitee.com/panday94/chat-master-admin)
 * 网页端项目，请移步[chat-master-web](https://gitee.com/panday94/chat-master-web)
-* 移动端开发中。。。
+* 移动端项目，请移步[chat-master-uniapp](https://gitee.com/panday94/chat-master-uniapp)
 
 ## 演示
 
@@ -28,9 +28,18 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出同�
 ![cover](./doc/file/login.jpg)
 ![cover2](./doc/file/chat.gif)
 
+## 已实现功能
+1. 多模型对话，支持ChatGPT(3.5、4.0)、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)
+2. 支持后台配置及使用assistant模版，按指定prompt输出
+3. 存储历史对话及聊天内容，可开启/关闭根据上下文输出
+4. 支持按使用次数或者开通会员使用，也可全局判断不校验使用次数及会员。
+5. 支持分享功能（基础上开发）
+6. 支持个人信息修改
+
 ## 待实现功能
-1. 会员充值
-2. 邀请用户
+1. vip及svip开通功能
+2. 分享赠送次数功能
+3. 用户上传自己密钥使用
 
 ## 模型功能对比
 
@@ -42,7 +51,7 @@ ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出同�
 | 文心一言    | 不支持(传递会报错)  | 可以回复(不准)   | 使用Stable-Diffusion-XL |
 | 通义千问    | 支持             | 支持(效果没讯飞好) | 未接入                   |
 | 讯飞星火    | 不支持(传递不会报错) | 支持(准)      | 不支持                   |
-| 智谱清言    | 不支持(传递会报错)   | 不支持        | 不支持（API未提供            |
+| 智谱清言    | 不支持(传递会报错)   | 不支持        | 支持（API待接入目前有点贵）       |
 
 
 ## 内置功能

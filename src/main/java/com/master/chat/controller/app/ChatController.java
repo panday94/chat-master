@@ -113,7 +113,7 @@ public class ChatController extends BaseAppController {
      */
     @PostMapping()
     public ResponseInfo<ChatVO> saveChat(@RequestBody ChatCommand command) {
-        command.setUserId(getuserId());
+        command.setUserId(getUserId());
         return chatService.saveChat(command);
     }
 
@@ -126,6 +126,9 @@ public class ChatController extends BaseAppController {
      */
     @PostMapping("/message")
     public ResponseInfo sendMessage(@Validated @RequestBody GptCommand command) {
+        command.setUserId(getUserId());
+        // 校验用户
+        gptService.validateUser(getUserId());
         return chatMessageService.saveChatMessage(command);
     }
 
@@ -138,7 +141,7 @@ public class ChatController extends BaseAppController {
      */
     @PostMapping("/json")
     public ResponseInfo jsonChat(@RequestBody GptCommand command) {
-        command.setUserId(getuserId());
+        command.setUserId(getUserId());
         return gptService.chat(command);
     }
 

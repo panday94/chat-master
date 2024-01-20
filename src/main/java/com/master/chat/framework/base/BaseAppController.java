@@ -66,7 +66,7 @@ public abstract class BaseAppController extends ResponseInfo {
     /**
      * 获取登录用户id
      */
-    public Long getuserId() {
+    public Long getUserId() {
         return getLoginUser().getId();
     }
 

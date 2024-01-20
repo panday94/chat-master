@@ -1,17 +1,21 @@
 package com.master.chat.gpt.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.master.chat.framework.security.JWTPasswordEncoder;
+import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.enums.UserTypeEnum;
 import com.master.chat.gpt.mapper.UserMapper;
 import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.UserVO;
+import com.master.chat.gpt.service.IBaseConfigService;
 import com.master.chat.gpt.service.IUserService;
+import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
 import com.master.common.api.IPageInfo;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
@@ -39,6 +43,8 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private IBaseConfigService baseConfigService;
 
     /**
      * 根据id获取会员用户信息
@@ -88,7 +94,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .loginTime(LocalDateTime.now())
                 .uid(UUID.randomUUID().toString())
                 .name(name).nickName(name).tel(tel).password(JWTPasswordEncoder.bcryptEncode(password))
+                .type(3)
                 .build();
+        JSONObject appObject = baseConfigService.getBaseConfigByName(BaseConfigConstant.APP_INFO).getData();
+        if (ValidatorUtil.isNotNull(appObject) && ValidatorUtil.isNotNull(appObject.getString("freeNum"))) {
+            user.setNum(Long.valueOf(appObject.getString("freeNum")));
+        }
         userMapper.insert(user);
         return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
     }
@@ -118,6 +129,49 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         DozerUtil.convertor(command, user);
         user.setUpdateUser(command.getOperater());
         user.setUpdateTime(LocalDateTime.now());
+        userMapper.updateById(user);
+        return ResponseInfo.success();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseInfo updateUserContext(UserCommand command) {
+        User user = getUser(command.getOperaterId());
+        user.setContext(command.getContext());
+        userMapper.updateById(user);
+        return ResponseInfo.success();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseInfo updateUserAvatar(Long id, String avatar) {
+        User user = getUser(id);
+        user.setAvatar(avatar);
+        userMapper.updateById(user);
+        return ResponseInfo.success(avatar);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseInfo updatePassword(SysUserPasswordCommand command) {
+        User user = getUser(command.getOperaterId());
+        boolean isBcrypt = JWTPasswordEncoder.matchesBcrypt(user.getPassword());
+        if (isBcrypt) {
+            if (!JWTPasswordEncoder.matchesBcrypt(command.getOldPassword(), user.getPassword())) {
+                return ResponseInfo.businessFail("旧密码错误，您还有5次机会或者联系管理员重置密码");
+            }
+            if (JWTPasswordEncoder.matchesBcrypt(command.getNewPassword(), user.getPassword())) {
+                return ResponseInfo.businessFail("新密码与旧密码相同，无需重置");
+            }
+        } else {
+            if (!command.getOldPassword().equals(user.getPassword())) {
+                return ResponseInfo.businessFail("旧密码错误，您还有5次机会或者联系管理员重置密码");
+            }
+            if (command.getNewPassword().equals(user.getPassword())) {
+                return ResponseInfo.businessFail("新密码与旧密码相同，无需重置");
+            }
+        }
+        user.setPassword(JWTPasswordEncoder.bcryptEncode(command.getNewPassword()));
         userMapper.updateById(user);
         return ResponseInfo.success();
     }

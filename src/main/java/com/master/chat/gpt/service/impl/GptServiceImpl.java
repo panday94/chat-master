@@ -11,6 +11,7 @@ import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.master.chat.api.base.enums.ChatModelEnum;
 import com.master.chat.api.base.enums.ChatRoleEnum;
 import com.master.chat.api.base.exception.ChatMasterException;
@@ -31,6 +32,8 @@ import com.master.chat.api.xfyun.entity.SparkSyncChatResponse;
 import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.entity.response.SparkTextUsage;
 import com.master.chat.api.zhipu.ZhiPuClient;
+import com.master.chat.common.constant.SysConfigConstants;
+import com.master.chat.framework.base.BaseEntity;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.mapper.ModelMapper;
 import com.master.chat.gpt.mapper.OpenkeyMapper;
@@ -44,6 +47,7 @@ import com.master.chat.gpt.pojo.vo.ModelVO;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.gpt.service.IChatService;
 import com.master.chat.gpt.service.IGptService;
+import com.master.chat.sys.service.ISysConfigService;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
 import com.master.common.enums.IntegerEnum;
@@ -84,6 +88,8 @@ public class GptServiceImpl implements IGptService {
     private ModelMapper modelMapper;
     @Autowired
     private OpenkeyMapper openkeyMapper;
+    @Autowired
+    private ISysConfigService configService;
     private static OpenAiClient openAiClient;
     private static WenXinClient wenXinClient;
     private static ZhiPuClient zhiPuClient;
@@ -155,7 +161,6 @@ public class GptServiceImpl implements IGptService {
         chatMessage.setParentMessageId(userMessage.getMessageId());
         chatMessageService.saveChatMessage(chatMessage);
         chatMessageService.updateMessageStatus(userMessage.getMessageId(), IntegerEnum.TWO.getValue());
-        reduceUserNum(command.getUserId());
         updateToken(chatMessage.getAppKey(), chatMessage.getUsedTokens(), chatMessage.getMessageId());
         return ResponseInfo.success(DozerUtil.convertor(chatMessage, ChatMessageVO.class));
     }
@@ -354,19 +359,6 @@ public class GptServiceImpl implements IGptService {
     }
 
     /**
-     * 扣账户余额
-     *
-     * @param command
-     */
-    private void reduceUserNum(Long userId) {
-        if (ValidatorUtil.isNotNull(userId)) {
-            User user = userMapper.selectById(userId);
-            user.setNum(user.getNum() - 1);
-            userMapper.updateById(user);
-        }
-    }
-
-    /**
      * 更新token额度
      */
     private void updateToken(String appKey, Long usedTokens, String messageId) {
@@ -381,7 +373,9 @@ public class GptServiceImpl implements IGptService {
     }
 
     @Override
-    public List<ChatMessageDTO> listMessageByConverstationId(Boolean context, String conversationId) {
+    public List<ChatMessageDTO> listMessageByConverstationId(Long userId, String conversationId) {
+        User user = userMapper.selectById(userId);
+        Boolean context = user.getContext();
         ChatMessageDTO chatMessage = chatMessageService.getChatByMessageId(conversationId).getData();
         List<ChatMessageDTO> chatMessages = new ArrayList<>();
         if (ValidatorUtil.isNotNull(context) && context) {
@@ -398,18 +392,22 @@ public class GptServiceImpl implements IGptService {
      */
     @Override
     public void validateUser(Long userId) {
-        if (ValidatorUtil.isNullOrZero(userId)) {
-            log.error("必须为游客身份或者会员身份");
-            throw new ProhibitVisitException();
-        }
-        // 会员身份处理
         User user = userMapper.selectById(userId);
         if (ValidatorUtil.isNull(user)) {
             throw new ProhibitVisitException();
         }
-        if (user.getNum() <= 0) {
-            throw new BusinessException("使用次数已用完，可以分享获取次数或者开通会员享受更高权益");
+        // 是否限制访问ChatMASTER
+        Boolean flag = configService.getKeyValue(SysConfigConstants.CHAT_MASTER_ON_OFF);
+        if (!flag) {
+            return;
         }
+        if (user.getNum() < 1) {
+            throw new BusinessException("电量不足，请分享好友获取电量或开通会员");
+        }
+        // 扣电量
+        UpdateWrapper<User> uw = new UpdateWrapper<>();
+        uw.lambda().set(User::getNum, user.getNum() - 1).eq(BaseEntity::getId, user.getId());
+        userMapper.update(null, uw);
     }
 
     @Override

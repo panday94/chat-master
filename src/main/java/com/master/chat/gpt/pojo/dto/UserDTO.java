@@ -84,6 +84,11 @@ public class UserDTO implements Serializable {
     private String ip;
 
     /**
+     * 是否开启上下文
+     */
+    private Boolean context;
+
+    /**
      * 调用次数
      */
     private Long num;
@@ -94,7 +99,7 @@ public class UserDTO implements Serializable {
     private Long shareId;
 
     /**
-     * 用户类型
+     * 用户类型 1 微信小程序 2 公众号 3 手机号
      */
     private Integer type;
 

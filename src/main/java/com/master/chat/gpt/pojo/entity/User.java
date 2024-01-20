@@ -78,6 +78,11 @@ public class User extends BaseEntity {
     private String ip;
 
     /**
+     * 是否开启上下文
+     */
+    private Boolean context;
+
+    /**
      * 调用次数
      */
     private Long num;

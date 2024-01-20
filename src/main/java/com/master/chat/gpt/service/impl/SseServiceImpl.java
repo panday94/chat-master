@@ -153,9 +153,7 @@ public class SseServiceImpl implements SseService {
             log.info("聊天消息推送失败uid:[{}],没有创建连接，请重试。", user.getUid());
             throw new BusinessException("聊天消息推送失败uid:[{}],没有创建连接，请重试。~");
         }
-        // 校验用户
-        gptService.validateUser(user.getId());
-        List<ChatMessageDTO> chatMessages = gptService.listMessageByConverstationId(user.getContext(), conversationId);
+        List<ChatMessageDTO> chatMessages = gptService.listMessageByConverstationId(user.getId(), conversationId);
         if (ValidatorUtil.isNullIncludeArray(chatMessages)) {
             throw new BusinessException("消息发送失败");
         }

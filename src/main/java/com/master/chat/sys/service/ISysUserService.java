@@ -81,7 +81,7 @@ public interface ISysUserService extends IService<SysUser> {
     ResponseInfo updateSysUser(SysUserCommand command);
 
     /**
-     * 修改账号
+     * 修改头像
      *
      * @param id     用户id
      * @param avatar 头像

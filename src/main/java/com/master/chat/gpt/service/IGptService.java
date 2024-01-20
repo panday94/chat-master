@@ -49,7 +49,7 @@ public interface IGptService {
      * @param conversationId 对话id
      * @return
      */
-    List<ChatMessageDTO> listMessageByConverstationId(Boolean context, String conversationId);
+    List<ChatMessageDTO> listMessageByConverstationId(Long userId, String conversationId);
 
     /**
      * 校验账户余额

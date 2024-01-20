@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.UserVO;
+import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
 import com.master.common.api.IPageInfo;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
@@ -76,6 +77,31 @@ public interface IUserService extends IService<User> {
      * @return 结果
      */
     ResponseInfo updateUser(UserCommand command);
+
+    /**
+     * 修改会员用户
+     *
+     * @param command 会员用户
+     * @return 结果
+     */
+    ResponseInfo updateUserContext(UserCommand command);
+
+    /**
+     * 修改头像
+     *
+     * @param id     用户id
+     * @param avatar 头像
+     * @return
+     */
+    ResponseInfo updateUserAvatar(Long id, String avatar);
+
+    /**
+     * 修改账号密码
+     *
+     * @param command 账号信息
+     * @return
+     */
+    ResponseInfo updatePassword(SysUserPasswordCommand command);
 
     /**
      * 批量删除会员用户

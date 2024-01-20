@@ -16,12 +16,7 @@ public interface BaseConfigConstant {
     String BASE_INFO = "baseInfo";
 
     /**
-     * 额外信息
-     */
-    String EXTRA_INFO = "extraInfo";
-
-    /**
-     * app信息
+     * 应用信息
      */
     String APP_INFO = "appInfo";
 
@@ -29,5 +24,10 @@ public interface BaseConfigConstant {
      * 微信信息
      */
     String WX_INFO = "wxInfo";
+
+    /**
+     * 额外信息
+     */
+    String EXTRA_INFO = "extraInfo";
 
 }

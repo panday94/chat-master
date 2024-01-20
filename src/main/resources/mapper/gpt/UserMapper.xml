@@ -19,6 +19,7 @@
         <result column="openid" property="openid"/>
         <result column="unionid" property="unionid"/>
         <result column="ip" property="ip"/>
+        <result column="context" property="context"/>
         <result column="num" property="num"/>
         <result column="share_id" property="shareId"/>
         <result column="type" property="type"/>
@@ -29,7 +30,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.login_time, t.uid, t.name, t.nick_name, t.tel, t.password,
-            t.avatar, t.openid, t.unionid, t.ip, t.num, t.share_id, t.type, t.status, t.deleted
+            t.avatar, t.openid, t.unionid, t.ip, t.context, t.num, t.share_id, t.type, t.status, t.deleted
     </sql>
 
     <!-- 通用查询条件 -->

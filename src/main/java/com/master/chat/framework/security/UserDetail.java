@@ -63,11 +63,6 @@ public class UserDetail implements UserDetails {
     private Boolean enabled;
 
     /**
-     * 是否开启上下文
-     */
-    private Boolean context;
-
-    /**
      * 账号角色 1 后台 2 用户
      */
     private Integer role;
