@@ -1,4 +1,4 @@
-package com.master.chat.gpt.pojo.entity;
+package com.master.chat.sys.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@TableName("gpt_base_config")
+@TableName("sys_base_config")
 public class BaseConfig extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
