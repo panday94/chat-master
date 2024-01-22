@@ -1,16 +1,15 @@
-package com.master.chat.gpt.service.impl;
+package com.master.chat.sys.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.master.chat.gpt.mapper.BaseConfigMapper;
-import com.master.chat.gpt.pojo.command.BaseConfigCommand;
-import com.master.chat.gpt.pojo.entity.BaseConfig;
-import com.master.chat.gpt.pojo.vo.BaseConfigVO;
-import com.master.chat.gpt.service.IBaseConfigService;
+import com.master.chat.sys.mapper.BaseConfigMapper;
+import com.master.chat.sys.pojo.command.BaseConfigCommand;
+import com.master.chat.sys.pojo.entity.BaseConfig;
+import com.master.chat.sys.pojo.vo.BaseConfigVO;
+import com.master.chat.sys.service.IBaseConfigService;
 import com.master.common.api.IPageInfo;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
@@ -71,12 +70,12 @@ public class BaseConfigServiceImpl extends ServiceImpl<BaseConfigMapper, BaseCon
     }
 
     @Override
-    public ResponseInfo<JSONObject> getBaseConfigByName(String name) {
+    public <T> T getBaseConfigByName(String name, Class<T> t) {
         BaseConfig baseConfig = baseConfigMapper.selectOne(new LambdaQueryWrapper<BaseConfig>().eq(BaseConfig::getName, name));
         if (ValidatorUtil.isNull(baseConfig) || ValidatorUtil.isNull(baseConfig.getData())) {
-            return ResponseInfo.success();
+            return null;
         }
-        return ResponseInfo.success(JSON.parseObject(baseConfig.getData()));
+        return JSON.parseObject(baseConfig.getData(), t);
     }
 
     @Override

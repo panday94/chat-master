@@ -1,9 +1,9 @@
-package com.master.chat.gpt.mapper;
+package com.master.chat.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.master.chat.gpt.pojo.entity.BaseConfig;
-import com.master.chat.gpt.pojo.vo.BaseConfigVO;
+import com.master.chat.sys.pojo.entity.BaseConfig;
+import com.master.chat.sys.pojo.vo.BaseConfigVO;
 import com.master.common.api.Query;
 import org.apache.ibatis.annotations.Param;
 

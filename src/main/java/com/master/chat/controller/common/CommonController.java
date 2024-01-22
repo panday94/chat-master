@@ -1,11 +1,14 @@
 package com.master.chat.controller.common;
 
+import com.master.chat.common.constant.OssConstant;
 import com.master.chat.common.constant.RedisConstants;
 import com.master.chat.common.constant.SmsConstant;
+import com.master.chat.common.enums.OssEnum;
 import com.master.chat.common.util.*;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.gpt.pojo.vo.AssistantTypeVO;
 import com.master.chat.gpt.service.IAssistantTypeService;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.pojo.vo.DictVO;
 import com.master.chat.sys.pojo.vo.SysUserVO;
 import com.master.chat.sys.service.*;
@@ -13,6 +16,7 @@ import com.master.common.api.FileInfo;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
 import com.master.common.api.SelectDTO;
+import com.master.common.constant.StringPoolConstant;
 import com.master.common.enums.IntEnum;
 import com.master.common.enums.ResponseEnum;
 import com.master.common.enums.StatusEnum;
@@ -26,8 +30,6 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,30 @@ public class CommonController {
     private final ISysConfigService configService;
     private final ISysUserService sysUserService;
     private final IAssistantTypeService assistantTypeService;
+    private final IBaseConfigService baseConfigService;
     private final RedisUtils redisUtils;
+
+    /**
+     * 根据系统配置本地/oss上传文件
+     *
+     * @author: Yang
+     * @date: 2023/01/31
+     * @version: 1.0.0
+     */
+    @RequestMapping("/file/upload")
+    public ResponseInfo<FileInfo> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "pathName", required = false) String pathName) {
+        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
+        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getOssType()) || OssEnum.LOCAL.getValue().equals(extraInfo.getOssType())) {
+            String filePath = SystemConfig.uploadPath + getPathName(pathName);
+            FileInfo fileInfo = FileUploadUtils.upload(filePath, file);
+            fileInfo.setFileUrl(SystemConfig.baseUrl + fileInfo.getFileUrl());
+            return ResponseInfo.success(fileInfo);
+        }
+        if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
+            return ResponseInfo.success(AliyunOSSUtil.uploadFile(file, getPathName(pathName)));
+        }
+        return ResponseInfo.validateFail("未知的上传文件方式，上传失败");
+    }
 
     /**
      * 上传本地文件
@@ -61,37 +86,11 @@ public class CommonController {
      * @date: 2023/01/31
      * @version: 1.0.0
      */
-    @RequestMapping("/file/upload")
-    public ResponseInfo<FileInfo> upload(@RequestParam("file") MultipartFile file) {
-        // 上传文件路径
-        String filePath = SystemConfig.uploadPath;
-        // 上传并返回新文件名称
-        String fileName;
-        try {
-            fileName = FileUploadUtils.upload(filePath, file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseInfo.error("文件上传失败");
-        }
-        int newFileNameSeparatorIndex = fileName.lastIndexOf("/");
-        String newFileName = fileName.substring(newFileNameSeparatorIndex + 1).toLowerCase();
-        int separatorIndex = newFileName.lastIndexOf(".");
-        String suffix = newFileName.substring(separatorIndex + 1).toLowerCase();
-
-        // 计算文件大小信息
-        long size = file.getSize();
-        String fileSizeInfo = "0kB";
-        if (size != 0) {
-            String[] unitNames = new String[]{"B", "kB", "MB", "GB", "TB", "EB"};
-            int digitGroups = Math.min(unitNames.length - 1, (int) (Math.log10(size) / Math.log10(1024)));
-            fileSizeInfo = new DecimalFormat("#,##0.##").format(size / Math.pow(1024, digitGroups)) + " " + unitNames[digitGroups];
-        }
-        FileInfo fileInfo = new FileInfo();
-        fileInfo.setFileName(file.getOriginalFilename());
-        fileInfo.setFilePath(fileName);
-        fileInfo.setFileUrl(fileName);
-        fileInfo.setSize(fileSizeInfo);
-        fileInfo.setType(suffix);
+    @RequestMapping("/file/local/upload")
+    public ResponseInfo<FileInfo> uploadLocal(@RequestParam("file") MultipartFile file, @RequestParam(value = "pathName", required = false) String pathName) {
+        String filePath = SystemConfig.uploadPath + getPathName(pathName);
+        FileInfo fileInfo = FileUploadUtils.upload(filePath, file);
+        fileInfo.setFileUrl(SystemConfig.baseUrl + fileInfo.getFileUrl());
         return ResponseInfo.success(fileInfo);
     }
 
@@ -103,8 +102,8 @@ public class CommonController {
      * @version: 1.0.0
      */
     @RequestMapping("/file/oss/upload")
-    public ResponseInfo<FileInfo> uploadOss(@RequestParam("file") MultipartFile file, @RequestParam("pathName") String pathName) {
-        return ResponseInfo.success(AliyunOSSUtil.uploadFile(file, "demo/" + pathName));
+    public ResponseInfo<FileInfo> uploadOss(@RequestParam("file") MultipartFile file, @RequestParam(value = "pathName", required = false) String pathName) {
+        return ResponseInfo.success(AliyunOSSUtil.uploadFile(file, getPathName(pathName)));
     }
 
     /**
@@ -115,8 +114,27 @@ public class CommonController {
      * @version: 1.0.0
      */
     @RequestMapping("/file/oss/batch/upload")
-    public ResponseInfo<FileInfo> batchUploadOss(@RequestParam("file") MultipartFile[] files, @RequestParam("pathName") String pathName) {
-        return ResponseInfo.success(AliyunOSSUtil.uploadFiles(files, "demo/" + pathName));
+    public ResponseInfo<FileInfo> batchUploadOss(@RequestParam("file") MultipartFile[] files, @RequestParam(value = "pathName", required = false) String pathName) {
+        return ResponseInfo.success(AliyunOSSUtil.uploadFiles(files, getPathName(pathName)));
+    }
+
+    /**
+     * 获取文件路径名称
+     *
+     * @param pathName
+     * @return
+     */
+    private String getPathName(String pathName) {
+        if (ValidatorUtil.isNull(pathName)) {
+            return OssConstant.DEFAULT_FILE;
+        }
+        if (pathName.startsWith(StringPoolConstant.SLASH)) {
+            pathName = pathName.substring(1, pathName.length());
+        }
+        if (!pathName.endsWith(StringPoolConstant.SLASH)) {
+            pathName = pathName + StringPoolConstant.SLASH;
+        }
+        return pathName;
     }
 
     /**

@@ -14,9 +14,9 @@ import com.master.chat.api.xfyun.SparkClient;
 import com.master.chat.api.zhipu.ZhiPuClient;
 import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.mapper.OpenkeyMapper;
-import com.master.chat.gpt.pojo.dto.BaseInfoDTO;
 import com.master.chat.gpt.pojo.vo.OpenkeyVO;
-import com.master.chat.gpt.service.IBaseConfigService;
+import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
+import com.master.chat.sys.service.IBaseConfigService;
 import com.master.common.enums.IntegerEnum;
 import com.master.common.validator.ValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -64,8 +64,7 @@ public class InitBean {
                 .writeTimeout(600, TimeUnit.SECONDS)
                 .readTimeout(600, TimeUnit.SECONDS)
                 .build();
-        JSONObject baseObject = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO).getData();
-        BaseInfoDTO baseInfo = JSON.parseObject(JSON.toJSONString(baseObject), BaseInfoDTO.class);
+        BaseInfoDTO baseInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO, BaseInfoDTO.class);
         String apiHost = null;
         if (baseInfo.getProxyType().equals(IntegerEnum.TWO.getValue()) && ValidatorUtil.isNotNull(baseInfo.getProxyServer())) {
             apiHost = baseInfo.getProxyServer();
@@ -98,8 +97,7 @@ public class InitBean {
                 .writeTimeout(600, TimeUnit.SECONDS)
                 .readTimeout(600, TimeUnit.SECONDS)
                 .build();
-        JSONObject baseObject = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO).getData();
-        BaseInfoDTO baseInfo = JSON.parseObject(JSON.toJSONString(baseObject), BaseInfoDTO.class);
+        BaseInfoDTO baseInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO, BaseInfoDTO.class);
         String apiHost = null;
         if (baseInfo.getProxyType().equals(IntegerEnum.TWO.getValue()) && ValidatorUtil.isNotNull(baseInfo.getProxyServer())) {
             apiHost = baseInfo.getProxyServer();

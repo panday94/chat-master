@@ -1,6 +1,5 @@
 package com.master.chat.controller.app;
 
-import com.alibaba.fastjson.JSONObject;
 import com.master.chat.common.constant.RedisConstants;
 import com.master.chat.common.constant.SmsConstant;
 import com.master.chat.common.util.AliyunSMSUtil;
@@ -11,6 +10,11 @@ import com.master.chat.gpt.pojo.vo.AgreementVO;
 import com.master.chat.gpt.pojo.vo.AppConfigVO;
 import com.master.chat.gpt.pojo.vo.AssistantVO;
 import com.master.chat.gpt.service.*;
+import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
+import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
+import com.master.chat.sys.pojo.dto.config.WxInfoDTO;
+import com.master.chat.sys.service.IBaseConfigService;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
 import com.master.common.enums.IntEnum;
@@ -86,10 +90,10 @@ public class AppApiController {
      */
     @GetMapping("/home/config")
     public ResponseInfo getHomeConfig() {
-        JSONObject baseInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO).getData();
-        JSONObject extraInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.EXTRA_INFO).getData();
-        JSONObject appInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.APP_INFO).getData();
-        JSONObject wxInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.WX_INFO).getData();
+        BaseInfoDTO baseInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO, BaseInfoDTO.class);
+        WxInfoDTO wxInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.WX_INFO, WxInfoDTO.class);
+        AppInfoDTO appInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.APP_INFO, AppInfoDTO.class);
+        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.EXTRA_INFO, ExtraInfoDTO.class);
         Query query = new Query();
         query.put("status", StatusEnum.ENABLED.getValue());
         List<AssistantVO> assistants = assistantService.listAssistant(query).getData();

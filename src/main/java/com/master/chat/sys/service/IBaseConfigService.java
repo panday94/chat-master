@@ -1,13 +1,14 @@
-package com.master.chat.gpt.service;
+package com.master.chat.sys.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.master.chat.gpt.pojo.command.BaseConfigCommand;
-import com.master.chat.gpt.pojo.entity.BaseConfig;
-import com.master.chat.gpt.pojo.vo.BaseConfigVO;
+import com.master.chat.sys.pojo.command.BaseConfigCommand;
+import com.master.chat.sys.pojo.entity.BaseConfig;
+import com.master.chat.sys.pojo.vo.BaseConfigVO;
 import com.master.common.api.IPageInfo;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public interface IBaseConfigService extends IService<BaseConfig> {
      * @param name 配置名称
      * @return
      */
-    ResponseInfo<JSONObject> getBaseConfigByName(String name);
+    <T> T getBaseConfigByName(String name, Class<T> tClass);
 
     /**
      * 根据配置名称获取配置信息

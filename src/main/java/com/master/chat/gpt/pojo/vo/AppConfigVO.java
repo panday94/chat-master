@@ -1,6 +1,10 @@
 package com.master.chat.gpt.pojo.vo;
 
 import com.alibaba.fastjson.JSONObject;
+import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
+import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
+import com.master.chat.sys.pojo.dto.config.WxInfoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,22 +32,22 @@ public class AppConfigVO implements Serializable {
     /**
      * 基础配置信息
      */
-    private JSONObject baseInfo;
+    private BaseInfoDTO baseInfo;
 
     /**
      * 额外配置信息
      */
-    private JSONObject extraInfo;
+    private ExtraInfoDTO extraInfo;
 
     /**
      * app信息
      */
-    private JSONObject appInfo;
+    private AppInfoDTO appInfo;
 
     /**
      * 微信信息
      */
-    private JSONObject wxInfo;
+    private WxInfoDTO wxInfo;
 
     /**
      * 主要模型

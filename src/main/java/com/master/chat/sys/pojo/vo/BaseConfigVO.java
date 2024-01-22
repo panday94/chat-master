@@ -1,4 +1,4 @@
-package com.master.chat.gpt.pojo.vo;
+package com.master.chat.sys.pojo.vo;
 
 import lombok.Data;
 

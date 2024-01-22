@@ -45,6 +45,11 @@ public class ChatMessageVO implements Serializable {
     private Long chatId;
 
     /**
+     * 聊天摘要
+     */
+    private String chatTitle;
+
+    /**
      * 关联消息id
      */
     private String parentMessageId;

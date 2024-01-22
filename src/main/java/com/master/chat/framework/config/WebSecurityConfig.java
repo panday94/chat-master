@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers(
                 "/global/**", "/static/**", "/images/**", "/druid/**",
-                "/oauth/token", "/logout", "/captchaImage", "/profile/**", "/api/**", "/app/api/**",
+                "/oauth/token", "/logout", "/captchaImage", "/files/**", "/api/**", "/app/api/**",
                 "/common/**", "/sys-user/register", "/websocket/**");
     }
 

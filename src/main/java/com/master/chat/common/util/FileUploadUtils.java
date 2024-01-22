@@ -3,6 +3,9 @@ package com.master.chat.common.util;
 import cn.hutool.core.util.IdUtil;
 import com.master.chat.common.constant.Constants;
 import com.master.chat.framework.config.SystemConfig;
+import com.master.common.api.FileInfo;
+import com.master.common.constant.StringPoolConstant;
+import com.master.common.exception.BusinessException;
 import com.master.common.exception.FileException;
 import com.master.common.utils.DateUtil;
 import com.master.common.utils.file.MimeTypeUtils;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 
 /**
@@ -36,30 +40,18 @@ public class FileUploadUtils {
     public static final int DEFAULT_FILE_NAME_LENGTH = 100;
 
     /**
-     * 默认上传的地址
-     */
-    private static String defaultBaseDir = Constants.RESOURCE_PREFIX;
-
-    public static void setDefaultBaseDir(String defaultBaseDir) {
-        FileUploadUtils.defaultBaseDir = defaultBaseDir;
-    }
-
-    public static String getDefaultBaseDir() {
-        return defaultBaseDir;
-    }
-
-    /**
      * 以默认配置进行文件上传
      *
      * @param file 上传的文件
      * @return 文件名称
      * @throws Exception
      */
-    public static final String upload(MultipartFile file) throws IOException {
+    public static final FileInfo upload(MultipartFile file) {
         try {
-            return upload(getDefaultBaseDir(), file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
+            return upload(SystemConfig.uploadPath, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
         } catch (Exception e) {
-            throw new IOException(e.getMessage(), e);
+            e.printStackTrace();
+            throw new BusinessException("文件上传失败");
         }
     }
 
@@ -71,11 +63,12 @@ public class FileUploadUtils {
      * @return 文件名称
      * @throws IOException
      */
-    public static final String upload(String baseDir, MultipartFile file) throws IOException {
+    public static final FileInfo upload(String baseDir, MultipartFile file) {
         try {
             return upload(baseDir, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
         } catch (Exception e) {
-            throw new IOException(e.getMessage(), e);
+            e.printStackTrace();
+            throw new BusinessException("文件上传失败");
         }
     }
 
@@ -91,21 +84,38 @@ public class FileUploadUtils {
      * @throws IOException                          比如读写文件出错时
      * @throws InvalidExtensionException            文件校验异常
      */
-    public static final String upload(String baseDir, MultipartFile file, String[] allowedExtension)
+    public static final FileInfo upload(String baseDir, MultipartFile file, String[] allowedExtension)
             throws IOException {
         int fileNamelength = file.getOriginalFilename().length();
         if (fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
             throw new FileException("上传文件名长度最大为：" + FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
         }
-
         assertAllowed(file, allowedExtension);
-
         String fileName = extractFilename(file);
-
         File desc = getAbsoluteFile(baseDir, fileName);
         file.transferTo(desc);
         String pathFileName = getPathFileName(baseDir, fileName);
-        return pathFileName;
+
+        // 计算属性
+        int newFileNameSeparatorIndex = pathFileName.lastIndexOf("/");
+        String newFileName = pathFileName.substring(newFileNameSeparatorIndex + 1).toLowerCase();
+        int separatorIndex = newFileName.lastIndexOf(".");
+        String suffix = newFileName.substring(separatorIndex + 1).toLowerCase();
+        // 计算文件大小信息
+        long size = file.getSize();
+        String fileSizeInfo = "0kB";
+        if (size != 0) {
+            String[] unitNames = new String[]{"B", "kB", "MB", "GB", "TB", "EB"};
+            int digitGroups = Math.min(unitNames.length - 1, (int) (Math.log10(size) / Math.log10(1024)));
+            fileSizeInfo = new DecimalFormat("#,##0.##").format(size / Math.pow(1024, digitGroups)) + " " + unitNames[digitGroups];
+        }
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setFileName(file.getOriginalFilename());
+        fileInfo.setFilePath(pathFileName);
+        fileInfo.setFileUrl(pathFileName);
+        fileInfo.setSize(fileSizeInfo);
+        fileInfo.setType(suffix);
+        return fileInfo;
     }
 
     /**
@@ -113,7 +123,7 @@ public class FileUploadUtils {
      */
     public static final String extractFilename(MultipartFile file) {
         String extension = getExtension(file);
-        String fileName = DateUtil.formatLocalDate(LocalDate.now(), "yyyy/MM") + "/" + IdUtil.fastUUID() + "." + extension;
+        String fileName = DateUtil.formatLocalDate(LocalDate.now(), "yyyy/MM") + StringPoolConstant.SLASH + IdUtil.fastUUID() + "." + extension;
         return fileName;
     }
 
@@ -129,9 +139,8 @@ public class FileUploadUtils {
     }
 
     public static final String getPathFileName(String uploadDir, String fileName) {
-        int dirLastIndex = SystemConfig.uploadPath.length() + 1;
-        String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
-        String pathFileName = Constants.RESOURCE_PREFIX + currentDir + "/" + fileName;
+        String currentDir = uploadDir.replace(SystemConfig.uploadPath, StringPoolConstant.EMPTY);
+        String pathFileName = Constants.RESOURCE_PREFIX + StringPoolConstant.SLASH + currentDir + fileName;
         return pathFileName;
     }
 

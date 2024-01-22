@@ -1,4 +1,4 @@
-package com.master.chat.gpt.pojo.command;
+package com.master.chat.sys.pojo.command;
 
 import com.master.common.api.CommonCommand;
 import lombok.Data;

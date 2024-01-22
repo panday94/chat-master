@@ -840,7 +840,7 @@ INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1083, 'root', '2023-04-28 15:44:20', 'admin', '2023-04-28 15:44:20', '站点配置', '', '', '', 'base',
-        'gpt/base-config/index', '', '', 1080, 0, 2, 4, 1, 0, 0);
+        'sys/base-config/index', '', '', 1080, 0, 2, 4, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
@@ -885,37 +885,37 @@ INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1092, 'System', '2023-04-28 07:57:29', 'System', '2023-04-28 07:59:05', '基础配置列表', '', '', '#', '#', '',
-        '', 'gpt:base:config:list', 1083, 0, 3, 1, 1, 0, 0);
+        '', 'sys:base:config:list', 1083, 0, 3, 1, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1093, 'System', '2023-04-28 07:57:29', 'System', '2023-04-28 07:59:05', '基础配置查询', '', '', '#', '#', '',
-        '', 'gpt:base:config:query', 1083, 0, 3, 2, 1, 0, 0);
+        '', 'sys:base:config:query', 1083, 0, 3, 2, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1094, 'System', '2023-04-28 07:57:29', 'System', '2023-04-28 07:59:05', '基础配置新增', '', '', '#', '#', '',
-        '', 'gpt:base:config:save', 1083, 0, 3, 3, 1, 0, 0);
+        '', 'sys:base:config:save', 1083, 0, 3, 3, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1095, 'System', '2023-04-28 07:57:29', 'System', '2023-04-28 07:59:06', '基础配置修改', '', '', '#', '#', '',
-        '', 'gpt:base:config:update', 1083, 0, 3, 4, 1, 0, 0);
+        '', 'sys:base:config:update', 1083, 0, 3, 4, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1096, 'System', '2023-04-28 07:57:29', 'System', '2023-04-28 07:59:06', '基础配置删除', '', '', '#', '#', '',
-        '', 'gpt:base:config:remove', 1083, 0, 3, 5, 1, 0, 0);
+        '', 'sys:base:config:remove', 1083, 0, 3, 5, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1097, 'System', '2023-04-28 07:57:29', 'System', '2023-04-28 07:59:06', '基础配置审核', '', '', '#', '#', '',
-        '', 'gpt:base:config:audit', 1083, 0, 3, 6, 1, 0, 0);
+        '', 'sys:base:config:audit', 1083, 0, 3, 6, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
 VALUES (1098, 'System', '2023-04-28 07:57:29', 'System', '2023-04-28 07:59:06', '基础配置导出', '', '', '#', '#', '',
-        '', 'gpt:base:config:export', 1083, 0, 3, 7, 1, 0, 0);
+        '', 'sys:base:config:export', 1083, 0, 3, 7, 1, 0, 0);
 INSERT INTO `sys_resource` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `title`, `code`,
                             `icon`, `path`, `component`, `query`, `perms`, `parent_id`, `redirect`, `type`, `sort`,
                             `status`, `hidden`, `deleted`)
@@ -1392,6 +1392,27 @@ VALUES (9, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '操�
 INSERT INTO `sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `type`, `status`,
                              `deleted`)
 VALUES (10, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '系统状态', 'sys_common_status', 1, 0);
+INSERT INTO `chat_gpt`.`sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
+                                        `type`, `status`, `deleted`)
+VALUES (11, 'admin', '2023-05-04 11:24:39', 'System', '2023-05-04 11:24:39', '内容类型', 'gpt_content_type', 1, 0);
+INSERT INTO `chat_gpt`.`sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
+                                        `type`, `status`, `deleted`)
+VALUES (12, 'admin', '2023-05-04 11:32:35', 'System', '2023-05-04 11:32:35', '套餐类型', 'gpt_comb_type', 1, 0);
+INSERT INTO `chat_gpt`.`sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
+                                        `type`, `status`, `deleted`)
+VALUES (13, 'admin', '2023-05-06 11:55:35', 'System', '2023-05-06 11:55:35', '用户类型', 'gpt_member_type', 1, 0);
+INSERT INTO `chat_gpt`.`sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
+                                        `type`, `status`, `deleted`)
+VALUES (14, 'admin', '2023-05-06 11:57:25', 'System', '2023-05-06 11:57:25', '聊天状态', 'gpt_chat_status', 1, 0);
+INSERT INTO `chat_gpt`.`sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
+                                        `type`, `status`, `deleted`)
+VALUES (15, 'admin', '2023-09-06 15:32:46', 'admin', '2023-09-06 15:32:46', 'gpt模型类型', 'gpt_model_type', 1, 0);
+INSERT INTO `chat_gpt`.`sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
+                                        `type`, `status`, `deleted`)
+VALUES (16, 'admin', '2024-01-22 09:15:45', 'admin', '2024-01-22 09:15:45', '上传类型', 'sys_oss_type', 1, 0);
+INSERT INTO `chat_gpt`.`sys_dict_type` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
+                                        `type`, `status`, `deleted`)
+VALUES (17, 'admin', '2024-01-22 09:29:29', 'System', '2024-01-22 09:29:29', '短信类型', 'sys_sms_type', 1, 0);
 COMMIT;
 
 DROP TABLE IF EXISTS sys_dict;
@@ -1421,131 +1442,251 @@ CREATE TABLE sys_dict
 -- Records of sys_dict
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (1, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '男', '1', 'sys_user_sex', '', '', 1, 1, 1,
-        0,
-        '性别男');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        0, '性别男');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (2, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '女', '0', 'sys_user_sex', '', '', 0, 2, 1,
-        0,
-        '性别女');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        0, '性别女');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (3, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 14:35:41', '未知', '-1', 'sys_user_sex', '', '', 0, 3,
-        1,
-        0, '性别未知');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        1, 0, '性别未知');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (4, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:07', '显示', '0', 'sys_show_hide', '', 'primary',
-        1,
-        1, 1, 0, '显示菜单');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        1, 1, 1, 0, '显示菜单');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (5, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:11', '隐藏', '1', 'sys_show_hide', '', 'danger',
-        0,
-        2, 1, 0, '隐藏菜单');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        0, 2, 1, 0, '隐藏菜单');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (6, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 14:35:12', '启用', '1', 'sys_normal_disable', '',
         'primary', 1, 1, 1, 0, '正常状态');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (7, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 14:35:24', '禁用', '0', 'sys_normal_disable', '',
         'danger', 0, 2, 1, 0, '停用状态');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (8, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:29', '正常', '1', 'sys_job_status', '', 'primary',
         1, 1, 1, 0, '正常状态');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (9, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:37', '暂停', '0', 'sys_job_status', '', 'danger',
-        0,
-        2, 1, 0, '停用状态');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        0, 2, 1, 0, '停用状态');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (10, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '默认', 'DEFAULT', 'sys_job_group', '', '',
-        1,
-        1, 1, 0, '默认分组');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        1, 1, 1, 0, '默认分组');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (11, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '系统', 'SYSTEM', 'sys_job_group', '', '',
-        0,
-        2, 1, 0, '系统分组');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        0, 2, 1, 0, '系统分组');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (12, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-20 08:11:41', '是', '1', 'sys_yes_no', '', 'primary', 1,
-        1,
-        1, 0, '系统默认是');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        1, 1, 0, '系统默认是');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (13, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-20 08:11:45', '否', '0', 'sys_yes_no', '', 'danger', 0, 2,
         1, 0, '系统默认否');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (14, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '通知', '1', 'sys_notice_type', '',
-        'warning',
-        1, 1, 1, 0, '通知');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        'warning', 1, 1, 1, 0, '通知');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (15, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-08 15:40:22', '公告', '2', 'sys_notice_type', '',
-        'success',
-        0, 2, 1, 0, '公告');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        'success', 0, 2, 1, 0, '公告');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (16, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:44', '正常', '1', 'sys_notice_status', '',
         'primary', 1, 1, 1, 0, '正常状态');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (17, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:48', '关闭', '0', 'sys_notice_status', '',
         'danger', 0, 2, 1, 0, '关闭状态');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (18, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:29:45', '新增', 'INSERT', 'sys_oper_type', '',
-        'info',
-        0, 1, 1, 0, '新增操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        'info', 0, 1, 1, 0, '新增操作');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (19, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:29:49', '修改', 'UPDATE', 'sys_oper_type', '',
-        'info',
-        0, 2, 1, 0, '修改操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+        'info', 0, 2, 1, 0, '修改操作');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (20, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:29:54', '删除', 'DELETE', 'sys_oper_type', '',
         'danger', 0, 3, 1, 0, '删除操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (21, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:29:59', '授权', 'GRANT', 'sys_oper_type', '',
         'primary', 0, 4, 1, 0, '授权操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (22, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:30:07', '导出', 'EXPORT', 'sys_oper_type', '',
         'warning', 0, 5, 1, 0, '导出操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (23, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:30:13', '导入', 'IMPORT', 'sys_oper_type', '',
         'warning', 0, 6, 1, 0, '导入操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (24, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:30:17', '强退', 'FORCE', 'sys_oper_type', '',
         'danger', 0, 7, 1, 0, '强退操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (25, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:30:23', '生成代码', 'GENCODE', 'sys_oper_type', '',
         'warning', 0, 8, 1, 0, '生成操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (26, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-21 00:30:28', '清空数据', 'CLEAN', 'sys_oper_type', '',
         'danger', 0, 9, 1, 0, '清空操作');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (27, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:51', '成功', '1', 'sys_common_status', '',
         'primary', 0, 1, 1, 0, '正常状态');
-INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`,
-                        `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`)
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
 VALUES (28, 'admin', '2022-07-08 15:40:22', 'admin', '2022-07-15 19:46:55', '失败', '0', 'sys_common_status', '',
         'danger', 0, 2, 1, 0, '停用状态');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (29, 'admin', '2023-05-04 11:25:27', 'System', '2023-05-04 11:25:27', '用户协议', '1', 'gpt_content_type', '',
+        'default', 0, 1, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (30, 'admin', '2023-05-04 11:25:35', 'admin', '2023-05-04 11:25:35', '隐私政策', '2', 'gpt_content_type', '',
+        'default', 0, 2, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (31, 'admin', '2023-05-04 11:25:45', 'System', '2023-05-04 11:25:45', '使用指南', '3', 'gpt_content_type', '',
+        'default', 0, 3, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (32, 'admin', '2023-05-04 11:32:45', 'System', '2023-05-04 11:32:45', '次数', '1', 'gpt_comb_type', '',
+        'default', 0, 1, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (33, 'admin', '2023-05-04 11:32:53', 'System', '2023-05-04 11:32:53', '天数', '2', 'gpt_comb_type', '',
+        'default', 0, 2, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (34, 'admin', '2023-05-06 11:55:48', 'System', '2023-05-06 11:55:48', '微信小程序', '1', 'gpt_member_type', '',
+        'primary', 0, 1, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (35, 'admin', '2023-05-06 11:56:00', 'System', '2023-05-06 11:56:00', '公众号', '2', 'gpt_member_type', '',
+        'success', 0, 2, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (36, 'admin', '2023-05-06 11:56:11', 'admin', '2023-05-06 11:56:11', '手机号', '3', 'gpt_member_type', '',
+        'warning', 0, 3, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (37, 'admin', '2023-05-06 11:57:41', 'System', '2023-05-06 11:57:41', '回复中', '1', 'gpt_chat_status', '',
+        'warning', 0, 1, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (38, 'admin', '2023-05-06 11:57:55', 'System', '2023-05-06 11:57:55', '回复成功', '2', 'gpt_chat_status', '',
+        'success', 0, 2, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (39, 'admin', '2023-05-06 11:58:07', 'System', '2023-05-06 11:58:07', '回复失败', '3', 'gpt_chat_status', '',
+        'danger', 0, 3, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (40, 'admin', '2023-09-06 15:33:28', 'admin', '2023-09-06 15:33:28', 'ChatGpt', 'CHAT_GPT', 'gpt_model_type', '',
+        'primary', 0, 1, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (41, 'admin', '2024-01-22 09:15:57', 'admin', '2024-01-22 01:45:58', '本地上传', '1', 'sys_oss_type', '',
+        'primary', 0, 1, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (42, 'admin', '2024-01-22 09:16:46', 'admin', '2024-01-22 01:46:06', '阿里OSS', '2', 'sys_oss_type', '',
+        'success', 0, 2, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (43, 'admin', '2024-01-22 09:17:06', 'System', '2024-01-22 01:46:06', '腾讯COS', '3', 'sys_oss_type', '',
+        'warning', 0, 3, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (44, 'admin', '2024-01-22 09:30:24', 'System', '2024-01-22 09:30:24', '阿里云SMS', '1', 'sys_sms_type', '',
+        'primary', 0, 1, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (45, 'admin', '2024-01-22 09:30:37', 'System', '2024-01-22 09:30:37', '腾讯云SMS', '2', 'sys_sms_type', '',
+        'success', 0, 2, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (46, 'admin', '2024-01-22 15:37:59', 'System', '2024-01-22 15:37:59', '文心一言', 'WENXIN', 'gpt_model_type', '',
+        'success', 0, 2, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (47, 'admin', '2024-01-22 15:38:17', 'System', '2024-01-22 15:38:17', '通义千问', 'QIANWEN', 'gpt_model_type',
+        '', 'info', 0, 3, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (48, 'admin', '2024-01-22 15:38:34', 'System', '2024-01-22 15:38:34', '讯飞星火', 'SPARK', 'gpt_model_type', '',
+        'warning', 0, 4, 1, 0, '');
+INSERT INTO `chat_gpt`.`sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`,
+                                   `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`,
+                                   `remark`)
+VALUES (49, 'admin', '2024-01-22 15:39:03', 'admin', '2024-01-22 15:39:03', '智谱清言', 'ZHIPU', 'gpt_model_type', '',
+        'danger', 0, 5, 1, 0, '');
 COMMIT;
 
 DROP TABLE IF EXISTS sys_config;
@@ -1605,7 +1746,7 @@ VALUES (7, 'admin', '2022-08-16 15:58:54', 'admin', '2022-08-16 15:58:54', '即�
         'false', 1,
         0, '是否开启IM模块（true开启，false关闭）');
 INSERT INTO `sys_config` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`,
-                                     `config_key`, `config_value`, `type`, `deleted`, `remark`)
+                          `config_key`, `config_value`, `type`, `deleted`, `remark`)
 VALUES (8, 'admin', '2024-01-20 16:34:53', 'admin', '2024-01-20 16:34:53', '是否限制访问Chat', 'sys_chat_master',
         'true', 1, 0, '是否无限访问Chat');
 COMMIT;

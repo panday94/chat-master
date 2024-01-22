@@ -1,16 +1,24 @@
 package com.master.chat.controller.app;
 
+import com.master.chat.common.constant.OssConstant;
+import com.master.chat.common.enums.OssEnum;
 import com.master.chat.common.util.AliyunOSSUtil;
+import com.master.chat.common.util.FileUploadUtils;
 import com.master.chat.framework.base.BaseAppController;
+import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.vo.ModelVO;
 import com.master.chat.gpt.pojo.vo.UserVO;
 import com.master.chat.gpt.service.IModelService;
 import com.master.chat.gpt.service.IUserService;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
+import com.master.chat.sys.service.IBaseConfigService;
 import com.master.common.api.FileInfo;
 import com.master.common.api.Query;
 import com.master.common.api.ResponseInfo;
+import com.master.common.constant.StringPoolConstant;
+import com.master.common.validator.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +40,8 @@ public class UserController extends BaseAppController {
     private IUserService userService;
     @Autowired
     private IModelService modelService;
+    @Autowired
+    private IBaseConfigService baseConfigService;
 
     /**
      * 获取用户信息接口
@@ -77,11 +87,42 @@ public class UserController extends BaseAppController {
      * @date: 2023/01/31
      * @version: 1.0.0
      */
-    @PutMapping("/avatar")
-    public ResponseInfo<FileInfo> updateUserAvatar(@RequestParam("avatarFile") MultipartFile file) {
-        FileInfo fileInfo = AliyunOSSUtil.uploadFile(file, "demo/" + "avatar/");
-        userService.updateUserAvatar(getUserId(), fileInfo.getFilePath());
+    @PostMapping("/avatar")
+    public ResponseInfo<FileInfo> updateUserAvatar(@RequestParam("file") MultipartFile file) {
+        String pathName = "avatar/";
+        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
+        FileInfo fileInfo = null;
+        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getOssType()) || OssEnum.LOCAL.getValue().equals(extraInfo.getOssType())) {
+            String filePath = SystemConfig.uploadPath + getPathName(pathName);
+            fileInfo = FileUploadUtils.upload(filePath, file);
+            fileInfo.setFileUrl(SystemConfig.baseUrl + fileInfo.getFileUrl());
+        }else if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
+            fileInfo = AliyunOSSUtil.uploadFile(file, getPathName(pathName));
+        }
+        if (ValidatorUtil.isNull(fileInfo)) {
+            return ResponseInfo.validateFail("未知的上传文件方式，上传失败");
+        }
+        userService.updateUserAvatar(getUserId(), fileInfo.getFileUrl());
         return ResponseInfo.success(fileInfo);
+    }
+
+    /**
+     * 获取文件路径名称
+     *
+     * @param pathName
+     * @return
+     */
+    private String getPathName(String pathName) {
+        if (ValidatorUtil.isNull(pathName)) {
+            return OssConstant.DEFAULT_FILE;
+        }
+        if (pathName.startsWith(StringPoolConstant.SLASH)) {
+            pathName = pathName.substring(1, pathName.length());
+        }
+        if (!pathName.endsWith(StringPoolConstant.SLASH)) {
+            pathName = pathName + StringPoolConstant.SLASH;
+        }
+        return pathName;
     }
 
     /**

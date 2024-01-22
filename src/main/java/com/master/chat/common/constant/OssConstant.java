@@ -15,4 +15,9 @@ public interface OssConstant {
      */
     String BUCKET_NAME = "master";
 
+    /**
+     * 默认文件夹
+     */
+    String DEFAULT_FILE = "default/";
+
 }

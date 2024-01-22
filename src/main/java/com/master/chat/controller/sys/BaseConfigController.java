@@ -1,10 +1,10 @@
-package com.master.chat.controller.gpt;
+package com.master.chat.controller.sys;
 
 import com.alibaba.fastjson.JSONObject;
 import com.master.chat.framework.base.BaseController;
-import com.master.chat.gpt.pojo.command.BaseConfigCommand;
-import com.master.chat.gpt.pojo.vo.BaseConfigVO;
-import com.master.chat.gpt.service.IBaseConfigService;
+import com.master.chat.sys.pojo.command.BaseConfigCommand;
+import com.master.chat.sys.pojo.vo.BaseConfigVO;
+import com.master.chat.sys.service.IBaseConfigService;
 import com.master.chat.sys.constant.SysLogTypeConstant;
 import com.master.common.annotation.Log;
 import com.master.common.api.IPageInfo;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  基础配置接口
+ * 基础配置接口
  *
  * @author: Yang
  * @date: 2023-04-28
@@ -28,7 +28,7 @@ import java.util.Map;
  * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
  */
 @RestController
-@RequestMapping("/gpt/base-config" )
+@RequestMapping("/sys/base-config")
 public class BaseConfigController extends BaseController {
     @Autowired
     private IBaseConfigService baseConfigService;
@@ -40,8 +40,8 @@ public class BaseConfigController extends BaseController {
      * @date: 2023-04-28
      * @version: 1.0.0
      */
-    @GetMapping("/page" )
-    @PreAuthorize("hasAuthority('gpt:base:config:list')" )
+    @GetMapping("/page")
+    @PreAuthorize("hasAuthority('sys:base:config:list')")
     public ResponseInfo<IPageInfo<BaseConfigVO>> pageBaseConfig(@RequestParam Map map) {
         return baseConfigService.pageBaseConfig(new Query(map, true));
     }
@@ -53,8 +53,8 @@ public class BaseConfigController extends BaseController {
      * @date: 2023-04-28
      * @version: 1.0.0
      */
-    @GetMapping("/list" )
-    @PreAuthorize("hasAuthority('gpt:base:config:list')" )
+    @GetMapping("/list")
+    @PreAuthorize("hasAuthority('sys:base:config:list')")
     public ResponseInfo<List<BaseConfigVO>> listBaseConfig(@RequestParam Map map) {
         return baseConfigService.listBaseConfig(new Query(map));
     }
@@ -66,10 +66,10 @@ public class BaseConfigController extends BaseController {
      * @date: 2023-04-28
      * @version: 1.0.0
      */
-    @GetMapping(value = "/{name}" )
-    @PreAuthorize("hasAuthority('gpt:base:config:query')" )
-    public ResponseInfo<JSONObject> getBaseConfigByName(@PathVariable("name" ) String name) {
-        return baseConfigService.getBaseConfigByName(name);
+    @GetMapping(value = "/{name}")
+    @PreAuthorize("hasAuthority('sys:base:config:query')")
+    public ResponseInfo<JSONObject> getBaseConfigByName(@PathVariable("name") String name) {
+        return ResponseInfo.success(baseConfigService.getBaseConfigByName(name, JSONObject.class));
     }
 
     /**
@@ -80,7 +80,7 @@ public class BaseConfigController extends BaseController {
      * @version: 1.0.0
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('gpt:base:config:save')" )
+    @PreAuthorize("hasAuthority('sys:base:config:save')")
     @Log(type = SysLogTypeConstant.DEFAULT, businessType = BusinessTypeEnum.INSERT)
     public ResponseInfo saveBaseConfig(@Validated @RequestBody BaseConfigCommand command) {
         return baseConfigService.saveBaseConfig(command);
@@ -94,7 +94,7 @@ public class BaseConfigController extends BaseController {
      * @version: 1.0.0
      */
     @PutMapping
-    @PreAuthorize("hasAuthority('gpt:base:config:update')" )
+    @PreAuthorize("hasAuthority('sys:base:config:update')")
     @Log(type = SysLogTypeConstant.DEFAULT, businessType = BusinessTypeEnum.UPDATE)
     public ResponseInfo updateBaseConfig(@Validated @RequestBody BaseConfigCommand command) {
         return baseConfigService.updateBaseConfig(command);
@@ -107,8 +107,8 @@ public class BaseConfigController extends BaseController {
      * @date: 2023-04-28
      * @version: 1.0.0
      */
-    @DeleteMapping("/{ids}" )
-    @PreAuthorize("hasAuthority('gpt:base:config:remove')" )
+    @DeleteMapping("/{ids}")
+    @PreAuthorize("hasAuthority('sys:base:config:remove')")
     @Log(type = SysLogTypeConstant.DEFAULT, businessType = BusinessTypeEnum.DELETE)
     public ResponseInfo removeBaseConfigByIds(@PathVariable List<Long> ids) {
         return baseConfigService.removeBaseConfigByIds(ids);
