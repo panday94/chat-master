@@ -1780,6 +1780,27 @@ CREATE TABLE `sys_notice_read`
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统通知已读状态';
 
+DROP TABLE IF EXISTS `sys_base_config`;
+CREATE TABLE `sys_base_config`
+(
+    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `create_user` varchar(32) NOT NULL DEFAULT 'System' COMMENT '创建人',
+    `create_time` datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_user` varchar(32) NOT NULL DEFAULT 'System' COMMENT '更新人',
+    `update_time` datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `name`        varchar(50) NOT NULL DEFAULT '' COMMENT '配置键值',
+    `data`        longtext COMMENT '配置内容',
+    `deleted`     int(1) NOT NULL DEFAULT '0' COMMENT '是否删除 0->未删除;1->已删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='基础配置';
+
+INSERT INTO `chat_gpt`.`sys_base_config` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `data`, `deleted`) VALUES (1, 'admin', '2024-01-22 10:38:39', 'admin', '2024-01-22 14:29:27', 'baseInfo', '{\"contentSecurity\":0,\"copyright\":\"ChatMASTER\",\"descrip\":\"ChatMASTER，基于AI大模型api实现的ChatGPT服务，支持ChatGPT(3.5、4.0)模型，同时也支持国内文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型，支出同步响应及流式响应，完美呈现打印机效果。\",\"keywords\":[\"通义千问\",\"ChatGPT\",\"文心一言\",\"智谱清言\"],\"siteTitle\":\"ChatMASTER\",\"domain\":\"https://gpt.panday94.xyz\",\"proxyType\":1,\"siteLogo\":\"/files/default/2024/01/283083aa-aaf1-455c-ac79-f490aa385ed9.png\"}', 0);
+INSERT INTO `chat_gpt`.`sys_base_config` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `data`, `deleted`) VALUES (2, 'admin', '2024-01-22 10:39:48', 'System', '2024-01-22 10:39:48', 'appInfo', '{\"isShare\":1,\"isSms\":0,\"homeNotice\":\"ChatMASTER，基于AI大模型api实现的ChatGPT服务，支持ChatGPT(3.5、4.0)模型，同时也支持国内文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型，支出同步响应及流式响应，完美呈现打印机效果。\",\"shareRewardNum\":\"20\",\"freeNum\":\"20\",\"h5Url\":\"https://gpt.panday94.xyz/h5\"}', 0);
+INSERT INTO `chat_gpt`.`sys_base_config` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `data`, `deleted`) VALUES (3, 'admin', '2024-01-22 10:39:53', 'System', '2024-01-22 10:39:53', 'wxInfo', '{\"mpLogin\":0,\"mpPay\":0,\"maAppId\":\"xx\",\"maSecret\":\"xx\",\"mpAppId\":\"xx\",\"mpSecret\":\"xx\",\"mchNo\":\"xx\",\"v3Secret\":\"xx\"}', 0);
+INSERT INTO `chat_gpt`.`sys_base_config` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `data`, `deleted`) VALUES (4, 'admin', '2024-01-22 10:40:04', 'admin', '2024-01-22 11:48:58', 'extraInfo', '{\"uploadSize\":\"xx\",\"ossType\":1,\"smsKeySecret\":\"xx\",\"smsType\":1,\"smsKeyId\":\"xx\"}', 0);
+
+
 DROP TABLE IF EXISTS `sys_login_log`;
 CREATE TABLE `sys_login_log`
 (
