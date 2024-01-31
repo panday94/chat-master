@@ -2,17 +2,22 @@ package com.master.chat.controller.sys;
 
 import com.alibaba.excel.EasyExcel;
 import com.master.chat.common.constant.SysConfigConstants;
+import com.master.chat.common.enums.OssEnum;
 import com.master.chat.common.util.AliyunOSSUtil;
 import com.master.chat.common.util.ExcelUtil;
+import com.master.chat.common.util.FileUploadUtils;
 import com.master.chat.framework.base.BaseController;
+import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.framework.listener.ExcelListener;
 import com.master.chat.sys.constant.SysLogTypeConstant;
 import com.master.chat.sys.pojo.command.SysUserCommand;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
 import com.master.chat.sys.pojo.command.SysUserRegistCommand;
 import com.master.chat.sys.pojo.dto.SysUserExcelDTO;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.pojo.vo.ContactUserVO;
 import com.master.chat.sys.pojo.vo.SysUserVO;
+import com.master.chat.sys.service.IBaseConfigService;
 import com.master.chat.sys.service.ISysConfigService;
 import com.master.chat.sys.service.ISysUserService;
 import com.master.common.annotation.Log;
@@ -23,6 +28,7 @@ import com.master.common.api.ResponseInfo;
 import com.master.common.enums.BusinessTypeEnum;
 import com.master.common.enums.StatusEnum;
 import com.master.common.utils.DozerUtil;
+import com.master.common.validator.ValidatorUtil;
 import com.master.common.validator.group.UpdateGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,6 +57,8 @@ public class SysUserController extends BaseController {
     private ISysUserService sysUserService;
     @Autowired
     private ISysConfigService configService;
+    @Autowired
+    private IBaseConfigService baseConfigService;
 
     /**
      * 获取账号分页信息
@@ -185,9 +193,21 @@ public class SysUserController extends BaseController {
      */
     @PostMapping("/avatar")
     @Log(value = "修改账号头像", type = SysLogTypeConstant.SYS_USER, businessType = BusinessTypeEnum.UPDATE)
-    public ResponseInfo<FileInfo> updateSysUserAvatar(@RequestParam("avatarFile") MultipartFile file, @RequestParam("pathName") String pathName) {
-        FileInfo fileInfo = AliyunOSSUtil.uploadFile(file, "demo/" + pathName);
-        sysUserService.updateSysUserAvatar(getSysUserId(), fileInfo.getFilePath());
+    public ResponseInfo<FileInfo> updateSysUserAvatar(@RequestParam("avatarFile") MultipartFile file) {
+        String pathName = "avatar/";
+        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
+        FileInfo fileInfo = null;
+        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getOssType()) || OssEnum.LOCAL.getValue().equals(extraInfo.getOssType())) {
+            String filePath = SystemConfig.uploadPath + FileUploadUtils.getPathName(pathName);
+            fileInfo = FileUploadUtils.upload(filePath, file);
+            fileInfo.setFileUrl(SystemConfig.baseUrl + fileInfo.getFileUrl());
+        }else if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
+            fileInfo = AliyunOSSUtil.uploadFile(file, FileUploadUtils.getPathName(pathName));
+        }
+        if (ValidatorUtil.isNull(fileInfo)) {
+            return ResponseInfo.validateFail("未知的上传文件方式，上传失败");
+        }
+        sysUserService.updateSysUserAvatar(getSysUserId(), fileInfo.getFileUrl());
         return ResponseInfo.success(fileInfo);
     }
 

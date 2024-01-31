@@ -2,6 +2,7 @@ package com.master.chat.common.util;
 
 import cn.hutool.core.util.IdUtil;
 import com.master.chat.common.constant.Constants;
+import com.master.chat.common.constant.OssConstant;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.common.api.FileInfo;
 import com.master.common.constant.StringPoolConstant;
@@ -9,6 +10,7 @@ import com.master.common.exception.BusinessException;
 import com.master.common.exception.FileException;
 import com.master.common.utils.DateUtil;
 import com.master.common.utils.file.MimeTypeUtils;
+import com.master.common.validator.ValidatorUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
@@ -203,4 +205,24 @@ public class FileUploadUtils {
         }
         return extension;
     }
+
+    /**
+     * 获取文件路径名称
+     *
+     * @param pathName
+     * @return
+     */
+    public static String getPathName(String pathName) {
+        if (ValidatorUtil.isNull(pathName)) {
+            return OssConstant.DEFAULT_FILE;
+        }
+        if (pathName.startsWith(StringPoolConstant.SLASH)) {
+            pathName = pathName.substring(1, pathName.length());
+        }
+        if (!pathName.endsWith(StringPoolConstant.SLASH)) {
+            pathName = pathName + StringPoolConstant.SLASH;
+        }
+        return pathName;
+    }
+
 }

@@ -121,17 +121,6 @@ ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步�
 11. 支持多端登录或只能当前账号登录功能，需要后台配置。
 12. 使用阿里云、腾讯云对象存储及短信功能，支持本地存储。
 
-## 赞助
-
-如果你觉得这个项目对你有帮助，并且情况允许的话，可以给我一点点支持，总之非常感谢支持～
-
-<div style="display: flex; gap: 20px;">
-	<div style="text-align: center">
-		<img style="max-width: 100%" src="./doc/file/wechat.jpg" alt="微信" />
-		<p>WeChat Pay</p>
-	</div>
-</div>
-
 ## 参与贡献
 
 贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md)
@@ -141,9 +130,6 @@ ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步�
 ## 联系我们
 
 <div style="display: flex; gap: 20px;">
-	<div>
-		<img style="max-width: 100%" src="./doc/file/wechat_group.jpg" alt="交流群" />
-	</div>
 	<div>
 		<img style="max-width: 100%" src="./doc/file/wxcode.jpg" alt="微信" />
 		<p>添加微信，加入交流群</p>
