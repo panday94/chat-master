@@ -2,8 +2,8 @@ package com.master.chat.sys.pojo.command;
 
 import com.master.chat.sys.enums.AuditEnum;
 import com.master.chat.sys.pojo.entity.AuditLog;
-import com.master.common.api.CommonCommand;
-import com.master.common.utils.DozerUtil;
+import com.master.chat.common.api.CommonCommand;
+import com.master.chat.common.utils.DozerUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

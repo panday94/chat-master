@@ -1,7 +1,7 @@
 package com.master.chat.sys.pojo.command;
 
-import com.master.common.api.CommonCommand;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.api.CommonCommand;
+import com.master.chat.common.validator.ValidatorUtil;
 import lombok.Data;
 
 import java.io.Serializable;

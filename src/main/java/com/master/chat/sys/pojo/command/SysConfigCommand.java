@@ -1,6 +1,6 @@
 package com.master.chat.sys.pojo.command;
 
-import com.master.common.api.CommonCommand;
+import com.master.chat.common.api.CommonCommand;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

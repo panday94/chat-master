@@ -1,15 +1,15 @@
 package com.master.chat.framework.security;
 
 import com.alibaba.fastjson.JSON;
-import com.master.chat.common.constant.RedisConstants;
-import com.master.chat.common.util.RedisUtils;
-import com.master.common.api.ResponseInfo;
-import com.master.common.constant.AuthConstant;
-import com.master.common.constant.HttpConstant;
-import com.master.common.constant.StringPoolConstant;
-import com.master.common.exception.ValidateException;
-import com.master.common.utils.ApplicationContextUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.comm.constant.RedisConstants;
+import com.master.chat.comm.util.RedisUtils;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.constant.AuthConstant;
+import com.master.chat.common.constant.HttpConstant;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.exception.ValidateException;
+import com.master.chat.common.utils.ApplicationContextUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;

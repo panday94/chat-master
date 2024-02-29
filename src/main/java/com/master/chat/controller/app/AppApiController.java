@@ -1,9 +1,9 @@
 package com.master.chat.controller.app;
 
-import com.master.chat.common.constant.RedisConstants;
-import com.master.chat.common.constant.SmsConstant;
-import com.master.chat.common.util.AliyunSMSUtil;
-import com.master.chat.common.util.RedisUtils;
+import com.master.chat.comm.constant.RedisConstants;
+import com.master.chat.comm.constant.SmsConstant;
+import com.master.chat.comm.util.AliyunSMSUtil;
+import com.master.chat.comm.util.RedisUtils;
 import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.vo.AgreementVO;
@@ -15,13 +15,13 @@ import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
 import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.pojo.dto.config.WxInfoDTO;
 import com.master.chat.sys.service.IBaseConfigService;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
-import com.master.common.enums.IntEnum;
-import com.master.common.enums.ResponseEnum;
-import com.master.common.enums.StatusEnum;
-import com.master.common.utils.RandomUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.enums.IntEnum;
+import com.master.chat.common.enums.ResponseEnum;
+import com.master.chat.common.enums.StatusEnum;
+import com.master.chat.common.utils.RandomUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

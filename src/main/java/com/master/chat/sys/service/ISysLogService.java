@@ -3,9 +3,9 @@ package com.master.chat.sys.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.master.chat.sys.pojo.entity.SysLog;
 import com.master.chat.sys.pojo.vo.SysLogVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.master.chat.controller.app;
 
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
-import com.master.chat.common.constant.RedisConstants;
-import com.master.chat.common.constant.SysConfigConstants;
-import com.master.chat.common.util.RedisUtils;
+import com.master.chat.comm.constant.RedisConstants;
+import com.master.chat.comm.constant.SysConfigConstants;
+import com.master.chat.comm.util.RedisUtils;
 import com.master.chat.framework.security.JwtTokenUtils;
 import com.master.chat.framework.security.Oauth2Token;
 import com.master.chat.framework.security.UserDetail;
@@ -13,10 +13,10 @@ import com.master.chat.gpt.enums.UserTypeEnum;
 import com.master.chat.gpt.pojo.vo.UserVO;
 import com.master.chat.gpt.service.IUserService;
 import com.master.chat.sys.pojo.command.LoginCommand;
-import com.master.common.api.ResponseInfo;
-import com.master.common.constant.StringPoolConstant;
-import com.master.common.enums.ResponseEnum;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.enums.ResponseEnum;
+import com.master.chat.common.validator.ValidatorUtil;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

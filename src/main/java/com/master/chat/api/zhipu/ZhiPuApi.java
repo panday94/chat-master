@@ -1,8 +1,9 @@
 package com.master.chat.api.zhipu;
 
 import com.google.gson.Gson;
-import com.master.common.api.Query;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.common.validator.ValidatorUtil;
 import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.core.ConfigV3;
 import com.zhipu.oapi.core.cache.ICache;
@@ -39,7 +40,6 @@ public class ZhiPuApi {
         if (StringUtils.isNotEmpty(paramMsg)) {
             return new ModelApiResponse(-100, String.format("invalid param: %s", paramMsg));
         }
-
         if (Constants.invokeMethodAsync.equals(request.getInvokeMethod())) {
             return asyncInvoke(request, query);
         } else if (Constants.invokeMethodSse.equals(request.getInvokeMethod())) {

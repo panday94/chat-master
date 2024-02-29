@@ -1,6 +1,6 @@
 package com.master.chat.sys.pojo.command;
 
-import com.master.common.xss.Xss;
+import com.master.chat.common.xss.Xss;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

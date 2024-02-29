@@ -1,7 +1,7 @@
 package com.master.chat.framework.config;
 
 import com.master.chat.framework.filter.RepeatableFilter;
-import com.master.common.xss.XssFilter;
+import com.master.chat.common.xss.XssFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

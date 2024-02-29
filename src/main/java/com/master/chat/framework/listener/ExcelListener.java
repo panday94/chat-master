@@ -5,7 +5,7 @@ import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.master.common.utils.DozerUtil;
+import com.master.chat.common.utils.DozerUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;

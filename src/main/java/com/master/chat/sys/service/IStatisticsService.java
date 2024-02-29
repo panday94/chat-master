@@ -1,6 +1,6 @@
 package com.master.chat.sys.service;
 
-import com.master.common.api.Query;
+import com.master.chat.common.api.Query;
 
 import java.util.List;
 import java.util.Map;

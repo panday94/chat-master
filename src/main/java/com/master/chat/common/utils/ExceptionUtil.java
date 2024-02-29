@@ -1,0 +1,43 @@
+package com.master.chat.common.utils;
+
+import com.master.chat.common.constant.StringPoolConstant;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+/**
+ * 错误信息处理类
+ *
+ * @author: Yang
+ * @date: 2021/10/20
+ * @version: 1.2.0
+ * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ */
+public class ExceptionUtil {
+
+    /**
+     * 获取exception的详细错误信息。
+     */
+    public static String getExceptionMessage(Throwable e) {
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw, true));
+        String str = sw.toString();
+        return str;
+    }
+
+    public static String getRootErrorMessage(Exception e) {
+        Throwable root = ExceptionUtils.getRootCause(e);
+        root = (root == null ? e : root);
+        if (root == null) {
+            return StringPoolConstant.EMPTY;
+        }
+        String msg = root.getMessage();
+        if (msg == null) {
+            return StringPoolConstant.NULL;
+        }
+        return StringUtils.defaultString(msg);
+    }
+
+}

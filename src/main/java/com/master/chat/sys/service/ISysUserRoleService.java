@@ -3,7 +3,7 @@ package com.master.chat.sys.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.master.chat.sys.pojo.dto.SysUserRolesDTO;
 import com.master.chat.sys.pojo.entity.SysUserRole;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.master.chat.controller.quartz;
 
-import com.master.chat.common.util.ExcelUtil;
+import com.master.chat.comm.util.ExcelUtil;
 import com.master.chat.framework.base.BaseController;
 import com.master.chat.framework.web.exception.TaskException;
 import com.master.chat.quartz.constant.QuartzConstants;
@@ -15,12 +15,12 @@ import com.master.chat.quartz.service.ISysJobService;
 import com.master.chat.quartz.util.CronUtils;
 import com.master.chat.quartz.util.ScheduleUtils;
 import com.master.chat.sys.constant.SysLogTypeConstant;
-import com.master.common.annotation.Log;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.ResponseInfo;
-import com.master.common.constant.HttpConstant;
-import com.master.common.enums.BusinessTypeEnum;
-import com.master.common.utils.DozerUtil;
+import com.master.chat.common.annotation.Log;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.constant.HttpConstant;
+import com.master.chat.common.enums.BusinessTypeEnum;
+import com.master.chat.common.utils.DozerUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;

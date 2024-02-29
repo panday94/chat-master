@@ -1,18 +1,18 @@
 package com.master.chat.controller.sys;
 
-import com.master.chat.common.util.ExcelUtil;
+import com.master.chat.comm.util.ExcelUtil;
 import com.master.chat.framework.base.BaseController;
 import com.master.chat.sys.constant.SysLogTypeConstant;
 import com.master.chat.sys.pojo.command.SysConfigCommand;
 import com.master.chat.sys.pojo.dto.SysConfigExcelDTO;
 import com.master.chat.sys.pojo.vo.SysConfigVO;
 import com.master.chat.sys.service.ISysConfigService;
-import com.master.common.annotation.Log;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
-import com.master.common.enums.BusinessTypeEnum;
-import com.master.common.utils.DozerUtil;
+import com.master.chat.common.annotation.Log;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.enums.BusinessTypeEnum;
+import com.master.chat.common.utils.DozerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;

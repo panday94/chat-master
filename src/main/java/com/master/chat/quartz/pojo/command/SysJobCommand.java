@@ -1,7 +1,7 @@
 package com.master.chat.quartz.pojo.command;
 
 import com.master.chat.quartz.constant.ScheduleConstants;
-import com.master.common.api.CommonCommand;
+import com.master.chat.common.api.CommonCommand;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

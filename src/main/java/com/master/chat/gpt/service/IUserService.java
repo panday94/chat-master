@@ -5,9 +5,9 @@ import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.UserVO;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

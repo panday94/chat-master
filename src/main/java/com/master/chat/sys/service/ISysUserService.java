@@ -7,9 +7,9 @@ import com.master.chat.sys.pojo.dto.SysUserPreDTO;
 import com.master.chat.sys.pojo.entity.SysUser;
 import com.master.chat.sys.pojo.vo.ContactUserVO;
 import com.master.chat.sys.pojo.vo.SysUserVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

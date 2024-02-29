@@ -183,7 +183,7 @@ CREATE TABLE `gpt_openkey` (
   `update_user` varchar(32) NOT NULL DEFAULT 'System' COMMENT '更新人',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `app_id` varchar(64) NOT NULL DEFAULT '' COMMENT 'appid',
-  `app_key` varchar(64) NOT NULL DEFAULT '' COMMENT 'app key',
+  `app_key` varchar(64) NOT NULL DEFAULT '' COMMENT 'app key对应openai的token',
   `app_secret` varchar(128) NOT NULL DEFAULT '' COMMENT 'app密钥',
   `total_tokens` bigint(20) NOT NULL DEFAULT '0' COMMENT '总额度',
   `used_tokens` bigint(20) NOT NULL DEFAULT '0' COMMENT '已用额度',
@@ -193,16 +193,15 @@ CREATE TABLE `gpt_openkey` (
   `remark` varchar(250) DEFAULT '' COMMENT '备注',
   `deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否删除 0->未删除;1->已删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `app_key` (`app_key`),
+  KEY `app_key` (`app_key`),
   KEY `model` (`model`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='openai token';
 
-INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (1, 'admin', '2023-05-04 10:10:05', 'System', '2023-10-27 01:43:51', '', '', '', 5, 1559, -1554, 0, 'CHAT_GPT', 'master@gmail.com', 0);
-INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (2, 'System', '2023-09-07 09:20:16', 'System', '2023-12-26 09:00:24', '', '', '', 5, 7496, -7491, 1, 'CHAT_GPT', 'master@gmail.com', 0);
-INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (3, 'System', '2023-09-07 09:20:48', 'System', '2023-09-12 08:07:11', '', '', '', 0, 1033, -1033, 1, 'WENXIN', '', 0);
-INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (4, 'System', '2023-09-12 02:24:22', 'System', '2023-10-18 09:29:08', '', '', '', 100000, 31727, 68273, 1, 'QIANWEN', '', 0);
-INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (5, 'System', '2023-09-12 02:25:27', 'admin', '2023-12-26 14:53:18', '', '', '', 1998204, 7479, 1990725, 1, 'SPARK', '', 0);
-INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (6, 'System', '2023-12-27 00:37:59', 'System', '2023-12-27 01:23:44', '', '', '', 0, 0, 0, 1, 'ZHIPU', '', 0);
+INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (1, 'admin', '2023-05-04 10:10:05', 'System', '2023-10-27 01:43:51', '', '', '', 100000, 0, 0, 1, 'CHAT_GPT', 'master@gmail.com', 0);
+INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (3, 'System', '2023-09-07 09:20:48', 'System', '2023-09-12 08:07:11', '', '', '', 100000, 0, 0, 1, 'WENXIN', '', 0);
+INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (4, 'System', '2023-09-12 02:24:22', 'System', '2023-10-18 09:29:08', '', '', '', 100000, 0, 0, 1, 'QIANWEN', '', 0);
+INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (5, 'System', '2023-09-12 02:25:27', 'admin', '2023-12-26 14:53:18', '', '', '', 100000, 0, 0, 1, 'SPARK', '', 0);
+INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `model`, `remark`, `deleted`) VALUES (6, 'System', '2023-12-27 00:37:59', 'System', '2023-12-27 01:23:44', '', '', '', 100000, 0, 0, 1, 'ZHIPU', '', 0);
 
 -- ----------------------------
 -- Table structure for gpt_order

@@ -2,8 +2,8 @@ package com.master.chat.sys.service.impl;
 
 import com.master.chat.sys.mapper.StatisticsMapper;
 import com.master.chat.sys.service.IStatisticsService;
-import com.master.common.api.Query;
-import com.master.common.utils.DateUtil;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

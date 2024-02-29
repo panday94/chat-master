@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.master.chat.sys.pojo.command.DictTypeCommand;
 import com.master.chat.sys.pojo.entity.DictType;
 import com.master.chat.sys.pojo.vo.DictTypeVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

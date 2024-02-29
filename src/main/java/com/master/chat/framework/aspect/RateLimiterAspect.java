@@ -1,12 +1,12 @@
 package com.master.chat.framework.aspect;
 
-import com.master.chat.common.util.RedisUtils;
-import com.master.common.annotation.RateLimiter;
-import com.master.common.enums.LimitTypeEnum;
-import com.master.common.exception.ErrorException;
-import com.master.common.utils.ApplicationContextUtil;
-import com.master.common.utils.IPUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.comm.util.RedisUtils;
+import com.master.chat.common.annotation.RateLimiter;
+import com.master.chat.common.enums.LimitTypeEnum;
+import com.master.chat.common.exception.ErrorException;
+import com.master.chat.common.utils.ApplicationContextUtil;
+import com.master.chat.common.utils.IPUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

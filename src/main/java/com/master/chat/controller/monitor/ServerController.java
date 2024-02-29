@@ -1,7 +1,7 @@
 package com.master.chat.controller.monitor;
 
 import com.master.chat.framework.web.entity.Server;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.ResponseInfo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,6 +1,6 @@
 package com.master.chat.framework.manger;
 
-import com.master.common.utils.ApplicationContextUtil;
+import com.master.chat.common.utils.ApplicationContextUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.TimerTask;

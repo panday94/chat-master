@@ -1,9 +1,9 @@
 package com.master.chat.framework.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.master.common.annotation.RepeatSubmit;
-import com.master.common.api.ResponseInfo;
-import com.master.common.utils.ApplicationContextUtil;
+import com.master.chat.common.annotation.RepeatSubmit;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.utils.ApplicationContextUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;

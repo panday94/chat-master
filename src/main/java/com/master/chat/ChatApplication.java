@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
-@ComponentScan(basePackages = {"com.master.common", "com.master.chat"})
+@ComponentScan(basePackages = {"com.master.chat.common", "com.master.chat"})
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
 public class ChatApplication {
 

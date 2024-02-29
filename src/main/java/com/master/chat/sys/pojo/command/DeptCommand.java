@@ -1,7 +1,7 @@
 package com.master.chat.sys.pojo.command;
 
-import com.master.common.api.CommonCommand;
-import com.master.common.validator.group.UpdateGroup;
+import com.master.chat.common.api.CommonCommand;
+import com.master.chat.common.validator.group.UpdateGroup;
 import lombok.Data;
 
 import javax.validation.constraints.Min;

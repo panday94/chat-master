@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.master.chat.gpt.pojo.entity.ChatMessage;
 import com.master.chat.gpt.pojo.vo.ChatMessageVO;
-import com.master.common.api.Query;
+import com.master.chat.common.api.Query;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 

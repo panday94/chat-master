@@ -92,6 +92,9 @@ public class OpenAiStreamClient {
     @Getter
     private OpenAiAuthInterceptor authInterceptor;
 
+    public OpenAiStreamClient() {
+    }
+
     /**
      * 构造实例对象
      *

@@ -5,8 +5,8 @@ import com.master.chat.sys.enums.AuditEnum;
 import com.master.chat.sys.pojo.command.AuditCommand;
 import com.master.chat.sys.pojo.entity.AuditLog;
 import com.master.chat.sys.pojo.vo.AuditLogVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.ResponseInfo;
 
 /**
  * 审核日志 服务类

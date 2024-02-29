@@ -3,7 +3,7 @@ package com.master.chat.sys.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.master.chat.sys.pojo.entity.SysConfig;
-import com.master.common.api.QueryDTO;
+import com.master.chat.common.api.QueryDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

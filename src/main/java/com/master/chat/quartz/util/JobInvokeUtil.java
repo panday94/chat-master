@@ -1,8 +1,8 @@
 package com.master.chat.quartz.util;
 
 import com.master.chat.quartz.pojo.entity.SysJob;
-import com.master.common.utils.ApplicationContextUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.utils.ApplicationContextUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;

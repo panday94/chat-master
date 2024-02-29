@@ -1,3 +1,17 @@
+## v1.1.3
+
+`2024-02-29`
+
+> [chat-master](https://gitee.com/yoli9/chat-master)
+
+## Enhancement
+- 若涉及到上传oss和sms在后台配置，默认本地上传文件，未开通sms
+- 将master-common模块移如chat-master项目中，省区再要下载master-common打包步骤
+
+## BugFix
+- 修复chat_gpt.sql文件插入openkey表app_key唯一索引问题
+- 修复因缺少模型token值启动失败问题
+
 ## v1.1.2
 
 `2024-01-20`

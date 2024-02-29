@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.master.chat.gpt.pojo.entity.Order;
 import com.master.chat.gpt.pojo.vo.OrderVO;
-import com.master.common.api.Query;
+import com.master.chat.common.api.Query;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

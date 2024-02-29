@@ -110,7 +110,7 @@ public class SysLog implements Serializable {
     private String title;
 
     /**
-     * 业务类型 {@link com.master.common.enums.BusinessTypeEnum}
+     * 业务类型 {@link com.master.chat.common.enums.BusinessTypeEnum}
      */
     private String businessType;
 

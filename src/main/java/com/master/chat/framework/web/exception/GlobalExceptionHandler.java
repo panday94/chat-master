@@ -1,7 +1,7 @@
 package com.master.chat.framework.web.exception;
 
-import com.master.common.api.ResponseInfo;
-import com.master.common.exception.*;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;

@@ -17,8 +17,8 @@ import com.master.chat.gpt.mapper.OpenkeyMapper;
 import com.master.chat.gpt.pojo.vo.OpenkeyVO;
 import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
 import com.master.chat.sys.service.IBaseConfigService;
-import com.master.common.enums.IntegerEnum;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.enums.IntegerEnum;
+import com.master.chat.common.validator.ValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -51,7 +51,7 @@ public class InitBean {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.CHAT_GPT.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
             log.error("未加载到ChatGpt模型token数据");
-            return null;
+            return new OpenAiStreamClient();
         }
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new OpenAILogger());
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
@@ -84,7 +84,7 @@ public class InitBean {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.CHAT_GPT.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
             log.error("未加载到ChatGpt模型token数据");
-            return null;
+            return new OpenAiClient();
         }
         //本地开发需要配置代理地址
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new OpenAILogger());
@@ -123,9 +123,13 @@ public class InitBean {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.WENXIN.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
             log.error("未加载到文心一言模型token数据");
-            return null;
+            return new WenXinClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
+        if (ValidatorUtil.isNull(openkey.getAppKey()) || ValidatorUtil.isNull(openkey.getAppSecret())) {
+            log.error("未获取到文心一言模型token数据");
+            return new WenXinClient();
+        }
         String accessToken = WenXinConfig.getAccessToken(openkey.getAppKey(), openkey.getAppSecret());
         return WenXinClient.builder()
                 .logLevel(HttpLoggingInterceptor.Level.BASIC)
@@ -142,7 +146,7 @@ public class InitBean {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.QIANWEN.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
             log.error("未加载到通义千问模型token数据");
-            return null;
+            return new QianWenClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
         return new QianWenClient(openkey.getAppKey());
@@ -157,8 +161,8 @@ public class InitBean {
     public SparkClient sparkClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.SPARK.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到讯飞星火模型token数据");
-            return null;
+            log.error("未加载到智谱清言模型token数据，请添加后需要重启系统");
+            return new SparkClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
         return new SparkClient(openkey.getAppId(), openkey.getAppKey(), openkey.getAppSecret());
@@ -173,10 +177,14 @@ public class InitBean {
     public ZhiPuClient zhiPuClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.ZHIPU.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到智谱清言模型token数据");
-            return null;
+            log.error("未加载到智谱清言模型token数据，请添加后需要重启系统");
+            return new ZhiPuClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
+        if (ValidatorUtil.isNull(openkey.getAppKey()) || ValidatorUtil.isNull(openkey.getAppSecret())) {
+            log.error("未获取到智谱清言模型token数据");
+            return new ZhiPuClient();
+        }
         return ZhiPuClient.builder().appKey(openkey.getAppKey()).appSecret(openkey.getAppSecret()).build();
     }
 

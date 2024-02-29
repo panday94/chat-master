@@ -1,10 +1,10 @@
 package com.master.chat.controller.common;
 
-import com.master.chat.common.constant.OssConstant;
-import com.master.chat.common.constant.RedisConstants;
-import com.master.chat.common.constant.SmsConstant;
-import com.master.chat.common.enums.OssEnum;
-import com.master.chat.common.util.*;
+import com.master.chat.comm.constant.OssConstant;
+import com.master.chat.comm.constant.RedisConstants;
+import com.master.chat.comm.constant.SmsConstant;
+import com.master.chat.comm.enums.OssEnum;
+import com.master.chat.comm.util.*;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.gpt.pojo.vo.AssistantTypeVO;
 import com.master.chat.gpt.service.IAssistantTypeService;
@@ -12,17 +12,17 @@ import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.pojo.vo.DictVO;
 import com.master.chat.sys.pojo.vo.SysUserVO;
 import com.master.chat.sys.service.*;
-import com.master.common.api.FileInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
-import com.master.common.api.SelectDTO;
-import com.master.common.constant.StringPoolConstant;
-import com.master.common.enums.IntEnum;
-import com.master.common.enums.ResponseEnum;
-import com.master.common.enums.StatusEnum;
-import com.master.common.utils.DozerUtil;
-import com.master.common.utils.RandomUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.api.FileInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.api.SelectDTO;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.enums.IntEnum;
+import com.master.chat.common.enums.ResponseEnum;
+import com.master.chat.common.enums.StatusEnum;
+import com.master.chat.common.utils.DozerUtil;
+import com.master.chat.common.utils.RandomUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -135,18 +135,6 @@ public class CommonController {
             pathName = pathName + StringPoolConstant.SLASH;
         }
         return pathName;
-    }
-
-    /**
-     * 获取阿里云oss文件操作临时身份
-     *
-     * @author: Yang
-     * @date: 2023/01/31
-     * @version: 1.0.0
-     */
-    @GetMapping("/sts/assume/role")
-    public ResponseInfo getStsAssumeRole() {
-        return ResponseInfo.success(AliyunSTSUtil.getAssumeRole());
     }
 
     /**

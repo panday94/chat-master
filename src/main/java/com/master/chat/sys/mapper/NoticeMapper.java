@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.master.chat.sys.pojo.entity.Notice;
 import com.master.chat.sys.pojo.vo.NoticeVO;
-import com.master.common.api.Query;
+import com.master.chat.common.api.Query;
 import org.apache.ibatis.annotations.Param;
 
 /**

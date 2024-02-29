@@ -1,9 +1,9 @@
 package com.master.chat.controller.monitor;
 
-import com.master.chat.common.constant.RedisConstants;
+import com.master.chat.comm.constant.RedisConstants;
 import com.master.chat.framework.web.entity.SysCache;
-import com.master.common.api.ResponseInfo;
-import com.master.common.constant.StringPoolConstant;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.constant.StringPoolConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;

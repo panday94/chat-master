@@ -1,7 +1,7 @@
 package com.master.chat.framework.mybatis;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
-import com.master.common.utils.SnowFlakeUtil;
+import com.master.chat.common.utils.SnowFlakeUtil;
 import org.springframework.stereotype.Component;
 
 /**

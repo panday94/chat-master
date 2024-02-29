@@ -1,7 +1,7 @@
 package com.master.chat.framework.web.entity.server;
 
-import com.master.common.utils.Arith;
-import com.master.common.utils.DateUtil;
+import com.master.chat.common.utils.Arith;
+import com.master.chat.common.utils.DateUtil;
 import lombok.Setter;
 
 import java.lang.management.ManagementFactory;

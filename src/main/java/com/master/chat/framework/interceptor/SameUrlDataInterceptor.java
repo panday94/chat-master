@@ -1,13 +1,13 @@
 package com.master.chat.framework.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.master.chat.common.constant.RedisConstants;
-import com.master.chat.common.util.RedisUtils;
+import com.master.chat.comm.constant.RedisConstants;
+import com.master.chat.comm.util.RedisUtils;
 import com.master.chat.framework.filter.RepeatedlyRequestWrapper;
-import com.master.common.annotation.RepeatSubmit;
-import com.master.common.constant.AuthConstant;
-import com.master.common.constant.StringPoolConstant;
-import com.master.common.utils.HttpUtil;
+import com.master.chat.common.annotation.RepeatSubmit;
+import com.master.chat.common.constant.AuthConstant;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.utils.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

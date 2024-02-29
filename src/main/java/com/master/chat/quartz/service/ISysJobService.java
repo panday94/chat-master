@@ -4,8 +4,8 @@ import com.master.chat.framework.web.exception.TaskException;
 import com.master.chat.quartz.pojo.command.SysJobCommand;
 import com.master.chat.quartz.pojo.command.qry.SysJobQry;
 import com.master.chat.quartz.pojo.vo.SysJobVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.ResponseInfo;
 import org.quartz.SchedulerException;
 
 import java.util.List;

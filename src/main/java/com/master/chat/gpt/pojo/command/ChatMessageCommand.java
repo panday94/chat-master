@@ -1,6 +1,6 @@
 package com.master.chat.gpt.pojo.command;
 
-import com.master.common.api.CommonCommand;
+import com.master.chat.common.api.CommonCommand;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

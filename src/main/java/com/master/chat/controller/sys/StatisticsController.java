@@ -1,10 +1,10 @@
 package com.master.chat.controller.sys;
 
 import com.master.chat.sys.service.IStatisticsService;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
-import com.master.common.utils.DateUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.utils.DateUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

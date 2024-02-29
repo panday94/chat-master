@@ -1,11 +1,11 @@
 package com.master.chat.framework.security;
 
 import com.master.chat.sys.service.impl.ResourceServiceImpl;
-import com.master.common.constant.AuthConstant;
-import com.master.common.constant.StringPoolConstant;
-import com.master.common.exception.ValidateException;
-import com.master.common.utils.ApplicationContextUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.constant.AuthConstant;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.exception.ValidateException;
+import com.master.chat.common.utils.ApplicationContextUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,6 +1,6 @@
 package com.master.chat.quartz.pojo.command.qry;
 
-import com.master.common.api.QueryDTO;
+import com.master.chat.common.api.QueryDTO;
 import lombok.Data;
 
 /**

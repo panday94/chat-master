@@ -1,6 +1,6 @@
 package com.master.chat.framework.properties;
 
-import com.master.common.api.Key;
+import com.master.chat.common.api.Key;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

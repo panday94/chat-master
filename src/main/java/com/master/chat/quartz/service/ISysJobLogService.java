@@ -3,8 +3,8 @@ package com.master.chat.quartz.service;
 import com.master.chat.quartz.pojo.command.qry.SysJobQry;
 import com.master.chat.quartz.pojo.entity.SysJobLog;
 import com.master.chat.quartz.pojo.vo.SysJobLogVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

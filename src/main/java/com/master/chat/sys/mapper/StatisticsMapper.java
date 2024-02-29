@@ -1,6 +1,6 @@
 package com.master.chat.sys.mapper;
 
-import com.master.common.api.Query;
+import com.master.chat.common.api.Query;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

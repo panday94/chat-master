@@ -3,7 +3,7 @@ package com.master.chat.framework.third;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import org.springframework.stereotype.Component;
 
 /**

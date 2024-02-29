@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.master.chat.gpt.pojo.command.OpenkeyCommand;
 import com.master.chat.gpt.pojo.entity.Openkey;
 import com.master.chat.gpt.pojo.vo.OpenkeyVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

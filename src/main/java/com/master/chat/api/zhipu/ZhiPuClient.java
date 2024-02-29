@@ -2,8 +2,8 @@ package com.master.chat.api.zhipu;
 
 import cn.hutool.core.util.StrUtil;
 import com.master.chat.api.zhipu.interceptor.ZhiPuLogger;
-import com.master.common.api.Query;
-import com.master.common.exception.BusinessException;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.exception.BusinessException;
 import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.core.httpclient.OkHttpTransport;
 import com.zhipu.oapi.service.v3.ModelApiRequest;

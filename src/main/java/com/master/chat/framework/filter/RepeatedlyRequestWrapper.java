@@ -1,6 +1,6 @@
 package com.master.chat.framework.filter;
 
-import com.master.common.utils.HttpUtil;
+import com.master.chat.common.utils.HttpUtil;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

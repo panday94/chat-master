@@ -4,7 +4,7 @@ import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.dto.ChatMessageDTO;
 import com.master.chat.gpt.pojo.vo.ChatMessageVO;
 import com.master.chat.gpt.pojo.vo.ModelVO;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

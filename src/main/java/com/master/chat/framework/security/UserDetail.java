@@ -3,7 +3,7 @@ package com.master.chat.framework.security;
 import cn.hutool.core.lang.UUID;
 import com.master.chat.gpt.pojo.vo.UserVO;
 import com.master.chat.sys.pojo.vo.SysUserVO;
-import com.master.common.enums.IntegerEnum;
+import com.master.chat.common.enums.IntegerEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

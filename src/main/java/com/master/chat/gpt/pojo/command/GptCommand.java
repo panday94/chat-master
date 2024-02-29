@@ -1,7 +1,7 @@
 package com.master.chat.gpt.pojo.command;
 
-import com.master.common.api.CommonCommand;
-import com.master.common.api.Query;
+import com.master.chat.common.api.CommonCommand;
+import com.master.chat.common.api.Query;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

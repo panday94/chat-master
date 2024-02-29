@@ -124,6 +124,9 @@ public class OpenAiClient {
     @Getter
     private PageRequest pageRequest = PageRequest.builder().build();
 
+    public OpenAiClient() {
+    }
+
     /**
      * 构造器
      *

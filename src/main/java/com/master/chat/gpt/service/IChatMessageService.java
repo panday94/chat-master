@@ -6,9 +6,9 @@ import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.dto.ChatMessageDTO;
 import com.master.chat.gpt.pojo.entity.ChatMessage;
 import com.master.chat.gpt.pojo.vo.ChatMessageVO;
-import com.master.common.api.IPageInfo;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 

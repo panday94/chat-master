@@ -1,14 +1,14 @@
 package com.master.chat.framework.aspect;
 
 import cn.hutool.core.text.StrFormatter;
-import com.master.chat.common.constant.Constants;
+import com.master.chat.comm.constant.Constants;
 import com.master.chat.framework.security.JwtTokenUtils;
 import com.master.chat.framework.security.UserDetail;
 import com.master.chat.sys.pojo.dto.SysUserPreDTO;
 import com.master.chat.sys.service.ISysUserService;
-import com.master.common.annotation.DataScope;
-import com.master.common.constant.StringPoolConstant;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.annotation.DataScope;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.validator.ValidatorUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

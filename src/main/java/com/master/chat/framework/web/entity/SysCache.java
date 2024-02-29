@@ -1,6 +1,6 @@
 package com.master.chat.framework.web.entity;
 
-import com.master.common.constant.StringPoolConstant;
+import com.master.chat.common.constant.StringPoolConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

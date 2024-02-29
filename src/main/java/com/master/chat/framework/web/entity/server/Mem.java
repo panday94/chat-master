@@ -1,6 +1,6 @@
 package com.master.chat.framework.web.entity.server;
 
-import com.master.common.utils.Arith;
+import com.master.chat.common.utils.Arith;
 import lombok.Setter;
 
 /**

@@ -27,6 +27,13 @@ import com.master.chat.api.xfyun.entity.SparkMessage;
 import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.listener.SparkSseListener;
 import com.master.chat.api.zhipu.ZhiPuClient;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.enums.StatusEnum;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.common.exception.ErrorException;
+import com.master.chat.common.utils.ApplicationContextUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.framework.security.UserDetail;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
@@ -35,13 +42,6 @@ import com.master.chat.gpt.pojo.vo.ModelVO;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.gpt.service.IGptService;
 import com.master.chat.gpt.service.SseService;
-import com.master.common.api.Query;
-import com.master.common.api.ResponseInfo;
-import com.master.common.enums.StatusEnum;
-import com.master.common.exception.BusinessException;
-import com.master.common.exception.ErrorException;
-import com.master.common.utils.ApplicationContextUtil;
-import com.master.common.validator.ValidatorUtil;
 import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.service.v3.ModelApiRequest;
 import lombok.SneakyThrows;
@@ -202,6 +202,9 @@ public class SseServiceImpl implements SseService {
     @SneakyThrows
     private Boolean sseByOpenAi(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
                                 Long chatId, String conversationId, String prompt, String version) {
+        if (ValidatorUtil.isNullIncludeArray(openAiStreamClient.getApiKey())) {
+            throw new BusinessException("未加载到密钥信息");
+        }
         List<OpenAiMessage> messages = new ArrayList<>();
         chatMessages.stream().forEach(v -> {
             OpenAiMessage currentMessage = OpenAiMessage.builder().content(v.getContent()).role(v.getRole()).build();
@@ -228,6 +231,9 @@ public class SseServiceImpl implements SseService {
     @SneakyThrows
     private Boolean sseByWenXin(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
                                 Long chatId, String conversationId, String prompt, String version) {
+        if (ValidatorUtil.isNull(wenXinClient.getApiKey())) {
+            throw new BusinessException("未加载到密钥信息");
+        }
         if (isDraw(prompt)) {
             return imageByWenXin(sseEmitter, response, chatId, conversationId, prompt);
         }
@@ -293,6 +299,9 @@ public class SseServiceImpl implements SseService {
     @SneakyThrows
     private Boolean sseByZhiPu(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
                                Long chatId, String conversationId, String prompt, String version) {
+        if (ValidatorUtil.isNull(zhiPuClient.getAppKey())) {
+            throw new BusinessException("未加载到密钥信息");
+        }
         List<ModelApiRequest.Prompt> prompts = new ArrayList<>();
         chatMessages.stream().forEach(v -> {
             prompts.add(new ModelApiRequest.Prompt(v.getRole(), v.getContent()));
@@ -326,6 +335,9 @@ public class SseServiceImpl implements SseService {
     @SneakyThrows
     private Boolean sseByQianWen(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
                                  Long chatId, String conversationId, String prompt, String version) {
+        if (ValidatorUtil.isNull(qianWenClient.getAppKey())) {
+            throw new BusinessException("未加载到密钥信息");
+        }
         MessageManager msgManager = new MessageManager(20);
         chatMessages.stream().forEach(v -> {
             msgManager.add(Message.builder().role(v.getRole()).content(v.getContent()).build());
@@ -355,6 +367,9 @@ public class SseServiceImpl implements SseService {
     @SneakyThrows
     private Boolean sseBySpark(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
                                Long chatId, String conversationId, String prompt, String version) {
+        if (ValidatorUtil.isNull(sparkClient.appid)) {
+            throw new BusinessException("未加载到密钥信息");
+        }
         List<SparkMessage> messages = new ArrayList<>();
         chatMessages.stream().forEach(v -> {
             SparkMessage currentMessage = new SparkMessage(v.getRole(), v.getContent());

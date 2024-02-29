@@ -1,6 +1,6 @@
 package com.master.chat.api.base.exception;
 
-import com.master.common.enums.ResponseEnum;
+import com.master.chat.common.enums.ResponseEnum;
 import lombok.Getter;
 
 /**

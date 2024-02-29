@@ -8,16 +8,16 @@ import com.master.chat.sys.pojo.dto.SysUserRolesDTO;
 import com.master.chat.sys.pojo.entity.SysUser;
 import com.master.chat.sys.pojo.entity.SysUserRole;
 import com.master.chat.sys.service.ISysUserRoleService;
-import com.master.common.api.ResponseInfo;
-import com.master.common.enums.StatusEnum;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.enums.StatusEnum;
+import com.master.chat.common.validator.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.master.chat.common.constant.Constants.ADMIN;
+import static com.master.chat.comm.constant.Constants.ADMIN;
 
 /**
  * 用户角色 服务实现类

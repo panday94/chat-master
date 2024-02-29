@@ -5,8 +5,8 @@ import com.master.chat.sys.pojo.command.ResourceCommand;
 import com.master.chat.sys.pojo.entity.Resource;
 import com.master.chat.sys.pojo.vo.ResourceVO;
 import com.master.chat.sys.pojo.vo.RouterVO;
-import com.master.common.api.QueryDTO;
-import com.master.common.api.ResponseInfo;
+import com.master.chat.common.api.QueryDTO;
+import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 import java.util.Set;

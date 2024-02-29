@@ -14,6 +14,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
 
+        <commons.io.version>2.11.0</commons.io.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <httpclient.version>4.5.2</httpclient.version>
+        <alibaba.fastjson.version>1.2.72</alibaba.fastjson.version>
+        <google.zxing.version>3.4.0</google.zxing.version>
+        <hutool.version>5.6.5</hutool.version>
+        <dozer.version>6.5.2</dozer.version>
+
         <jjwt.version>0.9.1</jjwt.version>
         <master-common.version>1.3.0</master-common.version>
         <mysql.version>5.1.48</mysql.version>
@@ -77,17 +85,63 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!-- lombok 注解(省略代码) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!--commons-流处理 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
+        </dependency>
+        <!-- pool 连接池 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!--commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <!-- httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <!--Alibaba fastjson-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${alibaba.fastjson.version}</version>
+        </dependency>
+        <!-- 谷歌二维码工具包 -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${google.zxing.version}</version>
+        </dependency>
+        <!--Hutool Java工具包-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!--dozer java bean转换类 -->
+        <dependency>
+            <groupId>com.github.dozermapper</groupId>
+            <artifactId>dozer-spring-boot-starter</artifactId>
+            <version>${dozer.version}</version>
+        </dependency>
         <!-- jwt -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
-        </dependency>
-        <!-- 公共模块 -->
-        <dependency>
-            <groupId>com.master</groupId>
-            <artifactId>master-common</artifactId>
-            <version>${master-common.version}</version>
         </dependency>
         <!--mysql驱动 -->
         <dependency>
@@ -165,12 +219,6 @@
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>${oshi.version}</version>
-        </dependency>
-        <!--commons-lang3 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
         </dependency>
         <!-- pool 对象池 -->
         <dependency>

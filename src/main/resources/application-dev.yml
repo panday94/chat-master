@@ -65,11 +65,3 @@ system:
   upload-path: /Users/master/Documents/upload/
 url:
   base:
-# 阿里云配置文件
-ali:
-  oss:
-    key:
-    secret:
-  sms:
-    key:
-    secret:

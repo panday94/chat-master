@@ -11,11 +11,11 @@ import com.master.chat.framework.manger.factory.AsyncFactory;
 import com.master.chat.framework.security.JwtTokenUtils;
 import com.master.chat.framework.security.UserDetail;
 import com.master.chat.sys.pojo.entity.SysLog;
-import com.master.common.annotation.Log;
-import com.master.common.api.CommonCommand;
-import com.master.common.constant.StringPoolConstant;
-import com.master.common.utils.IPUtil;
-import com.master.common.validator.ValidatorUtil;
+import com.master.chat.common.annotation.Log;
+import com.master.chat.common.api.CommonCommand;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.utils.IPUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -50,7 +50,7 @@ public class SysLogAspect {
     @Autowired
     private HttpServletRequest request;
 
-    @Pointcut("@annotation(com.master.common.annotation.Log)")
+    @Pointcut("@annotation(com.master.chat.common.annotation.Log)")
     public void logPointCut() {
 
     }

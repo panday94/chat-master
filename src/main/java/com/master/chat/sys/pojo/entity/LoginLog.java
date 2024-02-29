@@ -1,7 +1,7 @@
 package com.master.chat.sys.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.master.common.enums.StatusEnum;
+import com.master.chat.common.enums.StatusEnum;
 import lombok.*;
 import lombok.experimental.Accessors;
 

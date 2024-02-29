@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.master.chat.sys.pojo.entity.SysUser;
 import com.master.chat.sys.pojo.vo.ContactUserVO;
 import com.master.chat.sys.pojo.vo.SysUserVO;
-import com.master.common.api.Query;
+import com.master.chat.common.api.Query;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
