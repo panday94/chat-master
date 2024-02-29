@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.master.chat.common.exception.ProhibitVisitException;
 import com.master.chat.framework.security.JWTPasswordEncoder;
 import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.enums.UserTypeEnum;
@@ -79,6 +80,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public ResponseInfo<UserVO> getLoginUserById(Long id) {
+        User user = userMapper.selectById(id);
+        if (ValidatorUtil.isNull(user)) {
+            throw new ProhibitVisitException("会员用户信息不存在，无法操作");
+        }
+        return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+    }
+
+    @Override
     public ResponseInfo<UserVO> getUserByUserName(String username) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getTel, username));
         return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
@@ -98,7 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .name(name).nickName(name).tel(tel).password(JWTPasswordEncoder.bcryptEncode(password))
                 .type(3)
                 .build();
-        AppInfoDTO appInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO, AppInfoDTO.class);
+        AppInfoDTO appInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.APP_INFO, AppInfoDTO.class);
         if (ValidatorUtil.isNotNull(appInfo) && ValidatorUtil.isNotNull(appInfo.getFreeNum())) {
             user.setNum(Long.valueOf(appInfo.getFreeNum()));
         }

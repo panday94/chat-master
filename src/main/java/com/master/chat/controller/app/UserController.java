@@ -52,7 +52,7 @@ public class UserController extends BaseAppController {
      */
     @GetMapping()
     public ResponseInfo<UserVO> getUserInfo() {
-        return userService.getUserById(getLoginUser().getId());
+        return userService.getLoginUserById(getLoginUser().getId());
     }
 
     /**

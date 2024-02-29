@@ -11,6 +11,7 @@
 ## BugFix
 - 修复chat_gpt.sql文件插入openkey表app_key唯一索引问题
 - 修复因缺少模型token值启动失败问题
+- 修复注册时未赠送免费体验次数问题
 
 ## v1.1.2
 

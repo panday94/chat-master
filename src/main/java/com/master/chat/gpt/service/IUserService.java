@@ -46,6 +46,14 @@ public interface IUserService extends IService<User> {
     ResponseInfo<UserVO> getUserById(Long id);
 
     /**
+     * 根据主键查询会员用户
+     *
+     * @param id 会员用户主键
+     * @return 会员用户
+     */
+    ResponseInfo<UserVO> getLoginUserById(Long id);
+
+    /**
      * 根据帐号查询会员用户
      *
      * @param id 会员用户主键
