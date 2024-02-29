@@ -131,8 +131,8 @@ ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步�
 ## 联系我们
 <div style="display: flex; gap: 20px;">
 	<div style="text-align: center; width: 255px">
+	    <p>扫码进群，如失效请添加下方微信，加入交流群</p>
 		<img style="max-width: 100%" src="./doc/file/wechat_group.jpg" alt="微信群" />
-		<p>扫码进群，如失效请添加微信，加入交流群</p>
 	</div>
    <div style="text-align: center;">
 		<img style="max-width: 100%" src="./doc/file/wxcode.jpg" alt="微信" />
