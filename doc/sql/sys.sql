@@ -1,5 +1,4 @@
-#
-oauth2中规定的数据表,需要手动创建,一般项目中提供服务接口插入,参数由用户定义,在请求时会自动查询服务器中对应的参数数据匹配认证
+# oauth2中规定的数据表,需要手动创建,一般项目中提供服务接口插入,参数由用户定义,在请求时会自动查询服务器中对应的参数数据匹配认证
 DROP TABLE IF EXISTS `oauth_client_details`;
 CREATE TABLE `oauth_client_details`
 (

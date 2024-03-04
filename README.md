@@ -21,6 +21,7 @@ ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步�
 * 管理端前端项目，请移步[chat-master-admin](https://gitee.com/panday94/chat-master-admin)
 * 网页端项目，请移步[chat-master-web](https://gitee.com/panday94/chat-master-web)
 * 移动端项目，请移步[chat-master-uniapp](https://gitee.com/panday94/chat-master-uniapp)
+* 如需了解更多可访问[这里](https://www.yuque.com/the6/ct0azl/ehxcgoy0xg41l9c3?singleDoc# 《ChatMASTER部署教程》)
 
 ## 演示
 
@@ -72,7 +73,7 @@ ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步�
 
 ``` 
 1、idea导入chat-master项目，请更换spring.profiles.active为dev
-2、执行doc文件夹下面sys.sql、sys_date.sql、chat-gpt.sql、update.sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
+2、执行doc文件夹下面chat_master全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
 3、版本更新时候需执行doc/update.sql
 4、更改application-dev中redis连接和mysql连接配置
 5、启动ChatApplication中main方法

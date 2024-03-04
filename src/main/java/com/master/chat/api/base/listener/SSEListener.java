@@ -9,13 +9,14 @@ import com.master.chat.api.openai.entity.chat.ChatCompletionResponse;
 import com.master.chat.api.wenxin.entity.ChatResponse;
 import com.master.chat.api.zhipu.entity.ZhiPuChoice;
 import com.master.chat.api.zhipu.entity.ZhiPuResponse;
-import com.master.chat.gpt.enums.ChatStatusEnum;
-import com.master.chat.gpt.pojo.command.ChatMessageCommand;
-import com.master.chat.gpt.service.IChatMessageService;
+import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.exception.BusinessException;
 import com.master.chat.common.exception.ErrorException;
 import com.master.chat.common.utils.ApplicationContextUtil;
 import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.gpt.enums.ChatStatusEnum;
+import com.master.chat.gpt.pojo.command.ChatMessageCommand;
+import com.master.chat.gpt.service.IChatMessageService;
 import com.zhipu.oapi.service.v3.ModelEventSourceListener;
 import com.zhipu.oapi.service.v3.SseMeta;
 import lombok.SneakyThrows;
@@ -150,6 +151,9 @@ public class SSEListener extends ModelEventSourceListener {
         }
         if (ValidatorUtil.isNull(finishReason) && ValidatorUtil.isNotNull(completionResponse.getChoices().get(0).getFinishReason())) {
             finishReason = completionResponse.getChoices().get(0).getFinishReason();
+        }
+        if (ValidatorUtil.isNull(content)) {
+            content = StringPoolConstant.EMPTY;
         }
         output.append(content).toString();
         return output.toString();

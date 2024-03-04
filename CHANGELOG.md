@@ -1,3 +1,17 @@
+## v1.1.4
+
+`2024-03-04`
+
+> [chat-master](https://gitee.com/yoli9/chat-master)
+
+## Enhancement
+- 增加全量chat_master.sql文件，可直接执行该文件即可
+- 在readme中增加chat-master部署语雀地址
+- 增加默认万花筒信息，方便使用
+
+## BugFix
+- 解决openai输出时末尾会多出字符串null
+
 ## v1.1.3
 
 `2024-02-29`
