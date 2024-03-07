@@ -4,17 +4,6 @@ import com.master.chat.comm.constant.RedisConstants;
 import com.master.chat.comm.constant.SmsConstant;
 import com.master.chat.comm.util.AliyunSMSUtil;
 import com.master.chat.comm.util.RedisUtils;
-import com.master.chat.gpt.constant.BaseConfigConstant;
-import com.master.chat.gpt.pojo.command.GptCommand;
-import com.master.chat.gpt.pojo.vo.AgreementVO;
-import com.master.chat.gpt.pojo.vo.AppConfigVO;
-import com.master.chat.gpt.pojo.vo.AssistantVO;
-import com.master.chat.gpt.service.*;
-import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
-import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
-import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
-import com.master.chat.sys.pojo.dto.config.WxInfoDTO;
-import com.master.chat.sys.service.IBaseConfigService;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.enums.IntEnum;
@@ -22,6 +11,15 @@ import com.master.chat.common.enums.ResponseEnum;
 import com.master.chat.common.enums.StatusEnum;
 import com.master.chat.common.utils.RandomUtil;
 import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.common.validator.base.BaseAssert;
+import com.master.chat.gpt.constant.BaseConfigConstant;
+import com.master.chat.gpt.pojo.command.GptCommand;
+import com.master.chat.gpt.pojo.vo.AgreementVO;
+import com.master.chat.gpt.pojo.vo.AppConfigVO;
+import com.master.chat.gpt.service.*;
+import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
+import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
+import com.master.chat.sys.service.IBaseConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,18 +89,8 @@ public class AppApiController {
     @GetMapping("/home/config")
     public ResponseInfo getHomeConfig() {
         BaseInfoDTO baseInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO, BaseInfoDTO.class);
-        WxInfoDTO wxInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.WX_INFO, WxInfoDTO.class);
         AppInfoDTO appInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.APP_INFO, AppInfoDTO.class);
-        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.EXTRA_INFO, ExtraInfoDTO.class);
-        Query query = new Query();
-        query.put("status", StatusEnum.ENABLED.getValue());
-        List<AssistantVO> assistants = assistantService.listAssistant(query).getData();
-        AssistantVO assistant = assistants.stream().filter(v -> StatusEnum.ENABLED.getValue().equals(v.getMainModel())).findFirst().get();
-        AppConfigVO appConfig = AppConfigVO.builder()
-                .baseInfo(baseInfo).extraInfo(extraInfo)
-                .appInfo(appInfo).wxInfo(wxInfo)
-                .mainAssistant(assistant).assistants(assistants)
-                .build();
+        AppConfigVO appConfig = AppConfigVO.builder().baseInfo(baseInfo).appInfo(appInfo).build();
         return ResponseInfo.success(appConfig);
     }
 
@@ -119,22 +107,10 @@ public class AppApiController {
         query.put("type", type);
         query.put("status", StatusEnum.ENABLED.getValue());
         List<AgreementVO> contents = contentService.listContent(query).getData();
-        if (ValidatorUtil.isNull(contents)) {
+        if (ValidatorUtil.isNullIncludeArray(contents)) {
             return ResponseInfo.success();
         }
         return ResponseInfo.success(contents.get(0));
-    }
-
-    /**
-     * 获取内容详情
-     *
-     * @author: Yang
-     * @date: 2023/1/9
-     * @version: 1.0.0
-     */
-    @GetMapping("/content/detail/{id}")
-    public ResponseInfo getContent(@PathVariable("id") Long id) {
-        return contentService.getContentById(id);
     }
 
     /**
@@ -150,6 +126,18 @@ public class AppApiController {
         query.put("type", type);
         query.put("status", StatusEnum.ENABLED.getValue());
         return contentService.listContent(query);
+    }
+
+    /**
+     * 获取内容详情
+     *
+     * @author: Yang
+     * @date: 2023/1/9
+     * @version: 1.0.0
+     */
+    @GetMapping("/content/detail/{id}")
+    public ResponseInfo getContent(@PathVariable("id") Long id) {
+        return contentService.getContentById(id);
     }
 
     /**
@@ -188,10 +176,10 @@ public class AppApiController {
      * @version: 1.0.0
      */
     @GetMapping("/assistant/random")
-    public ResponseInfo listAssistant() {
+    public ResponseInfo listAssistant(@RequestParam(required = false) Map map) {
         Query query = new Query();
         query.put("status", StatusEnum.ENABLED.getValue());
-        query.put("size", 3);
+        query.put("size", ValidatorUtil.isNotNull(map.get("size")) ? BaseAssert.getParamInt(map, "size") : 3);
         return assistantService.listAssistantByApp(new Query(query));
     }
 

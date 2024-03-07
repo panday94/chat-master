@@ -170,9 +170,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         DozerUtil.convertor(command, sysUser);
         sysUser.setUpdateUser(command.getOperater());
         sysUserMapper.updateById(sysUser);
-        if (ADMIN.equals(sysUser.getUsername())) {
-            return ResponseInfo.success();
-        }
         saveUserInfo(command, sysUser.getId());
         return ResponseInfo.success();
     }

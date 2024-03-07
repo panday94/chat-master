@@ -6,27 +6,36 @@
 
 ![](https://img.shields.io/badge/SpringBoot-2.3.7-brightgreen.svg)
 
-# 项目简介
-ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步响应及流式响应，完美呈现打印机效果。支持ChatGPT模型，同时也支持国内文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型，后续模型持续对接中。
-项目包含java后台、网页端、移动端及管理后台配置。
+> 声明：此项目只发布于码云和GitHub，基于 MIT 协议，免费且作为开源学习使用，禁止转卖、谨防受骗。如需商用必须保留版权信息，请自觉遵守。确保合法合规使用，在运营过程中产生的一切任何后果自负，与作者无关。
 
-欢迎小伙伴一起加入交流群[添加微信](#联系我们)或提Issues。使用参考下面具体介绍：
+# 项目简介
+ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换ChatGPT(3.5、4.0)模型、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型，后续模型持续对接中。
+项目包含java服务端、网页端、移动端及管理后台配置。
+
+GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
+
+欢迎小伙伴或有合作意向一起加入交流群[添加微信](#联系我们)或提Issues。使用参考下面具体介绍：
 
 * 支持文心一言Stable-Diffusion-XL作图功能
 * 内置了各种assistant模版，按指定prompt输出，也可后台创建assistant模版
 * 支持切换模型对话聊天，保存对话记录及根据上下文输出
-* wa端采用Vue2、Element UI，Chat网页端使用Vue3、TypeScript、NaiveUI进行开发
-* 后端采用Spring Boot、Spring Security + JWT、Mybatis-Plus、Lombok、 Mysql & Redis，代码通俗易懂，上手即用
+* 管理端端采用Vue2、Element UI，Chat网页端使用Vue3、TypeScript、NaiveUI进行开发
+* 服务端采用Spring Boot、Spring Security + JWT、Mybatis-Plus、Lombok、 Mysql & Redis，代码通俗易懂，上手即用
 * 完善的权限控制，权限认证使用Jwt，支持多终端认证系统
-* 管理端前端项目，请移步[chat-master-admin](https://gitee.com/panday94/chat-master-admin)
+* 管理端项目，请移步[chat-master-admin](https://gitee.com/panday94/chat-master-admin)
 * 网页端项目，请移步[chat-master-web](https://gitee.com/panday94/chat-master-web)
 * 移动端项目，请移步[chat-master-uniapp](https://gitee.com/panday94/chat-master-uniapp)
 * 如需了解更多可访问[这里](https://www.yuque.com/the6/ct0azl/ehxcgoy0xg41l9c3?singleDoc# 《ChatMASTER部署教程》)
+* 阿里云折扣场：[点我进入](https://www.aliyun.com/minisite/goods?userCode=iqguofg4)，腾讯云秒杀场：[点我进入](https://curl.qcloud.com/11y0ob0f)&nbsp;&nbsp;
+* 阿里云优惠券：[点我领取](https://www.aliyun.com/daily-act/ecs/activity_selection?userCode=iqguofg4)，腾讯云优惠券：[点我领取](https://curl.qcloud.com/EUbjrCcu)&nbsp;&nbsp;
 
 ## 演示
 
-演示地址：https://gpt.panday94.xyz
-后台密码：admin 123456
+网页端演示地址：https://gpt.panday94.xyz
+
+移动端演示地址：https://gpt.panday94.xyz/h5
+
+管理端演示地址：https://gpt.panday94.xyz/admin  密码：master chatmaster
 
 ![cover](./doc/file/login.jpg)
 ![cover2](./doc/file/chat.gif)
@@ -42,7 +51,10 @@ ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步�
 ## 待实现功能
 1. vip及svip开通功能
 2. 分享赠送次数功能
-3. 用户上传自己密钥使用
+3. 知识库功能
+4. websocket响应（对接移动端）
+5. 绘画
+6. 用户上传自己密钥使用 
 
 ## 模型功能对比
 
@@ -127,18 +139,28 @@ ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步�
 
 贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md)
 
+个人的力量始终有限，任何形式的贡献都是欢迎的，包括但不限于贡献代码，优化文档，提交 issue 和 PR 等。
 感谢所有做过贡献的人!
 
-## 联系我们
+## 赞助
+
+如果你觉得这个项目对你有帮助，并且情况允许的话，可以给我一点点支持，总之非常感谢支持～
+
 <div style="display: flex; gap: 20px;">
-	<div style="text-align: center; width: 255px">
-	    <p>扫码进群，如失效请添加下方微信，加入交流群</p>
-		<img style="max-width: 100%" src="./doc/file/wechat_group.jpg" alt="微信群" />
+	<div style="text-align: center">
+		<img style="max-width: 100%" src="./doc/file/wechat.jpg" alt="微信" />
+		<p>WeChat Pay</p>
 	</div>
-   <div style="text-align: center;">
-		<img style="max-width: 100%" src="./doc/file/wxcode.jpg" alt="微信" />
-		<p>添加微信</p>
-	</div>
+</div>
+
+## 联系我们
+<div style="display: flex;">
+    <img style="width: 100%" src="./doc/file/wechat.png" alt="微信" />
+</div>
+
+## 扫码进群
+<div style="display: flex; gap: 20px;">
+    <img style="max-width: 100%" src="./doc/file/wechat_group.jpg" alt="微信群" />
 </div>
 
 ## 许可证

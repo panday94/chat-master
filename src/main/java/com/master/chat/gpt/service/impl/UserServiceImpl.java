@@ -1,12 +1,20 @@
 package com.master.chat.gpt.service.impl;
 
 import cn.hutool.core.lang.UUID;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.enums.ResponseEnum;
+import com.master.chat.common.exception.ErrorException;
 import com.master.chat.common.exception.ProhibitVisitException;
+import com.master.chat.common.utils.CommonUtil;
+import com.master.chat.common.utils.DozerUtil;
+import com.master.chat.common.utils.RandomUtil;
+import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.framework.security.JWTPasswordEncoder;
 import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.enums.UserTypeEnum;
@@ -14,19 +22,10 @@ import com.master.chat.gpt.mapper.UserMapper;
 import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.UserVO;
-import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
-import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
-import com.master.chat.sys.service.IBaseConfigService;
 import com.master.chat.gpt.service.IUserService;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
-import com.master.chat.common.api.IPageInfo;
-import com.master.chat.common.api.Query;
-import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.enums.ResponseEnum;
-import com.master.chat.common.exception.ErrorException;
-import com.master.chat.common.utils.DozerUtil;
-import com.master.chat.common.utils.RandomUtil;
-import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
+import com.master.chat.sys.service.IBaseConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,12 +65,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public ResponseInfo<IPageInfo<UserVO>> pageUser(Query query) {
         IPage<UserVO> iPage = userMapper.pageUser(new Page<>(query.getCurrent(), query.getSize()), query);
+        iPage.getRecords().stream().forEach(v -> v.setTel(CommonUtil.mobileEncrypt(v.getTel())));
         return ResponseInfo.success(new IPageInfo(iPage.getCurrent(), iPage.getSize(), iPage.getTotal(), iPage.getRecords()));
     }
 
     @Override
     public ResponseInfo<List<UserVO>> listUser(Query query) {
-        return ResponseInfo.success(userMapper.listUser(query));
+        List<UserVO> userVOS = userMapper.listUser(query);
+        userVOS.stream().forEach(v -> v.setTel(CommonUtil.mobileEncrypt(v.getTel())));
+        return ResponseInfo.success(userVOS);
     }
 
     @Override
