@@ -16,7 +16,7 @@ import java.util.*;
  * @author: Yang
  * @date: 2021/8/12 17:18
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public class SignUtil {
 

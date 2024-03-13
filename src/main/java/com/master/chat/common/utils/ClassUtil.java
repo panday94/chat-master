@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  * @author: Yang
  * @date: 2020/12/24
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @UtilityClass
 public class ClassUtil extends ClassUtils {

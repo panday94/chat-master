@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author：周杰
  * @date: 2023/5/6
  * @version: 1.0.0
- * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  **/
 @Getter
 public enum PushScanQrcodeTypeEnum {

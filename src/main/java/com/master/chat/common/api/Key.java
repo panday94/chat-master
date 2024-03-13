@@ -9,7 +9,7 @@ import lombok.Setter;
  * @author: Yang
  * @date: 2021/7/27
  * @version: 3.7.2
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Getter
 @Setter

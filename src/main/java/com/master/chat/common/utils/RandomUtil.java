@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author: Yang
  * @date: 2020/12/24
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public class RandomUtil {
 

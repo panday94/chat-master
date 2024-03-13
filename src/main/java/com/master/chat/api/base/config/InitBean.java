@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  * @author: yang
  * @date: 2023/9/7
  * @version: 1.0.0
- * Copyright Ⓒ 2022 恒翔 Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Slf4j
 @Configuration

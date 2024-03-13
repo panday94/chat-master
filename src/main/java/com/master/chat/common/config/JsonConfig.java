@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter;
  * @author: Yang
  * @date: 2019/8/29
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Configuration
 public class JsonConfig {

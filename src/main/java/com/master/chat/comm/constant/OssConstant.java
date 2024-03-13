@@ -6,7 +6,7 @@ package com.master.chat.comm.constant;
  * @author: yang
  * @date: 2023/4/28
  * @version: 1.0.0
- * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public interface OssConstant {
 

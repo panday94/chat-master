@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author: yang
  * @date: 2024/1/6
  * @version: 1.1.1
- * Copyright Ⓒ 2022 恒翔 Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Data
 public class ImageData implements Serializable {

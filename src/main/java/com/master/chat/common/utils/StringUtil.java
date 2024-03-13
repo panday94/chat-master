@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author: Yang
  * @date: 2020/12/30
  * @version: 1.0.0
- * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public class StringUtil extends StringUtils {
 

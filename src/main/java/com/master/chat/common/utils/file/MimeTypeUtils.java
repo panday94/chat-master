@@ -8,7 +8,7 @@ import com.master.chat.common.constant.StringPoolConstant;
  * @author: Yang
  * @date: 2021/9/15
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public class MimeTypeUtils {
     public static final String IMAGE_PNG = "image/png";

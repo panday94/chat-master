@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
  * @author: Yang
  * @date: 2020/11/17
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Slf4j
 public class IPUtil {

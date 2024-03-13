@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @author: Yang
  * @date: 2021/1/15
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public class BigDecimalToStringConverter extends DozerConverter<BigDecimal, String> {
 

@@ -14,7 +14,7 @@ import java.util.Map;
  * @author: Yang
  * @date: 2019/8/16
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public abstract class BaseAssert {
 

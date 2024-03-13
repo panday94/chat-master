@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @author: yang
  * @date: 2023/2/7
  * @version: 1.0.0
- * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Component
 public class CustomIdGenerator implements IdentifierGenerator {

@@ -9,7 +9,7 @@ import lombok.Data;
  * @author: Yang
  * @date: 2020/3/4
  * @version: 3.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Data
 public class ProhibitVisitException extends RuntimeException {

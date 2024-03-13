@@ -6,7 +6,7 @@ package com.master.chat.common.constant;
  * @author: Yang
  * @date: 2021/11/22
  * @version: 1.2.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public interface AliOssConstant {
 

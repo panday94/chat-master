@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  * @author: yang
  * @date: 2023/11/24
  * @version: 1.0.0
- * Copyright Ⓒ 2022 恒翔 Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Data
 @Builder

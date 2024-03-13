@@ -27,7 +27,7 @@ import java.util.List;
  * @author: Yang
  * @date: 2023-11-22
  * @version: 1.0.0
- * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Service
 public class AssistantTypeServiceImpl extends ServiceImpl<AssistantTypeMapper, AssistantType> implements IAssistantTypeService {

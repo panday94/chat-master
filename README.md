@@ -31,9 +31,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 演示
 
-网页端演示地址：https://gpt.panday94.xyz
-
-移动端演示地址：https://gpt.panday94.xyz/h5
+网页端演示地址：https://gpt.panday94.xyz 移动端可[扫码访问](#联系我们)
 
 管理端演示地址：https://gpt.panday94.xyz/admin  密码：master chatmaster
 
@@ -146,6 +144,8 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 如果你觉得这个项目对你有帮助，并且情况允许的话，可以给我一点点支持，总之非常感谢支持～
 
+接定制开发，欢迎老板下单！
+
 <div style="display: flex; gap: 20px;">
 	<div style="text-align: center">
 		<img style="max-width: 100%" src="./doc/file/wechat.jpg" alt="微信" />
@@ -167,4 +167,4 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 [Apache License 2.0](./LICENSE)
 
-Copyright (c) 2022 Master Computer Corporation Limited All rights reserved
+Copyright (c) 2023 Master Computer Corporation Limited All rights reserved

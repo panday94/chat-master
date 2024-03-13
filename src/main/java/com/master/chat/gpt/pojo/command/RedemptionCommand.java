@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author: Yang
  * @date: 2023-04-28
  * @version: 1.0.0
- * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Data
 public class RedemptionCommand extends CommonCommand implements Serializable {

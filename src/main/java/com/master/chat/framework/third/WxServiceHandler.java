@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author: Yang
  * @date: 2021/2/1
  * @version: 1.0.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Component
 public class WxServiceHandler {

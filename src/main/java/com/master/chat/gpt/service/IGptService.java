@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author: yang
  * @date: 2023/5/5
- * @version: Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * @version: Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public interface IGptService {
 

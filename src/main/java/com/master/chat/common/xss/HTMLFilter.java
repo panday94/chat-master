@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
  * @author Joseph O'Connell
  * @author Cal Hendersen
  * @author Michael Semb Wever
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public final class HTMLFilter {
 

@@ -15,7 +15,7 @@ import java.util.List;
  * @author: Yang
  * @date: 2023-12-01
  * @version: 1.0.0
- * Copyright Ⓒ 2022 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public interface ModelMapper extends BaseMapper<Model> {
 

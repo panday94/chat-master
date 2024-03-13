@@ -20,7 +20,7 @@ import java.security.cert.X509Certificate;
  * @author: Yang
  * @date: 2021/10/23
  * @version: 1.2.0
- * Copyright Ⓒ 2021 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Slf4j
 public class HttpUtil {
