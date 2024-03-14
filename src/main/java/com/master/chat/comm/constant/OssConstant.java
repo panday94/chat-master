@@ -11,11 +11,6 @@ package com.master.chat.comm.constant;
 public interface OssConstant {
 
     /**
-     * 仓库
-     */
-    String BUCKET_NAME = "master";
-
-    /**
      * 默认文件夹
      */
     String DEFAULT_FILE = "default/";

@@ -26,14 +26,19 @@ public class Assistant extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色名称
+     * 头像
      */
-    private String title;
+    private String avatar;
 
     /**
      * 角色图标
      */
     private String icon;
+
+    /**
+     * 角色名称
+     */
+    private String title;
 
     /**
      * 标签

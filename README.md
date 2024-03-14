@@ -135,7 +135,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 参与贡献
 
-贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md)
+贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md) [版本记录](./CHANGELOG.md)
 
 个人的力量始终有限，任何形式的贡献都是欢迎的，包括但不限于贡献代码，优化文档，提交 issue 和 PR 等。
 感谢所有做过贡献的人!

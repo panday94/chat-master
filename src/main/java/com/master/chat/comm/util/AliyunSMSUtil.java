@@ -7,14 +7,11 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.master.chat.comm.constant.SmsConstant;
-import com.master.chat.framework.properties.AliProperties;
 import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 
 /**
@@ -28,8 +25,6 @@ import java.util.Map;
 @Slf4j
 @Component
 public class AliyunSMSUtil {
-    @Autowired
-    private AliProperties aliProperties;
 
     /**
      * 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
@@ -37,6 +32,11 @@ public class AliyunSMSUtil {
     private static String ACCESS_KEY_ID;
 
     private static String ACCESS_KEY_SECRET;
+
+    /**
+     * 短信签名
+     */
+    private static String SMS_SIGN;
 
     /**
      * 产品名称:云通信短信API产品,开发者无需替换
@@ -47,6 +47,7 @@ public class AliyunSMSUtil {
      * 产品域名,开发者无需替换
      */
     private static final String DOMAIN;
+
 
     /**
      * 静态块
@@ -59,13 +60,23 @@ public class AliyunSMSUtil {
     }
 
     /**
+     * 初始化配置信息
+     */
+    public static void initSmsInfo(ExtraInfoDTO smsInfo) {
+        ACCESS_KEY_ID = smsInfo.getSmsKeyId();
+        ACCESS_KEY_SECRET = smsInfo.getSmsKeySecret();
+        SMS_SIGN = smsInfo.getSmsSign();
+    }
+
+    /**
      * 发送短信
      *
      * @param tel          手机号
      * @param templateCode 短信模板
      * @param map          短信参数
      */
-    public static SendSmsResponse sendSms(String tel, String templateCode, Map<String, Object> map) {
+    public static SendSmsResponse sendSms(ExtraInfoDTO smsInfo, String tel, String templateCode, Map<String, Object> map) {
+        initSmsInfo(smsInfo);
         try {
             // 可自助调整超时时间
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -80,7 +91,7 @@ public class AliyunSMSUtil {
             SendSmsRequest request = new SendSmsRequest();
             // 必填:待发送手机号
             request.setPhoneNumbers(tel);
-            request.setSignName(SmsConstant.SIGN_NAME);
+            request.setSignName(SMS_SIGN);
             // 必填:短信模板-可在短信控制台中找到
             request.setTemplateCode(templateCode);
             // 可选:模板中的变量替换JSON串,如模板内容为"亲爱的用户,您的验证码为${code}"时,此处的值为
@@ -125,7 +136,8 @@ public class AliyunSMSUtil {
      * @param templateParam
      * @return
      */
-    public static SendBatchSmsResponse sendBatchSms(String phoneNumberJson, String templateCode, String signNameJson, String templateParam) {
+    public static SendBatchSmsResponse sendBatchSms(ExtraInfoDTO smsInfo, String phoneNumberJson, String templateCode, String signNameJson, String templateParam) {
+        initSmsInfo(smsInfo);
         try {
             // 可自助调整超时时间
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -183,7 +195,8 @@ public class AliyunSMSUtil {
      * @param createTime
      * @return
      */
-    public static QuerySendDetailsResponse querySend(String tel, String bizId, String createTime) {
+    public static QuerySendDetailsResponse querySend(ExtraInfoDTO smsInfo, String tel, String bizId, String createTime) {
+        initSmsInfo(smsInfo);
         try {
             // 可自助调整超时时间
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");

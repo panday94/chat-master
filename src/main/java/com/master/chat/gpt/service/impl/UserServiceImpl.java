@@ -78,7 +78,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public ResponseInfo<UserVO> getUserById(Long id) {
-        return ResponseInfo.success(DozerUtil.convertor(getUser(id), UserVO.class));
+        UserVO userVO = DozerUtil.convertor(getUser(id), UserVO.class);
+        if (ValidatorUtil.isNull(userVO)) {
+            throw new ProhibitVisitException("会员用户信息不存在，无法操作");
+        }
+        userVO.setTel(CommonUtil.mobileEncrypt(userVO.getTel()));
+        return ResponseInfo.success(userVO);
     }
 
     @Override
@@ -87,7 +92,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (ValidatorUtil.isNull(user)) {
             throw new ProhibitVisitException("会员用户信息不存在，无法操作");
         }
-        return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+        UserVO userVO = DozerUtil.convertor(user, UserVO.class);
+        userVO.setTel(CommonUtil.mobileEncrypt(userVO.getTel()));
+        return ResponseInfo.success(userVO);
     }
 
     @Override
@@ -140,7 +147,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Transactional(rollbackFor = Exception.class, transactionManager = "masterTransactionManager")
     public ResponseInfo updateUser(UserCommand command) {
         User user = getUser(command.getId());
-        DozerUtil.convertor(command, user);
+        user.setNickName(command.getNickName());
         user.setUpdateUser(command.getOperater());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.updateById(user);

@@ -16,6 +16,11 @@ public enum SmsEnum {
     /**
      *  sms类型
      */
+    NONE(0, "无"),
+
+    /**
+     *  sms类型
+     */
     ALI(1, "阿里云SMS"),
 
     TECENT(2, "腾讯云SMS");

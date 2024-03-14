@@ -2,8 +2,8 @@ package com.master.chat.controller.common;
 
 import com.master.chat.comm.constant.OssConstant;
 import com.master.chat.comm.constant.RedisConstants;
-import com.master.chat.comm.constant.SmsConstant;
 import com.master.chat.comm.enums.OssEnum;
+import com.master.chat.comm.enums.SmsEnum;
 import com.master.chat.comm.util.*;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.gpt.pojo.vo.AssistantTypeVO;
@@ -74,7 +74,9 @@ public class CommonController {
             return ResponseInfo.success(fileInfo);
         }
         if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
-            return ResponseInfo.success(AliyunOSSUtil.uploadFile(file, getPathName(pathName)));
+            return ResponseInfo.success(AliyunOSSUtil.uploadFile(extraInfo, file, getPathName(pathName)));
+        } else if (OssEnum.TECENT.getValue().equals(extraInfo.getOssType())) {
+            return ResponseInfo.success(TencentCOSUtil.upload(extraInfo, file, getPathName(pathName)));
         }
         return ResponseInfo.validateFail("未知的上传文件方式，上传失败");
     }
@@ -95,7 +97,7 @@ public class CommonController {
     }
 
     /**
-     * 上传文件到阿里云oss
+     * 上传文件到oss
      *
      * @author: Yang
      * @date: 2023/01/31
@@ -103,19 +105,16 @@ public class CommonController {
      */
     @RequestMapping("/file/oss/upload")
     public ResponseInfo<FileInfo> uploadOss(@RequestParam("file") MultipartFile file, @RequestParam(value = "pathName", required = false) String pathName) {
-        return ResponseInfo.success(AliyunOSSUtil.uploadFile(file, getPathName(pathName)));
-    }
-
-    /**
-     * 批量上传文件搭配阿里云oss
-     *
-     * @author: Yang
-     * @date: 2023/01/31
-     * @version: 1.0.0
-     */
-    @RequestMapping("/file/oss/batch/upload")
-    public ResponseInfo<FileInfo> batchUploadOss(@RequestParam("file") MultipartFile[] files, @RequestParam(value = "pathName", required = false) String pathName) {
-        return ResponseInfo.success(AliyunOSSUtil.uploadFiles(files, getPathName(pathName)));
+        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
+        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getOssType()) || OssEnum.LOCAL.getValue().equals(extraInfo.getOssType())) {
+            return ResponseInfo.validateFail("未开通oss上传功能");
+        }
+        if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
+            return ResponseInfo.success(AliyunOSSUtil.uploadFile(extraInfo, file, getPathName(pathName)));
+        } else if (OssEnum.TECENT.getValue().equals(extraInfo.getOssType())) {
+            return ResponseInfo.success(TencentCOSUtil.upload(extraInfo, file, getPathName(pathName)));
+        }
+        return ResponseInfo.validateFail("未知的上传文件方式，上传失败");
     }
 
     /**
@@ -146,6 +145,10 @@ public class CommonController {
      */
     @PostMapping("/sms/send")
     public ResponseInfo sendSmsCode(@RequestBody Query query) {
+        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
+        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getSmsType()) || SmsEnum.NONE.getValue().equals(extraInfo.getSmsType())) {
+            return ResponseInfo.validateFail("未开通短信功能");
+        }
         query = new Query(query);
         String tel = query.getTel();
         if (IntEnum.ELEVEN.getValue() != tel.length()) {
@@ -158,7 +161,13 @@ public class CommonController {
         if (ValidatorUtil.isNotNull(redisUtils.get(key))) {
             return ResponseInfo.customizeError(ResponseEnum.REPEAT_REQUEST_SMS);
         }
-        AliyunSMSUtil.sendSms(tel, SmsConstant.AUTHCODE_TEMPLATE, map);
+        if (SmsEnum.ALI.getValue().equals(extraInfo.getSmsType())) {
+            AliyunSMSUtil.sendSms(extraInfo, tel, extraInfo.getRegisterTemplate(), map);
+        } else if (SmsEnum.TECENT.getValue().equals(extraInfo.getSmsType())) {
+            TencentSMSUtil.sendSms(extraInfo, tel, extraInfo.getRegisterTemplate(), new String[]{code});
+        } else {
+            return ResponseInfo.validateFail("未知的短信方式，发送失败");
+        }
         redisUtils.set(key, code, RedisConstants.FIVE_MINUTES);
         return ResponseInfo.success();
     }

@@ -4,6 +4,8 @@ import com.master.chat.comm.constant.OssConstant;
 import com.master.chat.comm.enums.OssEnum;
 import com.master.chat.comm.util.AliyunOSSUtil;
 import com.master.chat.comm.util.FileUploadUtils;
+import com.master.chat.comm.util.TencentCOSUtil;
+import com.master.chat.common.api.FileInfo;
 import com.master.chat.framework.base.BaseAppController;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.gpt.pojo.command.UserCommand;
@@ -14,7 +16,6 @@ import com.master.chat.gpt.service.IUserService;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
 import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.service.IBaseConfigService;
-import com.master.chat.common.api.FileInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.constant.StringPoolConstant;
@@ -96,11 +97,15 @@ public class UserController extends BaseAppController {
             String filePath = SystemConfig.uploadPath + getPathName(pathName);
             fileInfo = FileUploadUtils.upload(filePath, file);
             fileInfo.setFileUrl(SystemConfig.baseUrl + fileInfo.getFileUrl());
-        }else if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
-            fileInfo = AliyunOSSUtil.uploadFile(file, getPathName(pathName));
-        }
-        if (ValidatorUtil.isNull(fileInfo)) {
+        } else if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
+            fileInfo = AliyunOSSUtil.uploadFile(extraInfo, file, getPathName(pathName));
+        } else if (OssEnum.TECENT.getValue().equals(extraInfo.getOssType())) {
+            fileInfo = TencentCOSUtil.upload(extraInfo, file, FileUploadUtils.getPathName(pathName));
+        } else {
             return ResponseInfo.validateFail("未知的上传文件方式，上传失败");
+        }
+        if (ValidatorUtil.isNull(fileInfo) || ValidatorUtil.isNull(fileInfo.getFileUrl())) {
+            return ResponseInfo.validateFail("上传失败");
         }
         userService.updateUserAvatar(getUserId(), fileInfo.getFileUrl());
         return ResponseInfo.success(fileInfo);

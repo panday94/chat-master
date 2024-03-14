@@ -2,8 +2,10 @@ package com.master.chat.controller.app;
 
 import com.master.chat.comm.constant.RedisConstants;
 import com.master.chat.comm.constant.SmsConstant;
+import com.master.chat.comm.enums.SmsEnum;
 import com.master.chat.comm.util.AliyunSMSUtil;
 import com.master.chat.comm.util.RedisUtils;
+import com.master.chat.comm.util.TencentSMSUtil;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.enums.IntEnum;
@@ -19,6 +21,7 @@ import com.master.chat.gpt.pojo.vo.AppConfigVO;
 import com.master.chat.gpt.service.*;
 import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
 import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.service.IBaseConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +65,10 @@ public class AppApiController {
      */
     @PostMapping("/sms/send")
     public ResponseInfo sendSmsCode(@RequestBody Query query) {
+        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
+        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getSmsType()) || SmsEnum.NONE.getValue().equals(extraInfo.getSmsType())) {
+            return ResponseInfo.validateFail("未开通短信功能");
+        }
         query = new Query(query);
         String tel = query.getTel();
         if (IntEnum.ELEVEN.getValue() != tel.length()) {
@@ -74,7 +81,13 @@ public class AppApiController {
         if (ValidatorUtil.isNotNull(redisUtils.get(key))) {
             return ResponseInfo.customizeError(ResponseEnum.REPEAT_REQUEST_SMS);
         }
-        AliyunSMSUtil.sendSms(tel, SmsConstant.AUTHCODE_TEMPLATE, map);
+        if (SmsEnum.ALI.getValue().equals(extraInfo.getSmsType())) {
+            AliyunSMSUtil.sendSms(extraInfo, tel, extraInfo.getRegisterTemplate(), map);
+        } else if (SmsEnum.TECENT.getValue().equals(extraInfo.getSmsType())) {
+            TencentSMSUtil.sendSms(extraInfo, tel, extraInfo.getRegisterTemplate(), new String[]{code});
+        } else {
+            return ResponseInfo.validateFail("未知的短信方式，发送失败");
+        }
         redisUtils.set(key, code, RedisConstants.FIVE_MINUTES);
         return ResponseInfo.success();
     }

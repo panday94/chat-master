@@ -1,6 +1,7 @@
 package com.master.chat.gpt.pojo.vo;
 
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -61,6 +62,7 @@ public class UserVO implements Serializable {
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
 
     /**
@@ -72,11 +74,6 @@ public class UserVO implements Serializable {
      * openid
      */
     private String openid;
-
-    /**
-     * unionid
-     */
-    private String unionid;
 
     /**
      * 登录ip

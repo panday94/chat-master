@@ -1,3 +1,17 @@
+## v1.1.5
+
+`2024-03-14`
+
+> [chat-master](https://gitee.com/yoli9/chat-master)
+
+## Enhancement
+- 增加腾讯云oss及sms方法，发送短信及上传图片功能由后台配置
+- 可后台配置用户协议及站点logo，web端和移动端展示
+- 用户信息及密钥信息加密返回
+
+## BugFix
+- 解决部分页面搜索问题
+
 ## v1.1.4
 
 `2024-03-04`

@@ -48,6 +48,7 @@ public class ChatVO implements Serializable {
      * 角色id
      */
     private Long assistantId;
+    private String assistantTitle;
 
     /**
      * 提示词

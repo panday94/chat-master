@@ -10,14 +10,4 @@ package com.master.chat.comm.constant;
  */
 public interface SmsConstant {
 
-    /**
-     * 短信签名
-     */
-    String SIGN_NAME = "";
-
-    /**
-     * 验证码短信模板
-     */
-    String AUTHCODE_TEMPLATE = "";
-
 }

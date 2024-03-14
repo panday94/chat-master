@@ -11,7 +11,9 @@ import com.master.chat.gpt.service.IOpenkeyService;
 import com.master.chat.common.api.IPageInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.exception.ErrorException;
+import com.master.chat.common.utils.CommonUtil;
 import com.master.chat.common.utils.DozerUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,17 +53,30 @@ public class OpenkeyServiceImpl extends ServiceImpl<OpenkeyMapper, Openkey> impl
     @Override
     public ResponseInfo<IPageInfo<OpenkeyVO>> pageOpenkey(Query query) {
         IPage<OpenkeyVO> iPage = openkeyMapper.pageOpenkey(new Page<>(query.getCurrent(), query.getSize()), query);
+        iPage.getRecords().stream().forEach(v -> {
+            v.setAppKey(CommonUtil.passportEncrypt(v.getAppKey()));
+            v.setAppSecret(CommonUtil.passportEncrypt(v.getAppSecret()));
+        });
         return ResponseInfo.success(new IPageInfo(iPage.getCurrent(), iPage.getSize(), iPage.getTotal(), iPage.getRecords()));
     }
 
+
     @Override
     public ResponseInfo<List<OpenkeyVO>> listOpenkey(Query query) {
-        return ResponseInfo.success(openkeyMapper.listOpenkey(query));
+        List<OpenkeyVO> openkeyVOS = openkeyMapper.listOpenkey(query);
+        openkeyVOS.stream().forEach(v -> {
+            v.setAppKey(CommonUtil.passportEncrypt(v.getAppKey()));
+            v.setAppSecret(CommonUtil.passportEncrypt(v.getAppSecret()));
+        });
+        return ResponseInfo.success();
     }
 
     @Override
     public ResponseInfo<OpenkeyVO> getOpenkeyById(Long id) {
-        return ResponseInfo.success(DozerUtil.convertor(getOpenkey(id), OpenkeyVO.class));
+        OpenkeyVO openkeyVO = DozerUtil.convertor(getOpenkey(id), OpenkeyVO.class);
+        openkeyVO.setAppKey(CommonUtil.passportEncrypt(openkeyVO.getAppKey()));
+        openkeyVO.setAppSecret(CommonUtil.passportEncrypt(openkeyVO.getAppSecret()));
+        return ResponseInfo.success(openkeyVO);
     }
 
     @Override
@@ -77,7 +92,13 @@ public class OpenkeyServiceImpl extends ServiceImpl<OpenkeyMapper, Openkey> impl
     @Transactional(rollbackFor = Exception.class, transactionManager = "masterTransactionManager")
     public ResponseInfo updateOpenkey(OpenkeyCommand command) {
         Openkey openkey = getOpenkey(command.getId());
-        DozerUtil.convertor(command, openkey);
+        openkey.setModel(command.getModel());
+        openkey.setAppId(command.getAppId());
+        command.setAppKey(ValidatorUtil.isNotNull(command.getAppKey()) && !command.getAppKey().contains(StringPoolConstant.STAR) ? command.getAppKey() : openkey.getAppKey());
+        command.setAppSecret(ValidatorUtil.isNotNull(command.getAppSecret()) && !command.getAppSecret().contains(StringPoolConstant.STAR) ? command.getAppSecret() : openkey.getAppSecret());
+        openkey.setTotalTokens(command.getTotalTokens());
+        openkey.setRemark(command.getRemark());
+        openkey.setStatus(command.getStatus());
         openkey.setUpdateUser(command.getOperater());
         openkey.setUpdateTime(LocalDateTime.now());
         openkeyMapper.updateById(openkey);

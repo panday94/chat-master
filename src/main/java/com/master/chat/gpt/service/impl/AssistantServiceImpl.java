@@ -50,7 +50,7 @@ public class AssistantServiceImpl extends ServiceImpl<AssistantMapper, Assistant
     }
 
     @Override
-    public ResponseInfo<IPageInfo<AssistantVO>> pageAssistant(Query query) {
+    public ResponseInfo<IPageInfo<AssistantVO>>  pageAssistant(Query query) {
         IPage<AssistantVO> iPage = assistantMapper.pageAssistant(new Page<>(query.getCurrent(), query.getSize()), query);
         return ResponseInfo.success(new IPageInfo(iPage.getCurrent(), iPage.getSize(), iPage.getTotal(), iPage.getRecords()));
     }
