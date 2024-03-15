@@ -43,8 +43,8 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 2. 支持后台配置及使用assistant模版，按指定prompt输出
 3. 存储历史对话及聊天内容，可开启/关闭根据上下文输出
 4. 支持按使用次数或者开通会员使用，也可全局判断不校验使用次数及会员，电量赠送次数或者不校验电量可在[chat-master-admin](https://gitee.com/panday94/chat-master-admin)中进行配置
-5. 支持分享功能（基础上开发）
-6. 支持个人信息修改
+5. 支持个人信息修改、支持分享功能（基础上开发）
+6. 支持本地存储或oss（阿里云、腾讯云），支持短信平台sms（阿里云、腾讯云），可根据后台配置使用
 
 ## 待实现功能
 1. vip及svip开通功能
@@ -136,6 +136,8 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 ## 参与贡献
 
 贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md) [版本记录](./CHANGELOG.md)
+
+接定制开发，欢迎老板咨询！
 
 个人的力量始终有限，任何形式的贡献都是欢迎的，包括但不限于贡献代码，优化文档，提交 issue 和 PR 等。
 感谢所有做过贡献的人!
