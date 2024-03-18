@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.master</groupId>
-    <artifactId>chat-master-plus</artifactId>
+    <artifactId>chat-master</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>chat-master-plus</name>
+    <name>chat-master</name>
     <description>ChatMASTER服务端应用，支持json返回及流式响应</description>
 
     <properties>
