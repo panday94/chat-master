@@ -6,10 +6,10 @@ import okhttp3.logging.HttpLoggingInterceptor;
 /**
  * 智谱清言logger
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/12/4
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 MasterComputer Corporation Limited All rights reserved.
  */
 @Slf4j
 public class ZhiPuLogger implements HttpLoggingInterceptor.Logger {

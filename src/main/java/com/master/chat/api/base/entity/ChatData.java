@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 /**
  * 流返回内容
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/11/24
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 MasterComputer Corporation Limited All rights reserved.
  */
 @Data
 @Builder
@@ -44,6 +44,11 @@ public class ChatData {
      * 内容
      */
     private Object content;
+
+    /**
+     * 是否输出结束
+     */
+    private Boolean finish;
 
     /**
      * 消息类型 text、image

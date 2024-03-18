@@ -3,8 +3,8 @@ package com.master.chat.api.openai.entity.images;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
+import com.master.chat.api.openai.exception.OpenAIException;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 

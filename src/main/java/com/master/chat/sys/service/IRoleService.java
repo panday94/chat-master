@@ -1,12 +1,12 @@
 package com.master.chat.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.master.chat.sys.pojo.command.RoleCommand;
-import com.master.chat.sys.pojo.entity.Role;
-import com.master.chat.sys.pojo.vo.RoleVO;
 import com.master.chat.common.api.IPageInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.sys.pojo.command.RoleCommand;
+import com.master.chat.sys.pojo.entity.Role;
+import com.master.chat.sys.pojo.vo.RoleVO;
 
 import java.util.List;
 

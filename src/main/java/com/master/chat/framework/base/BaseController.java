@@ -1,15 +1,15 @@
 package com.master.chat.framework.base;
 
-import com.master.chat.framework.security.JwtTokenUtils;
-import com.master.chat.framework.security.UserDetail;
-import com.master.chat.sys.pojo.entity.SysUser;
-import com.master.chat.sys.service.ISysUserService;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.constant.AuthConstant;
 import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.exception.ProhibitVisitException;
 import com.master.chat.common.utils.IPUtil;
 import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.framework.security.JwtTokenUtils;
+import com.master.chat.framework.security.UserDetail;
+import com.master.chat.sys.pojo.entity.SysUser;
+import com.master.chat.sys.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;

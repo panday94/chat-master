@@ -16,18 +16,16 @@ import com.master.chat.api.xfyun.entity.response.SparkResponseChoices;
 import com.master.chat.api.xfyun.entity.response.SparkResponseHeader;
 import com.master.chat.api.xfyun.entity.response.SparkResponseUsage;
 import com.master.chat.api.xfyun.exception.SparkException;
+import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
 import com.master.chat.gpt.service.IChatMessageService;
-import com.master.chat.common.utils.ApplicationContextUtil;
-import com.master.chat.common.validator.ValidatorUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -45,10 +43,11 @@ import java.util.concurrent.CountDownLatch;
  */
 @Slf4j
 public class SparkSseListener extends WebSocketListener {
+    private static final String FINISH = "[finish]";
+    private final StringBuilder output = new StringBuilder();
     public ObjectMapper objectMapper;
     private SparkRequest request;
     private HttpServletResponse response;
-    private final StringBuilder output = new StringBuilder();
     private CountDownLatch countDownLatch = new CountDownLatch(1);
     private Long chatId;
     private String parentMessageId;
@@ -57,9 +56,6 @@ public class SparkSseListener extends WebSocketListener {
     private String version;
     private Boolean error;
     private String errTxt;
-
-
-    private static final String FINISH = "[finish]";
 
     public SparkSseListener(SparkRequest request, HttpServletResponse response, Long chatId, String parentMessageId, String version) {
         objectMapper = new ObjectMapper();
@@ -84,7 +80,6 @@ public class SparkSseListener extends WebSocketListener {
             throw new SparkException(400, "请求数据 SparkRequest 序列化失败", e);
         }
         webSocket.send(requestJson);
-        response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
     }
@@ -158,7 +153,7 @@ public class SparkSseListener extends WebSocketListener {
                         .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(FINISH)
                         .status(ChatStatusEnum.SUCCESS.getValue()).appKey("").usedTokens(usage.getText().getTotalTokens().longValue())
                         .build();
-                ApplicationContextUtil.getBean(IChatMessageService.class).saveChatMessage(chatMessage);
+                com.master.chat.common.utils.ApplicationContextUtil.getBean(IChatMessageService.class).saveChatMessage(chatMessage);
             }
         }
     }

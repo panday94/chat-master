@@ -16,8 +16,8 @@ import com.master.chat.api.openai.entity.chat.Functions;
 import com.master.chat.api.openai.entity.chat.OpenAiMessage;
 import com.master.chat.api.openai.entity.common.OpenAiResponse;
 import com.master.chat.api.openai.entity.completions.Completion;
-import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
+import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.function.KeyRandomStrategy;
 import com.master.chat.api.openai.function.KeyStrategyFunction;
 import com.master.chat.api.openai.interceptor.DefaultOpenAiAuthInterceptor;
@@ -418,8 +418,8 @@ public class OpenAiStreamClient {
      *
      * @return Builder
      */
-    public static OpenAiStreamClient.Builder builder() {
-        return new OpenAiStreamClient.Builder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static final class Builder {

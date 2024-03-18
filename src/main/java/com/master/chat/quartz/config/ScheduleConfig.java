@@ -1,4 +1,4 @@
-//package com.master.chat.quartz.config;
+package com.master.chat.quartz.config;//package com.master.chat.quartz.config;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;

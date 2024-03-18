@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * 自动生成主键雪花id
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/2/7
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.

@@ -36,7 +36,7 @@ import java.util.Set;
 /**
  * 登陆登出接口
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/5/4
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.

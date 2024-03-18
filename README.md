@@ -43,8 +43,8 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 2. 支持后台配置及使用assistant模版，按指定prompt输出
 3. 存储历史对话及聊天内容，可开启/关闭根据上下文输出
 4. 支持按使用次数或者开通会员使用，也可全局判断不校验使用次数及会员，电量赠送次数或者不校验电量可在[chat-master-admin](https://gitee.com/panday94/chat-master-admin)中进行配置
-5. 支持个人信息修改、支持分享功能（基础上开发）
-6. 支持本地存储或oss（阿里云、腾讯云），支持短信平台sms（阿里云、腾讯云），可根据后台配置使用
+5. 支持分享功能（基础上开发）
+6. 支持个人信息修改
 
 ## 待实现功能
 1. vip及svip开通功能
@@ -58,13 +58,13 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 > 版本记录请查看这里[版本记录](./CHANGELOG.md)
 
-| 模型       | 是否支持System     | 天气查询       | 绘画                    |
-|-----------|----------------|------------|-----------------------|
-| ChatGPT   | 支持             | 不支持        | 支持                    |
-| 文心一言    | 不支持(传递会报错)  | 可以回复(不准)   | 使用Stable-Diffusion-XL |
-| 通义千问    | 支持             | 支持(效果没讯飞好) | 未接入                   |
-| 讯飞星火    | 不支持(传递不会报错) | 支持(准)      | 不支持                   |
-| 智谱清言    | 不支持(传递会报错)   | 不支持        | 支持（API待接入目前有点贵）       |
+| 模型       | 是否支持System  | 天气查询       | 绘画                    |
+|-----------|-------------|------------|-----------------------|
+| ChatGPT   | 支持          | 不支持        | 支持                    |
+| 文心一言    | 不支持(传递会报错) | 可以回复(不准)   | 使用Stable-Diffusion-XL |
+| 通义千问    | 支持          | 支持(效果没讯飞好) | 未接入                   |
+| 讯飞星火    | 支持 | 支持(准)      | 不支持                   |
+| 智谱清言    | 支持  | 不支持        | 支持（API待接入目前有点贵）       |
 
 
 ## 内置功能
@@ -83,7 +83,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ``` 
 1、idea导入chat-master项目，请更换spring.profiles.active为dev
-2、执行doc文件夹下面chat_master全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
+2、执行doc文件夹下面chat_gpt全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
 3、版本更新时候需执行doc/update.sql
 4、更改application-dev中redis连接和mysql连接配置
 5、启动ChatApplication中main方法
@@ -135,9 +135,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 参与贡献
 
-贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md) [版本记录](./CHANGELOG.md)
-
-接定制开发，欢迎老板咨询！
+贡献之前请先阅读 [贡献指南](./CONTRIBUTING.md)
 
 个人的力量始终有限，任何形式的贡献都是欢迎的，包括但不限于贡献代码，优化文档，提交 issue 和 PR 等。
 感谢所有做过贡献的人!

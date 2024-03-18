@@ -17,14 +17,12 @@ import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
 import com.master.chat.gpt.service.IChatMessageService;
-import com.zhipu.oapi.service.v3.ModelEventSourceListener;
-import com.zhipu.oapi.service.v3.SseMeta;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,13 +33,14 @@ import java.util.concurrent.CountDownLatch;
 /**
  * 流式响应同步返回 监听
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/9/7
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 MasterComputer Corporation Limited All rights reserved.
  */
 @Slf4j
-public class SSEListener extends ModelEventSourceListener {
+public class SSEListener extends EventSourceListener {
+    private static final String FINISH = "[finish]";
     private long tokens;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
     private HttpServletResponse response;
@@ -55,8 +54,6 @@ public class SSEListener extends ModelEventSourceListener {
     private String version;
     private Boolean error;
     private String errTxt;
-
-    private static final String FINISH = "[finish]";
 
     public SSEListener(HttpServletResponse response, SseEmitter sseEmitter, Long chatId, String parentMessageId, String model, String version) {
         this.response = response;
@@ -77,7 +74,6 @@ public class SSEListener extends ModelEventSourceListener {
             log.error("客户端非sse推送");
             return;
         }
-        response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
         log.info("{}建立sse连接...", model);
@@ -227,19 +223,8 @@ public class SSEListener extends ModelEventSourceListener {
         countDownLatch.countDown();
     }
 
-    @Override
     public CountDownLatch getCountDownLatch() {
         return this.countDownLatch;
-    }
-
-    @Override
-    public String getOutputText() {
-        return null;
-    }
-
-    @Override
-    public SseMeta getMeta() {
-        return null;
     }
 
     /**

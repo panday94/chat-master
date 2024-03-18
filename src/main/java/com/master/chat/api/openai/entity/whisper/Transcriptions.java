@@ -19,7 +19,7 @@ public class Transcriptions extends Whisper {
      * 模型目前只支持这一种：WHISPER_1
      */
     @Builder.Default
-    private String model = Whisper.Model.WHISPER_1.getName();
+    private String model = Model.WHISPER_1.getName();
     /**
      * 提示语，需要与语音语言匹配
      */

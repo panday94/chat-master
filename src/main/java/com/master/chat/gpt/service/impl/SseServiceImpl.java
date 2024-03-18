@@ -27,13 +27,7 @@ import com.master.chat.api.xfyun.entity.SparkMessage;
 import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.listener.SparkSseListener;
 import com.master.chat.api.zhipu.ZhiPuClient;
-import com.master.chat.common.api.Query;
-import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.enums.StatusEnum;
-import com.master.chat.common.exception.BusinessException;
-import com.master.chat.common.exception.ErrorException;
 import com.master.chat.common.utils.ApplicationContextUtil;
-import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.framework.security.UserDetail;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
@@ -42,8 +36,14 @@ import com.master.chat.gpt.pojo.vo.ModelVO;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.gpt.service.IGptService;
 import com.master.chat.gpt.service.SseService;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.enums.StatusEnum;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.common.exception.ErrorException;
+import com.master.chat.common.validator.ValidatorUtil;
 import com.zhipu.oapi.Constants;
-import com.zhipu.oapi.service.v3.ModelApiRequest;
+import com.zhipu.oapi.service.v4.model.ChatCompletionRequest;
+import com.zhipu.oapi.service.v4.model.ChatMessage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,12 +68,14 @@ import java.util.concurrent.Semaphore;
 @Slf4j
 @Service
 public class SseServiceImpl implements SseService {
-    private final IGptService gptService;
+    private static final String[] drawingWords = {"画画", "作画", "画图", "绘画", "描绘"};
+    private static final String[] drawingInstructions = {"请画", "画一", "画个",};
     private static OpenAiStreamClient openAiStreamClient;
     private static WenXinClient wenXinClient;
     private static ZhiPuClient zhiPuClient;
     private static QianWenClient qianWenClient;
     private static SparkClient sparkClient;
+    private final IGptService gptService;
 
     @Autowired
     public SseServiceImpl(IGptService gptService, OpenAiStreamClient openAiStreamClient, WenXinClient wenXinClient,
@@ -157,24 +159,24 @@ public class SseServiceImpl implements SseService {
         if (ValidatorUtil.isNullIncludeArray(chatMessages)) {
             throw new BusinessException("消息发送失败");
         }
-        // ChatGPT、文心一言、智谱清言统一在SSEListener中处理流式返回，通义千问与讯飞星火单独处理
-        Boolean flag;
+        // ChatGPT、文心一言统一在SSEListener中处理流式返回，通义千问与讯飞星火\智谱清言单独处理
+        Boolean flag = false;
         try {
             switch (modelEnum) {
                 case CHAT_GPT:
-                    flag = sseByOpenAi(sseEmitter, response, chatMessages, chatMessage.getChatId(), conversationId, prompt, version);
+                    flag = sseByOpenAi(response, sseEmitter, chatMessages, user.getUid(), chatMessage.getChatId(), conversationId, prompt, version);
                     break;
                 case WENXIN:
-                    flag = sseByWenXin(sseEmitter, response, chatMessages, chatMessage.getChatId(), conversationId, prompt, version);
+                    flag = sseByWenXin(response, sseEmitter, chatMessages, user.getUid(), chatMessage.getChatId(), conversationId, prompt, version);
                     break;
                 case QIANWEN:
-                    flag = sseByQianWen(sseEmitter, response, chatMessages, chatMessage.getChatId(), conversationId, prompt, version);
+                    flag = sseByQianWen(response, sseEmitter, chatMessages, user.getUid(), chatMessage.getChatId(), conversationId, prompt, version);
                     break;
                 case SPARK:
-                    flag = sseBySpark(sseEmitter, response, chatMessages, chatMessage.getChatId(), conversationId, prompt, version);
+                    flag = sseBySpark(response, sseEmitter, chatMessages, user.getUid(), chatMessage.getChatId(), conversationId, prompt, version);
                     break;
                 case ZHIPU:
-                    flag = sseByZhiPu(sseEmitter, response, chatMessages, chatMessage.getChatId(), conversationId, prompt, version);
+                    flag = sseByZhiPu(response, sseEmitter, chatMessages, user.getUid(), chatMessage.getChatId(), conversationId, prompt, version);
                     break;
                 default:
                     throw new BusinessException("未知的模型类型，功能未接入。");
@@ -185,10 +187,16 @@ public class SseServiceImpl implements SseService {
             }
             gptService.updateMessageStatus(conversationId, status);
         } catch (BusinessException e) {
+            flag = true;
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
+            flag = true;
             throw new ErrorException();
+        } finally {
+            if (flag) {
+                gptService.restoreNum(user.getId());
+            }
         }
     }
 
@@ -200,8 +208,8 @@ public class SseServiceImpl implements SseService {
      * @return
      */
     @SneakyThrows
-    private Boolean sseByOpenAi(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
-                                Long chatId, String conversationId, String prompt, String version) {
+    private Boolean sseByOpenAi(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages,
+                                String uid, Long chatId, String conversationId, String prompt, String version) {
         if (ValidatorUtil.isNullIncludeArray(openAiStreamClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
         }
@@ -229,8 +237,8 @@ public class SseServiceImpl implements SseService {
      * @return
      */
     @SneakyThrows
-    private Boolean sseByWenXin(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
-                                Long chatId, String conversationId, String prompt, String version) {
+    private Boolean sseByWenXin(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages,
+                                String uid, Long chatId, String conversationId, String prompt, String version) {
         if (ValidatorUtil.isNull(wenXinClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
         }
@@ -238,7 +246,7 @@ public class SseServiceImpl implements SseService {
             return imageByWenXin(sseEmitter, response, chatId, conversationId, prompt);
         }
         List<MessageItem> messages = new ArrayList<>();
-        chatMessages.stream().forEach(v -> {
+        chatMessages.stream().filter(d -> !d.getRole().equals(ChatRoleEnum.SYSTEM.getValue())).forEach(v -> {
             messages.add(MessageItem.builder().role(v.getRole()).content(v.getContent()).build());
         });
         SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, ChatModelEnum.WENXIN.getValue(), version);
@@ -290,42 +298,6 @@ public class SseServiceImpl implements SseService {
     }
 
     /**
-     * 智谱清言流式输出
-     *
-     * @param uid
-     * @param prompt
-     * @return
-     */
-    @SneakyThrows
-    private Boolean sseByZhiPu(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
-                               Long chatId, String conversationId, String prompt, String version) {
-        if (ValidatorUtil.isNull(zhiPuClient.getAppKey())) {
-            throw new BusinessException("未加载到密钥信息");
-        }
-        List<ModelApiRequest.Prompt> prompts = new ArrayList<>();
-        chatMessages.stream().forEach(v -> {
-            prompts.add(new ModelApiRequest.Prompt(v.getRole(), v.getContent()));
-        });
-        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, ChatModelEnum.ZHIPU.getValue(), version);
-        ModelApiRequest request = new ModelApiRequest();
-        request.setModelId(ValidatorUtil.isNotNull(version) ? version : Constants.ModelChatGLM6B);
-        request.setPrompt(prompts);
-        // 关闭搜索示例
-        //  modelApiRequest.setRef(new HashMap<String, Object>(){{
-        //    put("enable",false);
-        // }});
-        // 开启搜索示例
-        // modelApiRequest.setRef(new HashMap<String, Object>(){{
-        //    put("enable",true);
-        //    put("search_query","历史");
-        //  }});
-        Query query = new Query();
-        zhiPuClient.streamChat(request, query, sseListener);
-        sseListener.getCountDownLatch().await();
-        return sseListener.getError();
-    }
-
-    /**
      * 通议千问流式输出
      *
      * @param uid
@@ -333,8 +305,8 @@ public class SseServiceImpl implements SseService {
      * @return
      */
     @SneakyThrows
-    private Boolean sseByQianWen(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
-                                 Long chatId, String conversationId, String prompt, String version) {
+    private Boolean sseByQianWen(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages,
+                                 String uid, Long chatId, String conversationId, String prompt, String version) {
         if (ValidatorUtil.isNull(qianWenClient.getAppKey())) {
             throw new BusinessException("未加载到密钥信息");
         }
@@ -365,8 +337,8 @@ public class SseServiceImpl implements SseService {
      * @return
      */
     @SneakyThrows
-    private Boolean sseBySpark(SseEmitter sseEmitter, HttpServletResponse response, List<ChatMessageDTO> chatMessages,
-                               Long chatId, String conversationId, String prompt, String version) {
+    private Boolean sseBySpark(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages,
+                               String uid, Long chatId, String conversationId, String prompt, String version) {
         if (ValidatorUtil.isNull(sparkClient.appid)) {
             throw new BusinessException("未加载到密钥信息");
         }
@@ -392,8 +364,33 @@ public class SseServiceImpl implements SseService {
         return sseListener.getError();
     }
 
-    private static final String[] drawingWords = {"画画", "作画", "画图", "绘画", "描绘"};
-    private static final String[] drawingInstructions = {"请画", "画一", "画个",};
+    /**
+     * 智谱清言流式输出
+     *
+     * @param uid
+     * @param prompt
+     * @return
+     */
+    @SneakyThrows
+    private Boolean sseByZhiPu(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages,
+                               String uid, Long chatId, String conversationId, String prompt, String version) {
+        if (ValidatorUtil.isNull(zhiPuClient.getAppKey())) {
+            throw new BusinessException("未加载到密钥信息");
+        }
+        List<ChatMessage> messages = new ArrayList<>();
+        chatMessages.stream().filter(d -> !d.getRole().equals(ChatRoleEnum.SYSTEM.getValue())).forEach(v -> {
+            messages.add(new ChatMessage(v.getRole(), v.getContent()));
+        });
+        String modelVaersion = ValidatorUtil.isNotNull(version) ? version : Constants.ModelChatGLM3TURBO;
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
+                .model(modelVaersion)
+                .stream(Boolean.TRUE)
+                .messages(messages)
+                .build();
+        Boolean flag = zhiPuClient.streamChat(response, chatCompletionRequest, chatId, conversationId, modelVaersion);
+
+        return flag;
+    }
 
     /**
      * 判断是否需要画画

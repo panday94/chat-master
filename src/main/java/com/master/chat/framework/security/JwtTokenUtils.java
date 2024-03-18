@@ -29,7 +29,7 @@ public class JwtTokenUtils {
     /**
      * 密钥
      */
-    private static final String SECRET = "the6isy188";
+    private static final String SECRET = "chatmaster888";
 
     /**
      * 有效期7天

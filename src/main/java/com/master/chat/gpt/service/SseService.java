@@ -36,4 +36,5 @@ public interface SseService {
      * @param chatRequest
      */
     void sseChat(UserDetail user, String conversationId, HttpServletResponse response);
+
 }

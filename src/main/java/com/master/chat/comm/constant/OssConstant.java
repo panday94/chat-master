@@ -3,7 +3,7 @@ package com.master.chat.comm.constant;
 /**
  * 对象存储常量类
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/4/28
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.

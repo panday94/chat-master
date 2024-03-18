@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 对话接口
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/5/4
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
@@ -133,14 +133,14 @@ public class ChatController extends BaseAppController {
     }
 
     /**
-     * json响应
+     * 同步响应
      *
      * @author: Yang
      * @date: 2023/5/5
      * @version: 1.0.0
      */
-    @PostMapping("/json")
-    public ResponseInfo jsonChat(@RequestBody GptCommand command) {
+    @PostMapping("/completions/sync")
+    public ResponseInfo syncCompletions(@RequestBody GptCommand command) {
         command.setUserId(getUserId());
         return gptService.chat(command);
     }
@@ -151,7 +151,7 @@ public class ChatController extends BaseAppController {
      * @param headers
      * @return
      */
-    @GetMapping("/createSse")
+    @GetMapping("/sse/create")
     public SseEmitter createConnect(@RequestHeader(name = "uid") String uid) {
         return sseService.createSse(uid);
     }
@@ -161,20 +161,20 @@ public class ChatController extends BaseAppController {
      *
      * @param headers
      */
-    @GetMapping("/closeSse")
+    @GetMapping("/sse/close")
     public void closeConnect(@RequestHeader(name = "uid") String uid) {
         sseService.closeSse(uid);
     }
 
     /**
-     * sse响应
+     * 对话响应
      *
      * @author: Yang
      * @date: 2023/5/5
      * @version: 1.0.0
      */
-    @GetMapping("/stream")
-    public void sseChat(String conversationId, HttpServletResponse response) {
+    @GetMapping("/completions")
+    public void completions(String conversationId, HttpServletResponse response) {
         sseService.sseChat(getLoginUser(), conversationId, response);
     }
 

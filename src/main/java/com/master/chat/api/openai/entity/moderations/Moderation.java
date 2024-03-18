@@ -1,7 +1,7 @@
 package com.master.chat.api.openai.entity.moderations;
 
-import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
+import com.master.chat.api.openai.exception.OpenAIException;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 

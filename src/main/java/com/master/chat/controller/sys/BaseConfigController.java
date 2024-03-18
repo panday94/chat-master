@@ -1,16 +1,16 @@
 package com.master.chat.controller.sys;
 
 import com.alibaba.fastjson.JSONObject;
-import com.master.chat.framework.base.BaseController;
-import com.master.chat.sys.pojo.command.BaseConfigCommand;
-import com.master.chat.sys.pojo.vo.BaseConfigVO;
-import com.master.chat.sys.service.IBaseConfigService;
-import com.master.chat.sys.constant.SysLogTypeConstant;
 import com.master.chat.common.annotation.Log;
 import com.master.chat.common.api.IPageInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.enums.BusinessTypeEnum;
+import com.master.chat.framework.base.BaseController;
+import com.master.chat.sys.constant.SysLogTypeConstant;
+import com.master.chat.sys.pojo.command.BaseConfigCommand;
+import com.master.chat.sys.pojo.vo.BaseConfigVO;
+import com.master.chat.sys.service.IBaseConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;

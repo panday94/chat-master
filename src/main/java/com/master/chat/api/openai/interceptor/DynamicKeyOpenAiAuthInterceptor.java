@@ -2,8 +2,8 @@ package com.master.chat.api.openai.interceptor;
 
 import cn.hutool.json.JSONUtil;
 import com.master.chat.api.openai.entity.common.OpenAiResponse;
-import com.master.chat.api.openai.exception.OpenAIException;
 import com.master.chat.api.openai.exception.CommonError;
+import com.master.chat.api.openai.exception.OpenAIException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;

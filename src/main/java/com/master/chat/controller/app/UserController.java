@@ -5,7 +5,6 @@ import com.master.chat.comm.enums.OssEnum;
 import com.master.chat.comm.util.AliyunOSSUtil;
 import com.master.chat.comm.util.FileUploadUtils;
 import com.master.chat.comm.util.TencentCOSUtil;
-import com.master.chat.common.api.FileInfo;
 import com.master.chat.framework.base.BaseAppController;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.gpt.pojo.command.UserCommand;
@@ -16,6 +15,7 @@ import com.master.chat.gpt.service.IUserService;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
 import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.service.IBaseConfigService;
+import com.master.chat.common.api.FileInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.constant.StringPoolConstant;
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * 会员信息接口
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/5/4
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.

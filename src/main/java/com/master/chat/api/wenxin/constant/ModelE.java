@@ -4,10 +4,10 @@ package com.master.chat.api.wenxin.constant;
  * 文心一言模型
  * 文档地址：https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Nlks5zkzu
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/9/7
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 MasterComputer Corporation Limited All rights reserved.
  */
 public enum ModelE {
     /**

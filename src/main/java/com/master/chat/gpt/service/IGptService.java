@@ -11,9 +11,10 @@ import java.util.List;
 /**
  * chatgpt接口
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/5/5
- * @version: Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * @version: Copyright
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public interface IGptService {
 
@@ -57,6 +58,13 @@ public interface IGptService {
      * @param userId
      */
     void validateUser(Long userId);
+
+    /**
+     * 恢复账户余额
+     *
+     * @param userId
+     */
+    void restoreNum(Long userId);
 
     /**
      * 修改对话状态

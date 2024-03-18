@@ -22,7 +22,8 @@ public enum SparkApiVersion {
      * 2.0版本
      */
     V2_0("v2.1", "https://spark-api.xf-yun.com/v2.1/chat", "generalv2"),
-    V3_0("v3.1", "https://spark-api.xf-yun.com/v2.1/chat", "generalv3"),
+    V3_0("v3.1", "https://spark-api.xf-yun.com/v3.1/chat", "generalv3"),
+    V3_5("v3.5", "https://spark-api.xf-yun.com/v3.5/chat", "generalv3.5"),
     ;
 
     private final String version;

@@ -1,11 +1,22 @@
 package com.master.chat.controller.app;
 
 import com.master.chat.comm.constant.RedisConstants;
-import com.master.chat.comm.constant.SmsConstant;
 import com.master.chat.comm.enums.SmsEnum;
 import com.master.chat.comm.util.AliyunSMSUtil;
 import com.master.chat.comm.util.RedisUtils;
 import com.master.chat.comm.util.TencentSMSUtil;
+import com.master.chat.gpt.constant.BaseConfigConstant;
+import com.master.chat.gpt.pojo.command.GptCommand;
+import com.master.chat.gpt.pojo.vo.AgreementVO;
+import com.master.chat.gpt.pojo.vo.AppConfigVO;
+import com.master.chat.gpt.service.IAgreementService;
+import com.master.chat.gpt.service.IAssistantService;
+import com.master.chat.gpt.service.IAssistantTypeService;
+import com.master.chat.gpt.service.IGptService;
+import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
+import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
+import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
+import com.master.chat.sys.service.IBaseConfigService;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.enums.IntEnum;
@@ -14,15 +25,6 @@ import com.master.chat.common.enums.StatusEnum;
 import com.master.chat.common.utils.RandomUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.common.validator.base.BaseAssert;
-import com.master.chat.gpt.constant.BaseConfigConstant;
-import com.master.chat.gpt.pojo.command.GptCommand;
-import com.master.chat.gpt.pojo.vo.AgreementVO;
-import com.master.chat.gpt.pojo.vo.AppConfigVO;
-import com.master.chat.gpt.service.*;
-import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
-import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
-import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
-import com.master.chat.sys.service.IBaseConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +35,7 @@ import java.util.Map;
 /**
  * 获取小程序基础信息接口
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/5/4
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
@@ -51,8 +53,6 @@ public class AppApiController {
     private IAgreementService contentService;
     @Autowired
     private IGptService gptService;
-    @Autowired
-    private SseService sseService;
     @Autowired
     private RedisUtils redisUtils;
 
@@ -179,6 +179,18 @@ public class AppApiController {
         Query query = new Query(map, true);
         query.put("status", StatusEnum.ENABLED.getValue());
         return assistantService.listAssistantByApp(query);
+    }
+
+    /**
+     * 获取Ai助手
+     *
+     * @author: Yang
+     * @date: 2023/1/9
+     * @version: 1.0.0
+     */
+    @GetMapping("/assistant/{id}")
+    public ResponseInfo getAssistantById(@PathVariable Long id) {
+        return assistantService.getAssistantById(id);
     }
 
     /**

@@ -34,14 +34,19 @@ public class BaseInfoDTO implements Serializable {
     private String siteLogo;
 
     /**
-     * 代理方案 1 环境代理 2 方向代理 3 直接代理
+     * 代理方案 1 无需代理 2 反向代理 3 本地代理
      */
     private Integer proxyType;
 
     /**
-     * 代理地址
+     * 反代地址
      */
     private String proxyServer;
+
+    /**
+     * 本地代理地址
+     */
+    private String proxyAddress;
 
     /**
      * 域名

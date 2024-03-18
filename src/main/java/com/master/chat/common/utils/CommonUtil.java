@@ -2,7 +2,6 @@ package com.master.chat.common.utils;
 
 import cn.hutool.core.util.RandomUtil;
 import com.master.chat.common.constant.StringPoolConstant;
-import com.master.chat.common.utils.DateUtil;
 import com.master.chat.common.utils.SnowFlakeUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import lombok.extern.slf4j.Slf4j;

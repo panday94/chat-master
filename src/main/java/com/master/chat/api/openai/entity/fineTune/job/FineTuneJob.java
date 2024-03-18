@@ -18,7 +18,7 @@ public class FineTuneJob implements Serializable {
     /**
      * 参考
      *
-     * @see FineTuneJob.Model
+     * @see Model
      */
     private String model;
 

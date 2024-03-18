@@ -7,4 +7,5 @@ ALTER TABLE `chat_gpt`.`gpt_user` ADD COLUMN `context` tinyint(1) NOT NULL DEFAU
 ALTER TABLE `chat_gpt`.`gpt_user` MODIFY COLUMN `num` int(11) NULL DEFAULT 0 COMMENT '调用次数' AFTER `context`;
 
 # 2024-03-14 增加助手表头像字段
+ALTER TABLE `chat_gpt`.`gpt_assistant` ADD COLUMN `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '头像' AFTER `update_time`;
 ALTER TABLE `chat_gpt`.`gpt_assistant` MODIFY COLUMN `icon` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色图标' AFTER `avatar`;

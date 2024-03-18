@@ -18,6 +18,11 @@ public class AppInfoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 是否无限制访问GPT
+     */
+    private Integer isGPTLimit;
+
+    /**
      * 是否开启分享
      */
     private Integer isShare;

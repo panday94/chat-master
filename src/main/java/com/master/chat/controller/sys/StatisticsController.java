@@ -1,10 +1,10 @@
 package com.master.chat.controller.sys;
 
-import com.master.chat.sys.service.IStatisticsService;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.utils.DateUtil;
 import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.sys.service.IStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 统计接口
  *
- * @author: yang
+ * @author: Yang
  * @date: 2023/1/13
  * @version: 1.0.0
  * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.

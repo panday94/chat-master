@@ -34,7 +34,7 @@
     </select>
 
     <select id="getPieData" resultType="java.util.Map">
-        SELECT SUM(q.a) as a, SUM(q.b) as b, SUM(q.c) as c, SUM(q.d) as d, SUM(q.e) as e
+        SELECT ifnull(SUM(q.a),0) as a, ifnull(SUM(q.b),0) as b, ifnull(SUM(q.c),0) as c, ifnull(SUM(q.d),0) as d, ifnull(SUM(q.e),0) as e
         FROM (SELECT
         (CASE WHEN t.title = '系统配置' THEN 1 ELSE 0 END) as a,
         (CASE WHEN t.title = '系统账号' THEN 1 ELSE 0 END) as b,
