@@ -94,8 +94,8 @@ public class OpenkeyServiceImpl extends ServiceImpl<OpenkeyMapper, Openkey> impl
         Openkey openkey = getOpenkey(command.getId());
         openkey.setModel(command.getModel());
         openkey.setAppId(command.getAppId());
-        command.setAppKey(ValidatorUtil.isNotNull(command.getAppKey()) && !command.getAppKey().contains(StringPoolConstant.STAR) ? command.getAppKey() : openkey.getAppKey());
-        command.setAppSecret(ValidatorUtil.isNotNull(command.getAppSecret()) && !command.getAppSecret().contains(StringPoolConstant.STAR) ? command.getAppSecret() : openkey.getAppSecret());
+        openkey.setAppKey(ValidatorUtil.isNotNull(command.getAppKey()) && !command.getAppKey().contains(StringPoolConstant.STAR) ? command.getAppKey() : openkey.getAppKey());
+        openkey.setAppSecret(ValidatorUtil.isNotNull(command.getAppSecret()) && !command.getAppSecret().contains(StringPoolConstant.STAR) ? command.getAppSecret() : openkey.getAppSecret());
         openkey.setTotalTokens(command.getTotalTokens());
         openkey.setRemark(command.getRemark());
         openkey.setStatus(command.getStatus());
