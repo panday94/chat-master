@@ -11,6 +11,9 @@ import com.master.chat.api.base.enums.ChatContentEnum;
 import com.master.chat.api.base.enums.ChatModelEnum;
 import com.master.chat.api.base.enums.ChatRoleEnum;
 import com.master.chat.api.base.listener.SSEListener;
+import com.master.chat.api.moonshot.MoonshotClient;
+import com.master.chat.api.moonshot.constant.MoonshotApiVersion;
+import com.master.chat.api.moonshot.entity.ChatCompletionMessage;
 import com.master.chat.api.openai.OpenAiStreamClient;
 import com.master.chat.api.openai.entity.chat.ChatCompletion;
 import com.master.chat.api.openai.entity.chat.OpenAiMessage;
@@ -75,17 +78,19 @@ public class SseServiceImpl implements SseService {
     private static ZhiPuClient zhiPuClient;
     private static QianWenClient qianWenClient;
     private static SparkClient sparkClient;
+    private static MoonshotClient moonshotClient;
     private final IGptService gptService;
 
     @Autowired
     public SseServiceImpl(IGptService gptService, OpenAiStreamClient openAiStreamClient, WenXinClient wenXinClient,
-                          ZhiPuClient zhiPuClient, QianWenClient qianWenClient, SparkClient sparkClient) {
+                          ZhiPuClient zhiPuClient, QianWenClient qianWenClient, SparkClient sparkClient, MoonshotClient moonshotClient) {
         this.gptService = gptService;
         SseServiceImpl.openAiStreamClient = openAiStreamClient;
         SseServiceImpl.wenXinClient = wenXinClient;
         SseServiceImpl.zhiPuClient = zhiPuClient;
         SseServiceImpl.qianWenClient = qianWenClient;
         SseServiceImpl.sparkClient = sparkClient;
+        SseServiceImpl.moonshotClient = moonshotClient;
     }
 
     @Override
@@ -177,6 +182,9 @@ public class SseServiceImpl implements SseService {
                     break;
                 case ZHIPU:
                     flag = sseByZhiPu(response, sseEmitter, chatMessages, user.getUid(), chatMessage.getChatId(), conversationId, prompt, version);
+                    break;
+                case MOONSHOT:
+                    flag = sseByMoonshot(response, sseEmitter, chatMessages, user.getUid(), chatMessage.getChatId(), conversationId, prompt, version);
                     break;
                 default:
                     throw new BusinessException("未知的模型类型，功能未接入。");
@@ -388,7 +396,32 @@ public class SseServiceImpl implements SseService {
                 .messages(messages)
                 .build();
         Boolean flag = zhiPuClient.streamChat(response, chatCompletionRequest, chatId, conversationId, modelVaersion);
+        return flag;
+    }
 
+    /**
+     * 月之暗面流式输出
+     *
+     * @param uid
+     * @param prompt
+     * @return
+     */
+    @SneakyThrows
+    private Boolean sseByMoonshot(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages,
+                                  String uid, Long chatId, String conversationId, String prompt, String version) {
+        if (ValidatorUtil.isNull(moonshotClient.getApiKey())) {
+            throw new BusinessException("未加载到密钥信息");
+        }
+        List<ChatCompletionMessage> messages = new ArrayList<>();
+        chatMessages.stream().filter(d -> !d.getRole().equals(ChatRoleEnum.SYSTEM.getValue())).forEach(v -> {
+            messages.add(new ChatCompletionMessage(v.getRole(), v.getContent()));
+        });
+        String modelVaersion = ValidatorUtil.isNotNull(version) ? version : MoonshotApiVersion.API_MODEL_8K;
+        com.master.chat.api.moonshot.entity.ChatCompletionRequest chatCompletionRequest = com.master.chat.api.moonshot.entity.ChatCompletionRequest.builder()
+                .model(modelVaersion)
+                .messages(messages)
+                .build();
+        Boolean flag = moonshotClient.streamChat(response, chatCompletionRequest, chatId, conversationId, modelVaersion);
         return flag;
     }
 

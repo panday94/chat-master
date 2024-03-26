@@ -1,3 +1,12 @@
+## v1.1.6.1
+
+`2024-03-26`
+
+> [chat-master-web](https://gitee.com/yoli9/chat-master-web)
+
+## Enhancement
+- 增加月之暗面支持
+
 ## v1.1.6
 
 `2024-03-17`

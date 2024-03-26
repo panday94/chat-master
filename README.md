@@ -158,7 +158,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 扫码进群
 <div style="display: flex; gap: 20px;">
-    <img style="max-width: 100%" src="./doc/file/wechat_group.jpg" alt="微信群" />
+    <img style="max-width: 100%" src="https://gpt.panday94.xyz/files/wx_group.jpg" alt="微信群" />
 </div>
 
 ## 许可证

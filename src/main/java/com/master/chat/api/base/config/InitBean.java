@@ -1,6 +1,7 @@
 package com.master.chat.api.base.config;
 
 import com.master.chat.api.base.enums.ChatModelEnum;
+import com.master.chat.api.moonshot.MoonshotClient;
 import com.master.chat.api.openai.OpenAiClient;
 import com.master.chat.api.openai.OpenAiStreamClient;
 import com.master.chat.api.openai.function.KeyRandomStrategy;
@@ -217,6 +218,26 @@ public class InitBean {
             return new ZhiPuClient();
         }
         return ZhiPuClient.builder().appKey(openkey.getAppKey()).appSecret(openkey.getAppSecret()).build();
+    }
+
+    /**
+     * 月之暗面
+     *
+     * @return
+     */
+    @Bean
+    public MoonshotClient moonshotClient() {
+        List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.MOONSHOT.getValue());
+        if (ValidatorUtil.isNullIncludeArray(openkeys)) {
+            log.error("未加载到月之暗面模型token数据，请添加后需要重启系统");
+            return new MoonshotClient();
+        }
+        OpenkeyVO openkey = openkeys.get(0);
+        if (ValidatorUtil.isNull(openkey.getAppKey())) {
+            log.error("未获取到月之暗面模型token数据");
+            return new MoonshotClient();
+        }
+        return MoonshotClient.builder().apiKey(openkey.getAppKey()).build();
     }
 
 }

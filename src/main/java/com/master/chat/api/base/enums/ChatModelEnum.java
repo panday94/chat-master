@@ -26,6 +26,8 @@ public enum ChatModelEnum {
 
     SPARK("SPARK", "讯飞星火"),
 
+    MOONSHOT("Moonshot", "月之暗面"),
+
     ;
 
     /**
