@@ -9,14 +9,14 @@
 > 声明：此项目只发布于码云和GitHub，基于 MIT 协议，免费且作为开源学习使用，禁止转卖、谨防受骗。如需商用必须保留版权信息，请自觉遵守。确保合法合规使用，在运营过程中产生的一切任何后果自负，与作者无关。
 
 # 项目简介
-ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换ChatGPT(3.5、4.0)模型、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型，后续模型持续对接中。
+ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换ChatGPT(3.5、4.0)模型、月之暗面（Kimi）、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型，后续模型持续对接中。
 项目包含java服务端、网页端、移动端及管理后台配置。
 
 GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 欢迎小伙伴或有合作意向一起加入交流群[添加微信](#联系我们)或提Issues。使用参考下面具体介绍：
 
-* 支持文心一言Stable-Diffusion-XL作图功能
+* 已支持月之暗面（Kimi）模型，支持文心一言Stable-Diffusion-XL作图功能
 * 内置了各种assistant模版，按指定prompt输出，也可后台创建assistant模版
 * 支持切换模型对话聊天，保存对话记录及根据上下文输出
 * 管理端端采用Vue2、Element UI，Chat网页端使用Vue3、TypeScript、NaiveUI进行开发
@@ -39,33 +39,25 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 ![cover2](./doc/file/chat.gif)
 
 ## 已实现功能
-1. 多模型对话，支持ChatGPT(3.5、4.0)、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)
+1. 多模型对话，支持ChatGPT(3.5、4.0)、月之暗面（Kimi）、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)
 2. 支持后台配置及使用assistant模版，按指定prompt输出
 3. 存储历史对话及聊天内容，可开启/关闭根据上下文输出
 4. 支持按使用次数或者开通会员使用，也可全局判断不校验使用次数及会员，电量赠送次数或者不校验电量可在[chat-master-admin](https://gitee.com/panday94/chat-master-admin)中进行配置
 5. 支持分享功能（基础上开发）
 6. 支持个人信息修改
 
-## 待实现功能
-1. vip及svip开通功能
-2. 分享赠送次数功能
-3. 知识库功能
-4. websocket响应（对接移动端）
-5. 绘画
-6. 用户上传自己密钥使用 
-
 ## 模型功能对比
 
 > 版本记录请查看这里[版本记录](./CHANGELOG.md)
 
-| 模型       | 是否支持System  | 天气查询       | 绘画                    |
-|-----------|-------------|------------|-----------------------|
-| ChatGPT   | 支持          | 不支持        | 支持                    |
+| 模型      | 是否支持System  | 天气查询       | 绘画                 |
+|---------|-------------|------------|--------------------|
+| ChatGPT | 支持          | 不支持        | 支持                 |
 | 文心一言    | 不支持(传递会报错) | 可以回复(不准)   | 使用Stable-Diffusion-XL |
-| 通义千问    | 支持          | 支持(效果没讯飞好) | 未接入                   |
-| 讯飞星火    | 支持 | 支持(准)      | 不支持                   |
-| 智谱清言    | 支持  | 不支持        | 支持（API待接入目前有点贵）       |
-
+| 通义千问    | 支持          | 支持(效果没讯飞好) | 未接入                |
+| 讯飞星火    | 支持 | 支持(准)      | 不支持                |
+| 智谱清言    | 支持  | 不支持        | 支持（API待接入目前有点贵）    |
+| 月之暗面    | 支持  | 不支持        | 支持文档问答             |
 
 ## 内置功能
 1. 工作台：集成多个应用和功能的系统页面，该页面主要为用户提供快速访问、信息聚会、个性化等功能。
@@ -100,38 +92,6 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 | Mysql | 5.7   | https://www.mysql.com/                                                               |
 | Maven | 3.6.3 | https://maven.apache.org/                                                            |
 | nginx | 1.10  | http://nginx.org/en/download.html                            ｜                       |
-
-### 开发技术
-
-| 技术                    | 说明                    | 官网                                                 |
-| ---------------------  | ------------------------| ----------------------------------------------------|
-| Spring Boot            | 容器+MVC框架            | https://spring.io/projects/spring-boot               |
-| Spring Security Oauth2 | 认证和授权框架           | https://spring.io/projects/spring-security-oauth     |
-| Lombok                 | 简化Java开发            | https://github.com/JourWon/test-lombok               |
-| Netty                  | 网络通信框架             | https://github.com/JourWon/test-lombok               |
-| JWT                    | JWT登录支持             | https://github.com/jwtk/jjwt                         |
-| MyBatis-plus           | 代码生成、物理分页        | https://baomidou.com/                                |
-| dynamic-datasource     | 多数据源                 | https://www.kancloud.cn/tracy5546/dynamic-datasource/2264611|
-| Redis                  | 分布式缓存               | https://redis.io/                                    |
-| Druid                  | 数据库连接池             | https://github.com/alibaba/druid                     |
-| OSS                    | 对象存储                 | https://github.com/aliyun/aliyun-oss-java-sdk        |
-| quartz                 | 定时任务                 | https://github.com/quartz-scheduler/quartz           |
-
-### 框架特点
-
-1. 使用@RepeatSubmit(interval = 1000)注解对接口进行重复提交限制，interval默认值为5s内，可以自定义时间范围。
-2. 使用@RateLimiter注解对接口进行限流。
-3. 使用@DataScope(deptAlias = "t1", userAlias = "t2")进行数据过滤。
-4. 使用@PreAuthorize("hasAuthority('system:config:remove')")注解可以对接口进行权限校验。
-5. 使用@Log(value = "刷新系统配置缓存", type = SysLogTypeConstant.CONFIG, businessType = BusinessTypeEnum.CLEAN)
-   注解进行系统日志存储。
-6. 使用@DS("master")切换数据源，优先方法高于类
-7. 引入阿里巴巴easy-excel框架，轻松编写导出、导入接口。
-8. 使用Lombok简化java代码，省略getter、setter方法。（@Accessors(chain = true)支持链式操作）
-9. 完善的自动生成代码功能，增加DTO、Command、VO类。
-10. 独立的定时任务列表管理功能。
-11. 支持多端登录或只能当前账号登录功能，需要后台配置。
-12. 使用阿里云、腾讯云对象存储及短信功能，支持本地存储。
 
 ## 参与贡献
 
