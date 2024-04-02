@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
+//import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +36,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     public ResponseInfo handleException(BusinessException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.businessFail(e.getMsg());
     }
 
@@ -44,6 +45,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ValidateException.class)
     public ResponseInfo handleException(ValidateException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.validateFail(e.getMsg());
     }
 
@@ -52,6 +54,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ProhibitVisitException.class)
     public ResponseInfo handleException(ProhibitVisitException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.unauthorized(e.getMsg());
     }
 
@@ -60,6 +63,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(PermissionException.class)
     public ResponseInfo handleException(PermissionException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.permissionDenied();
     }
 
@@ -69,16 +73,17 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseInfo handleAccessDeniedException(AccessDeniedException e) {
-        return ResponseInfo.permissionDenied();
-    }
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseInfo handleAccessDeniedException(AccessDeniedException e) {
+//        return ResponseInfo.permissionDenied();
+//    }
 
     /**
      * 系统异常
      */
     @ExceptionHandler(ErrorException.class)
     public ResponseInfo handleException(ErrorException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.error(e.getMsg());
     }
 
@@ -87,6 +92,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(CustomException.class)
     public ResponseInfo handleException(CustomException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.customizeError(e.getCode(), e.getMsg());
     }
 
@@ -95,6 +101,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(UpdateFailedException.class)
     public ResponseInfo handleException(UpdateFailedException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.error(e.getMsg());
     }
 
@@ -103,6 +110,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(SystemException.class)
     public ResponseInfo handleException(SystemException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.systemWarning(e.getMsg());
     }
 
@@ -114,7 +122,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseInfo handleException(Exception e) {
-        e.printStackTrace();
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.error();
     }
 
@@ -126,6 +134,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseInfo handleException(DuplicateKeyException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.validateFail("数据库中已存在该记录");
     }
 
@@ -137,6 +146,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseInfo handleException(HttpRequestMethodNotSupportedException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.requestMethodError();
     }
 
@@ -148,6 +158,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseInfo handleException(ConstraintViolationException e) {
+        log.error(Thread.currentThread().getName(), e);
         String message = e.getConstraintViolations().stream().findFirst().map(ConstraintViolation::getMessage).get();
         return ResponseInfo.validateFail(message);
     }
@@ -160,6 +171,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseInfo handleException(MethodArgumentNotValidException e) {
+        log.error(Thread.currentThread().getName(), e);
         String message = e.getBindingResult().getAllErrors().stream().findFirst().map(DefaultMessageSourceResolvable::getDefaultMessage).get();
         return ResponseInfo.validateFail(message);
     }
@@ -172,6 +184,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     public ResponseInfo handleException(BindException e) {
+        log.error(Thread.currentThread().getName(), e);
         String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return ResponseInfo.validateFail(message);
     }
@@ -184,6 +197,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseInfo handleException(HttpMessageNotReadableException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.validateFail();
     }
 
@@ -192,6 +206,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseInfo handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.error("文件大小超出10MB限制, 请压缩或降低文件质量! ");
     }
 
@@ -203,6 +218,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseInfo handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        log.error(Thread.currentThread().getName(), e);
         return ResponseInfo.error("信息存储失败，请检查提交信息");
     }
 
