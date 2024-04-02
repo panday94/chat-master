@@ -40,6 +40,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <jtokkit.version>0.5.0</jtokkit.version>
         <kaptcha.version>2.3.2</kaptcha.version>
+        <kotlinx-coroutines-debug.version>1.7.3</kotlinx-coroutines-debug.version>
         <logging-interceptor.version>4.9.3</logging-interceptor.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
@@ -375,6 +376,13 @@
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
             <version>${jakarta.activation-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-debug</artifactId>
+            <version>${kotlinx-coroutines-debug.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
