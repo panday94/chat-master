@@ -5,6 +5,12 @@ import com.master.chat.comm.enums.OssEnum;
 import com.master.chat.comm.util.AliyunOSSUtil;
 import com.master.chat.comm.util.FileUploadUtils;
 import com.master.chat.comm.util.TencentCOSUtil;
+import com.master.chat.common.api.FileInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.enums.StatusEnum;
+import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.framework.base.BaseAppController;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.gpt.pojo.command.UserCommand;
@@ -15,11 +21,6 @@ import com.master.chat.gpt.service.IUserService;
 import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
 import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.service.IBaseConfigService;
-import com.master.chat.common.api.FileInfo;
-import com.master.chat.common.api.Query;
-import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.constant.StringPoolConstant;
-import com.master.chat.common.validator.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,7 +66,9 @@ public class UserController extends BaseAppController {
      */
     @GetMapping("/model")
     public ResponseInfo<List<ModelVO>> getUserModel() {
-        return modelService.listModel(new Query());
+        Query query = new Query();
+        query.put("status", StatusEnum.ENABLED.getValue());
+        return modelService.listModel(query);
     }
 
     /**

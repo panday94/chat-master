@@ -1,7 +1,7 @@
 # Chat MASTER
 
 <p>
-    <a href="#联系我们"><img src="https://img.shields.io/badge/%E5%85%AC%E4%BC%97%E5%8F%B7-%E5%A4%A7%E5%B8%88%E5%AD%A6Java-blue" alt="公众号"></a>
+    <a href="#联系我们"><img src="https://img.shields.io/badge/MasterAII-blue" alt="公众号"></a>
 </p>
 
 ![](https://img.shields.io/badge/SpringBoot-2.3.7-brightgreen.svg)
@@ -31,7 +31,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 演示
 
-网页端演示地址：https://gpt.panday94.xyz 移动端可[扫码体验](#联系我们)
+网页端演示地址：https://gpt.panday94.xyz 移动端可关注公众号[扫码体验](#联系我们)
 
 管理端演示地址：https://gpt.panday94.xyz/admin  密码：master chatmaster
 
@@ -113,7 +113,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 联系我们
 <div style="display: flex;">
-    <img style="width: 100%" src="./doc/file/wechat.png" alt="微信" />
+    <img style="width: 100%" src="doc/file/wechat.png" alt="微信" />
 </div>
 
 ## 扫码进群
