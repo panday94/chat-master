@@ -48,10 +48,10 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 5. 移动端websocket支持
 
 ## 待实现功能
-1、文档对话、国内模型绘画
-2、知识库
-3、MJ/SD
-4、分销
+1. 文档对话、国内模型绘画
+2. 知识库
+3. MJ/SD
+4. 分销
 
 ## 模型功能对比
 
@@ -78,8 +78,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 9. 系统管理：对系统中基础业务进行管理维护。
 
 ## 环境搭建/运行&提示
-> ChatGPT需要在后台配置管理中进行站点配置或添加微信交流
-> 初始化sql已去除sys.date默认数据，如需统计查询可执行doc/sql/sys_date.sql
+> 初始化sql已去除sys.date默认数据，如需统计功能可执行doc/sql/sys_date.sql。ChatGPT需要在后台配置管理中进行站点配置或加入微信群咨询。
 
 ``` 
 1、idea导入chat-master项目，请更换spring.profiles.active为dev
