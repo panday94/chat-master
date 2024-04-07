@@ -4,9 +4,10 @@ package com.master.chat.common.constant;
  * 阿里云oss格式
  *
  * @author: Yang
- * @date: 2021/11/22
+ * @date: 2023/11/22
  * @version: 1.2.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public interface AliOssConstant {
 

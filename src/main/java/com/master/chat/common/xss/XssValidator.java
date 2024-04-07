@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
  * @author: Yang
  * @date: 2020/3/4
  * @version: 3.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public class XssValidator implements ConstraintValidator<Xss, String> {
     private static final String HTML_PATTERN = "<(\\S*?)[^>]*>.*?|<.*? />";

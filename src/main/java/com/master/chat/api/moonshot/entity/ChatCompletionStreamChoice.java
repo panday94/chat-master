@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
  * @author: Yang
  * @date: 2024/3/25
  * @version: 1.2.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @Data
 @AllArgsConstructor

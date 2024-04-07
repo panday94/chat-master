@@ -14,9 +14,10 @@ import java.util.*;
  * 签名工具
  *
  * @author: Yang
- * @date: 2021/8/12 17:18
+ * @date: 2023/8/12 17:18
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public class SignUtil {
 

@@ -16,7 +16,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author: yang
  * @date: 2023/2/23
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @Slf4j
 public class TencentSMSUtil {

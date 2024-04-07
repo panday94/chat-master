@@ -5,7 +5,6 @@ import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.enums.ResponseEnum;
 import com.master.chat.common.exception.FileException;
 import com.master.chat.common.utils.DateUtil;
-import com.master.chat.common.utils.file.MimeTypeUtils;
 import com.master.chat.common.validator.ValidatorUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,8 +12,8 @@ import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededExceptio
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+
+import java.util.Base64;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -29,9 +28,10 @@ import java.util.Arrays;
  * 文件工具类
  *
  * @author: Yang
- * @date: 2021/9/15
+ * @date: 2023/9/15
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public class FileUtil {
 
@@ -164,8 +164,7 @@ public class FileUtil {
                 dir.mkdirs();
             }
 
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] bfile = decoder.decodeBuffer(base64);
+            byte[] bfile = Base64.getDecoder().decode(base64);
 
             file = new File(filePath + File.separator + fileName);
             fos = new FileOutputStream(file);
@@ -313,8 +312,7 @@ public class FileUtil {
             e.printStackTrace();
         }
         // 对字节数组进行Base64编码，得到Base64编码的字符串
-        BASE64Encoder encoder = new BASE64Encoder();
-        String base64Str = encoder.encode(data);
+        String base64Str = Base64.getEncoder().encodeToString(data);
         return base64Str;
     }
 

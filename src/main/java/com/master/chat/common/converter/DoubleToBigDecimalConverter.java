@@ -8,9 +8,10 @@ import java.math.BigDecimal;
  * Double数据类型转BigDecimal
  *
  * @author: Yang
- * @date: 2021/1/15
+ * @date: 2023/1/15
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public class DoubleToBigDecimalConverter extends DozerConverter<Double, BigDecimal> {
     public DoubleToBigDecimalConverter() {

@@ -40,7 +40,8 @@ import java.util.regex.Pattern;
  * @author Joseph O'Connell
  * @author Cal Hendersen
  * @author Michael Semb Wever
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public final class HTMLFilter {
 

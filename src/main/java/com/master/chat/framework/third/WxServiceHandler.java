@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
  * 获取微信服务文件处理类
  *
  * @author: Yang
- * @date: 2021/2/1
+ * @date: 2023/2/1
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @Component
 public class WxServiceHandler {

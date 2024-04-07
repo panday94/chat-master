@@ -10,9 +10,10 @@ import org.apache.commons.lang3.StringUtils;
  * 获取地址工具类
  *
  * @author: Yang
- * @date: 2021/10/20
+ * @date: 2023/10/20
  * @version: 1.2.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @Slf4j
 public class AddressUtil {

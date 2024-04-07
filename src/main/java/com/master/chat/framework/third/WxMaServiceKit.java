@@ -10,9 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * 微信小程序配置缓存
  *
  * @author: Yang
- * @date: 2021/1/19
+ * @date: 2023/1/19
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @Slf4j
 public class WxMaServiceKit {

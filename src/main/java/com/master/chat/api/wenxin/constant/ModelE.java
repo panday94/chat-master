@@ -7,7 +7,8 @@ package com.master.chat.api.wenxin.constant;
  * @author: Yang
  * @date: 2023/9/7
  * @version: 1.0.0
- * Copyright Ⓒ 2023 MasterComputer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public enum ModelE {
     /**

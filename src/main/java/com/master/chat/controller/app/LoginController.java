@@ -39,7 +39,8 @@ import java.util.Set;
  * @author: Yang
  * @date: 2023/5/4
  * @version: 1.0.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @RestController(value = "appLoginController")
 @RequestMapping("/app")

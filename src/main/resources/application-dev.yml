@@ -64,4 +64,4 @@ spring:
 system:
   upload-path: /Users/master/Documents/upload/
 url:
-  base:
+  base: 'http://localhost:8088/chat-master'

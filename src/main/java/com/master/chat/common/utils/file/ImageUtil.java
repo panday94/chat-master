@@ -15,9 +15,10 @@ import java.util.UUID;
  * 图片工具类
  *
  * @author: Yang
- * @date: 2021/10/23
+ * @date: 2023/10/23
  * @version: 1.2.0
- * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
+ * https://www.panday94.xyz
+ * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public class ImageUtil {
 
