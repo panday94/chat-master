@@ -13,8 +13,6 @@ import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededExceptio
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -24,6 +22,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Base64;
 
 /**
  * 文件工具类
@@ -48,7 +47,7 @@ public class FileUtil {
     /**
      * fileToInput
      *
-     * @param multipartFile
+     * @param file
      * @return
      */
     public static InputStream fileToInput(File file) {
@@ -98,7 +97,7 @@ public class FileUtil {
     /**
      * File to byte[]
      *
-     * @param inStream
+     * @param file
      * @return
      * @throws IOException
      */
@@ -164,8 +163,7 @@ public class FileUtil {
                 dir.mkdirs();
             }
 
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] bfile = decoder.decodeBuffer(base64);
+            byte[] bfile = Base64.getDecoder().decode(base64);
 
             file = new File(filePath + File.separator + fileName);
             fos = new FileOutputStream(file);
@@ -197,7 +195,7 @@ public class FileUtil {
      * 远程图片转File
      *
      * @param url     图片链接
-     * @param outPath 输出地址
+     * @param fileName 输出地址
      * @return
      */
     public static File convertUrlToFile(String url, String filePath, String fileName) {
@@ -276,7 +274,7 @@ public class FileUtil {
     /**
      * 本地文件（图片、excel等）转换成Base64字符串
      *
-     * @param imgPath 文件路径
+     * @param file 文件路径
      */
     public static String convertFileToBase64(File file) {
         return convertFileToBase64(cn.hutool.core.io.FileUtil.getInputStream(file));
@@ -300,7 +298,7 @@ public class FileUtil {
     /**
      * 本地文件（图片、excel等）转换成Base64字符串
      *
-     * @param imgPath 文件路径
+     * @param in 文件路径
      */
     public static String convertFileToBase64(InputStream in) {
         byte[] data = null;
@@ -313,8 +311,7 @@ public class FileUtil {
             e.printStackTrace();
         }
         // 对字节数组进行Base64编码，得到Base64编码的字符串
-        BASE64Encoder encoder = new BASE64Encoder();
-        String base64Str = encoder.encode(data);
+        String base64Str = Base64.getEncoder().encodeToString(data);
         return base64Str;
     }
 
@@ -559,7 +556,6 @@ public class FileUtil {
      * @param file 上传的文件
      * @return
      * @throws FileSizeLimitExceededException 如果超出最大大小
-     * @throws InvalidExtensionException
      */
     private static final void assertAllowed(MultipartFile file, String[] allowedExtension) {
         long size = file.getSize();
