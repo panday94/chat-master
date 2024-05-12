@@ -1,34 +1,20 @@
 package com.master.chat.controller.app;
 
-import com.master.chat.comm.constant.RedisConstants;
-import com.master.chat.comm.enums.SmsEnum;
-import com.master.chat.comm.util.AliyunSMSUtil;
 import com.master.chat.comm.util.RedisUtils;
-import com.master.chat.comm.util.TencentSMSUtil;
-import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.vo.AgreementVO;
-import com.master.chat.gpt.pojo.vo.AppConfigVO;
 import com.master.chat.gpt.service.IAgreementService;
 import com.master.chat.gpt.service.IAssistantService;
 import com.master.chat.gpt.service.IAssistantTypeService;
 import com.master.chat.gpt.service.IGptService;
-import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
-import com.master.chat.sys.pojo.dto.config.BaseInfoDTO;
-import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
-import com.master.chat.sys.service.IBaseConfigService;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.enums.IntEnum;
-import com.master.chat.common.enums.ResponseEnum;
 import com.master.chat.common.enums.StatusEnum;
-import com.master.chat.common.utils.RandomUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.common.validator.base.BaseAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +31,6 @@ import java.util.Map;
 @RequestMapping("/app/api")
 public class AppApiController {
     @Autowired
-    private IBaseConfigService baseConfigService;
-    @Autowired
     private IAssistantTypeService assistantTypeService;
     @Autowired
     private IAssistantService assistantService;
@@ -57,56 +41,6 @@ public class AppApiController {
     @Autowired
     private RedisUtils redisUtils;
 
-    /**
-     * 发送短信
-     *
-     * @author: Yang
-     * @date: 2023/1/9
-     * @version: 1.0.0
-     */
-    @PostMapping("/sms/send")
-    public ResponseInfo sendSmsCode(@RequestBody Query query) {
-        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
-        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getSmsType()) || SmsEnum.NONE.getValue().equals(extraInfo.getSmsType())) {
-            return ResponseInfo.validateFail("未开通短信功能");
-        }
-        query = new Query(query);
-        String tel = query.getTel();
-        if (IntEnum.ELEVEN.getValue() != tel.length()) {
-            return ResponseInfo.businessFail("请输入正确手机号码");
-        }
-        String code = RandomUtil.randomNumbers(6);
-        Map<String, Object> map = new HashMap<>(16);
-        map.put("code", code);
-        String key = RedisConstants.TEL_CODE + tel;
-        if (ValidatorUtil.isNotNull(redisUtils.get(key))) {
-            return ResponseInfo.customizeError(ResponseEnum.REPEAT_REQUEST_SMS);
-        }
-        if (SmsEnum.ALI.getValue().equals(extraInfo.getSmsType())) {
-            AliyunSMSUtil.sendSms(extraInfo, tel, extraInfo.getRegisterTemplate(), map);
-        } else if (SmsEnum.TECENT.getValue().equals(extraInfo.getSmsType())) {
-            TencentSMSUtil.sendSms(extraInfo, tel, extraInfo.getRegisterTemplate(), new String[]{code});
-        } else {
-            return ResponseInfo.validateFail("未知的短信方式，发送失败");
-        }
-        redisUtils.set(key, code, RedisConstants.FIVE_MINUTES);
-        return ResponseInfo.success();
-    }
-
-    /**
-     * 获取app配置信息
-     *
-     * @author: Yang
-     * @date: 2023/1/9
-     * @version: 1.0.0
-     */
-    @GetMapping("/home/config")
-    public ResponseInfo getHomeConfig() {
-        BaseInfoDTO baseInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO, BaseInfoDTO.class);
-        AppInfoDTO appInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.APP_INFO, AppInfoDTO.class);
-        AppConfigVO appConfig = AppConfigVO.builder().baseInfo(baseInfo).appInfo(appInfo).build();
-        return ResponseInfo.success(appConfig);
-    }
 
     /**
      * 获取协议信息

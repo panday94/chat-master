@@ -6,11 +6,8 @@ import cn.hutool.http.Header;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.alibaba.fastjson.JSON;
-import com.master.chat.framework.manger.AsyncManager;
-import com.master.chat.framework.manger.factory.AsyncFactory;
 import com.master.chat.framework.security.JwtTokenUtils;
 import com.master.chat.framework.security.UserDetail;
-import com.master.chat.sys.pojo.entity.SysLog;
 import com.master.chat.common.api.CommonCommand;
 import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.utils.IPUtil;
@@ -121,14 +118,6 @@ public class RequestAspect {
             String className = joinPoint.getTarget().getClass().getName();
             String methodName = signature.getName();
             methodName = className + StringPoolConstant.DOT + methodName + StringPoolConstant.LEFT_BRACKET + StringPoolConstant.RIGHT_BRACKET;
-            SysLog sysLog = SysLog.builder()
-                    .sysUserId(ValidatorUtil.isNotNull(userDetail) ? userDetail.getId() : 0L)
-                    .username(ValidatorUtil.isNotNull(userDetail) ? userDetail.getUsername() : "游客")
-                    .ip(ip).domain(domain)
-                    .browser(userAgent.getBrowser().getName()).os(userAgent.getOs().getName())
-                    .method(methodName).requestMethod(request.getMethod()).uri(request.getRequestURI())
-                    .build();
-            AsyncManager.me().execute(AsyncFactory.addSysLog(sysLog, parameter, result, time));
         } catch (Exception e) {
             e.printStackTrace();
         }

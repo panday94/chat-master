@@ -1,10 +1,8 @@
 package com.master.chat.framework.security;
 
-import com.master.chat.sys.service.impl.ResourceServiceImpl;
 import com.master.chat.common.constant.AuthConstant;
 import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.exception.ValidateException;
-import com.master.chat.common.utils.ApplicationContextUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -89,10 +87,6 @@ public class JwtTokenUtils {
         // 得到 权限（角色）
         //Set<String> permissions = JSON.parseObject(JSON.toJSONString(claims.get("authorities")), Set.class);
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        if (1 == userDetail.getRole()) {
-            Set<String> permissions = ApplicationContextUtil.getBean(ResourceServiceImpl.class).listButtonResourceBySysUser(userDetail.getId(), userDetail.getUsername()).getData();
-            Optional.ofNullable(permissions).ifPresent(v -> v.stream().forEach(d -> authorities.add(new SimpleGrantedAuthority(d))));
-        }
         // 返回验证令牌
         return new UsernamePasswordAuthenticationToken(userDetail, null, authorities);
     }

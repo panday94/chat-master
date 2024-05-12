@@ -9,13 +9,11 @@ import com.master.chat.framework.security.JWTPasswordEncoder;
 import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.enums.UserTypeEnum;
 import com.master.chat.gpt.mapper.UserMapper;
+import com.master.chat.gpt.pojo.command.SysUserPasswordCommand;
 import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.UserVO;
 import com.master.chat.gpt.service.IUserService;
-import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
-import com.master.chat.sys.pojo.dto.config.AppInfoDTO;
-import com.master.chat.sys.service.IBaseConfigService;
 import com.master.chat.common.api.IPageInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
@@ -46,8 +44,6 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private IBaseConfigService baseConfigService;
 
     /**
      * 根据id获取会员用户信息
@@ -118,10 +114,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .name(name).nickName(name).tel(tel).password(JWTPasswordEncoder.bcryptEncode(password))
                 .type(3)
                 .build();
-        AppInfoDTO appInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.APP_INFO, AppInfoDTO.class);
-        if (ValidatorUtil.isNotNull(appInfo) && ValidatorUtil.isNotNull(appInfo.getFreeNum())) {
-            user.setNum(Long.valueOf(appInfo.getFreeNum()));
-        }
         userMapper.insert(user);
         return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
     }

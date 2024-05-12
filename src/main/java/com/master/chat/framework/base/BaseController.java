@@ -8,8 +8,6 @@ import com.master.chat.common.utils.IPUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.framework.security.JwtTokenUtils;
 import com.master.chat.framework.security.UserDetail;
-import com.master.chat.sys.pojo.entity.SysUser;
-import com.master.chat.sys.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class BaseController extends ResponseInfo {
     @Autowired
     private HttpServletRequest request;
-    @Autowired
-    private ISysUserService sysUserService;
 
     /**
      * 获取请求ip地址
@@ -83,15 +79,6 @@ public abstract class BaseController extends ResponseInfo {
      */
     public String getSysUserName() {
         return getLoginUser().getUsername();
-    }
-
-    /**
-     * 获取登录账号信息
-     *
-     * @return
-     */
-    public SysUser getSysUser() {
-        return sysUserService.getById(getLoginUser().getId());
     }
 
 }

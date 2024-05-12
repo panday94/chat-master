@@ -1,10 +1,7 @@
 package com.master.chat.controller.app;
 
 import com.master.chat.comm.constant.OssConstant;
-import com.master.chat.comm.enums.OssEnum;
-import com.master.chat.comm.util.AliyunOSSUtil;
 import com.master.chat.comm.util.FileUploadUtils;
-import com.master.chat.comm.util.TencentCOSUtil;
 import com.master.chat.common.api.FileInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
@@ -13,14 +10,12 @@ import com.master.chat.common.enums.StatusEnum;
 import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.framework.base.BaseAppController;
 import com.master.chat.framework.config.SystemConfig;
+import com.master.chat.gpt.pojo.command.SysUserPasswordCommand;
 import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.vo.ModelVO;
 import com.master.chat.gpt.pojo.vo.UserVO;
 import com.master.chat.gpt.service.IModelService;
 import com.master.chat.gpt.service.IUserService;
-import com.master.chat.sys.pojo.command.SysUserPasswordCommand;
-import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
-import com.master.chat.sys.service.IBaseConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,8 +38,6 @@ public class UserController extends BaseAppController {
     private IUserService userService;
     @Autowired
     private IModelService modelService;
-    @Autowired
-    private IBaseConfigService baseConfigService;
 
     /**
      * 获取用户信息接口
@@ -95,19 +88,10 @@ public class UserController extends BaseAppController {
     @PostMapping("/avatar")
     public ResponseInfo<FileInfo> updateUserAvatar(@RequestParam("file") MultipartFile file) {
         String pathName = "avatar/";
-        ExtraInfoDTO extraInfo = baseConfigService.getBaseConfigByName("extraInfo", ExtraInfoDTO.class);
         FileInfo fileInfo = null;
-        if (ValidatorUtil.isNull(extraInfo) || ValidatorUtil.isNull(extraInfo.getOssType()) || OssEnum.LOCAL.getValue().equals(extraInfo.getOssType())) {
-            String filePath = SystemConfig.uploadPath + getPathName(pathName);
-            fileInfo = FileUploadUtils.upload(filePath, file);
-            fileInfo.setFileUrl(SystemConfig.baseUrl + fileInfo.getFileUrl());
-        } else if (OssEnum.ALI.getValue().equals(extraInfo.getOssType())) {
-            fileInfo = AliyunOSSUtil.uploadFile(extraInfo, file, getPathName(pathName));
-        } else if (OssEnum.TECENT.getValue().equals(extraInfo.getOssType())) {
-            fileInfo = TencentCOSUtil.upload(extraInfo, file, FileUploadUtils.getPathName(pathName));
-        } else {
-            return ResponseInfo.validateFail("未知的上传文件方式，上传失败");
-        }
+        String filePath = SystemConfig.uploadPath + getPathName(pathName);
+        fileInfo = FileUploadUtils.upload(filePath, file);
+        fileInfo.setFileUrl(SystemConfig.baseUrl + fileInfo.getFileUrl());
         if (ValidatorUtil.isNull(fileInfo) || ValidatorUtil.isNull(fileInfo.getFileUrl())) {
             return ResponseInfo.validateFail("上传失败");
         }
