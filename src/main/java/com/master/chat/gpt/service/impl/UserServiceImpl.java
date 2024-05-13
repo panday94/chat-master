@@ -5,15 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.master.chat.framework.security.JWTPasswordEncoder;
-import com.master.chat.gpt.constant.BaseConfigConstant;
-import com.master.chat.gpt.enums.UserTypeEnum;
-import com.master.chat.gpt.mapper.UserMapper;
-import com.master.chat.gpt.pojo.command.SysUserPasswordCommand;
-import com.master.chat.gpt.pojo.command.UserCommand;
-import com.master.chat.gpt.pojo.entity.User;
-import com.master.chat.gpt.pojo.vo.UserVO;
-import com.master.chat.gpt.service.IUserService;
 import com.master.chat.common.api.IPageInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
@@ -24,6 +15,14 @@ import com.master.chat.common.utils.CommonUtil;
 import com.master.chat.common.utils.DozerUtil;
 import com.master.chat.common.utils.RandomUtil;
 import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.framework.security.JWTPasswordEncoder;
+import com.master.chat.gpt.enums.UserTypeEnum;
+import com.master.chat.gpt.mapper.UserMapper;
+import com.master.chat.gpt.pojo.command.SysUserPasswordCommand;
+import com.master.chat.gpt.pojo.command.UserCommand;
+import com.master.chat.gpt.pojo.entity.User;
+import com.master.chat.gpt.pojo.vo.UserVO;
+import com.master.chat.gpt.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +36,7 @@ import java.util.List;
  * @author: Yang
  * @date: 2023-04-28
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
@@ -104,18 +102,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Transactional(rollbackFor = Exception.class, transactionManager = "masterTransactionManager")
     public ResponseInfo<UserVO> loginByTel(String tel, String password, String shareCode) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getTel, tel));
-        if (ValidatorUtil.isNotNull(user)) {
-            return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+        if (ValidatorUtil.isNull(user)) {
+            return ResponseInfo.accountNotExist();
         }
-        String name = "用户" + RandomUtil.randomString(8);
-        user = User.builder()
+        return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+    }
+
+    @Override
+    public ResponseInfo register(String name, String tel, String password) {
+        User user = User.builder()
                 .loginTime(LocalDateTime.now())
                 .uid(UUID.randomUUID().toString())
                 .name(name).nickName(name).tel(tel).password(JWTPasswordEncoder.bcryptEncode(password))
                 .type(3)
                 .build();
         userMapper.insert(user);
-        return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+        return ResponseInfo.success();
     }
 
     @Override

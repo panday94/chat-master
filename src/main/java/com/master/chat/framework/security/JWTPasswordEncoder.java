@@ -12,8 +12,7 @@ import java.util.regex.Pattern;
  * @author: Yang
  * @date: 2023/01/31
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 public class JWTPasswordEncoder implements PasswordEncoder {
     private static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");

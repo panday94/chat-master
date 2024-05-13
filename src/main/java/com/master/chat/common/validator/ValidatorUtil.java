@@ -21,8 +21,7 @@ import java.util.regex.Pattern;
  * @author: Yang
  * @date: 2019/8/16
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 public class ValidatorUtil {
     private static Validator validator;

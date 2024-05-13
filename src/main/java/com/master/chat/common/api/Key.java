@@ -9,8 +9,7 @@ import lombok.Setter;
  * @author: Yang
  * @date: 2023/7/27
  * @version: 3.7.2
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 @Getter
 @Setter

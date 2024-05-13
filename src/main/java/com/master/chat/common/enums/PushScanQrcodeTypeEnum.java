@@ -8,8 +8,7 @@ import lombok.Getter;
  * @author：周杰
  * @date: 2023/5/6
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  **/
 @Getter
 public enum PushScanQrcodeTypeEnum {
