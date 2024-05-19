@@ -8,14 +8,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.master.chat.api.base.enums.ChatContentEnum;
 import com.master.chat.api.base.enums.ChatRoleEnum;
 import com.master.chat.gpt.enums.ChatStatusEnum;
-import com.master.chat.gpt.mapper.AssistantMapper;
 import com.master.chat.gpt.mapper.ChatMapper;
 import com.master.chat.gpt.mapper.ChatMessageMapper;
 import com.master.chat.gpt.mapper.UserMapper;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
 import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.dto.ChatMessageDTO;
-import com.master.chat.gpt.pojo.entity.Assistant;
 import com.master.chat.gpt.pojo.entity.Chat;
 import com.master.chat.gpt.pojo.entity.ChatMessage;
 import com.master.chat.gpt.pojo.entity.User;
@@ -50,8 +48,6 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
     private ChatMessageMapper chatMessageMapper;
     @Autowired
     private ChatMapper chatMapper;
-    @Autowired
-    private AssistantMapper assistantMapper;
     @Autowired
     private UserMapper userMapper;
 
@@ -159,12 +155,7 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
                 .build();
         chatMessageMapper.insert(chatMessage);
         messages.add(DozerUtil.convertor(chatMessage, ChatMessageDTO.class));
-        if (ValidatorUtil.isNotNullAndZero(command.getAssistantId())) {
-            Assistant assistant = assistantMapper.selectById(command.getAssistantId());
-            if (ValidatorUtil.isNotNull(assistant.getSystemPrompt())) {
-                messages.add(0, ChatMessageDTO.builder().role(ChatRoleEnum.SYSTEM.getValue()).content(assistant.getSystemPrompt()).build());
-            }
-        } else if (ValidatorUtil.isNotNull(command.getSystemPrompt())) {
+        if (ValidatorUtil.isNotNull(command.getSystemPrompt())) {
             messages.add(0, ChatMessageDTO.builder().role(ChatRoleEnum.SYSTEM.getValue()).content(command.getSystemPrompt()).build());
         }
         return ResponseInfo.success(messages);

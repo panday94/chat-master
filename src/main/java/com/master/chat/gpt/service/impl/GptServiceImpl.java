@@ -20,14 +20,12 @@ import com.master.chat.common.utils.DozerUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.common.validator.base.BaseAssert;
 import com.master.chat.gpt.enums.ChatStatusEnum;
-import com.master.chat.gpt.mapper.AssistantMapper;
 import com.master.chat.gpt.mapper.ModelMapper;
 import com.master.chat.gpt.mapper.OpenkeyMapper;
 import com.master.chat.gpt.mapper.UserMapper;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
 import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.dto.ChatMessageDTO;
-import com.master.chat.gpt.pojo.entity.Assistant;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.ChatMessageVO;
 import com.master.chat.gpt.pojo.vo.ChatVO;
@@ -62,8 +60,6 @@ public class GptServiceImpl implements IGptService {
     private UserMapper userMapper;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private AssistantMapper assistantMapper;
     @Autowired
     private OpenkeyMapper openkeyMapper;
 
@@ -186,12 +182,6 @@ public class GptServiceImpl implements IGptService {
         }
         chatMessages.add(chatMessage);
         ChatVO chat = chatService.getChatById(chatMessage.getChatId()).getData();
-        if (ValidatorUtil.isNotNull(chat) && ValidatorUtil.isNotNullAndZero(chat.getAssistantId())) {
-            Assistant assistant = assistantMapper.selectById(chat.getAssistantId());
-            if (ValidatorUtil.isNotNull(assistant.getSystemPrompt())) {
-                chatMessages.add(0, ChatMessageDTO.builder().role(ChatRoleEnum.SYSTEM.getValue()).content(assistant.getSystemPrompt()).build());
-            }
-        }
         return chatMessages;
     }
 

@@ -1,14 +1,10 @@
 package com.master.chat.controller.common;
 
 import com.master.chat.comm.constant.OssConstant;
-import com.master.chat.comm.constant.RedisConstants;
 import com.master.chat.comm.enums.OssEnum;
-import com.master.chat.comm.enums.SmsEnum;
 import com.master.chat.comm.util.FileUploadUtils;
 import com.master.chat.comm.util.RedisUtils;
 import com.master.chat.framework.config.SystemConfig;
-import com.master.chat.gpt.pojo.vo.AssistantTypeVO;
-import com.master.chat.gpt.service.IAssistantTypeService;
 import com.master.chat.sys.pojo.dto.config.ExtraInfoDTO;
 import com.master.chat.sys.pojo.vo.DictVO;
 import com.master.chat.sys.pojo.vo.SysUserVO;
@@ -18,11 +14,8 @@ import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.api.SelectDTO;
 import com.master.chat.common.constant.StringPoolConstant;
-import com.master.chat.common.enums.IntEnum;
-import com.master.chat.common.enums.ResponseEnum;
 import com.master.chat.common.enums.StatusEnum;
 import com.master.chat.common.utils.DozerUtil;
-import com.master.chat.common.utils.RandomUtil;
 import com.master.chat.common.validator.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +24,6 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,9 +46,7 @@ public class CommonController {
     private final IResourceService resourceService;
     private final ISysConfigService configService;
     private final ISysUserService sysUserService;
-    private final IAssistantTypeService assistantTypeService;
     private final IBaseConfigService baseConfigService;
-    private final RedisUtils redisUtils;
 
     /**
      * 根据系统配置本地/oss上传文件
@@ -210,21 +200,6 @@ public class CommonController {
     public ResponseInfo<List<SelectDTO>> listSysUser(@RequestParam(required = false) Map map) {
         List<SysUserVO> sysUserVOS = sysUserService.listSysUser(new Query(map)).getData();
         return ResponseInfo.success(DozerUtil.convertor(sysUserVOS, SelectDTO.class));
-    }
-
-    /**
-     * 获取人员筛选列表
-     *
-     * @author: Yang
-     * @date: 2023/01/31
-     * @version: 1.0.0
-     */
-    @GetMapping(value = "/assistant-type/select")
-    public ResponseInfo<List<SelectDTO>> listAssistantType(@RequestParam(required = false) Map map) {
-        Query query = new Query(map);
-        query.put("status", StatusEnum.ENABLED.getValue());
-        List<AssistantTypeVO> assistantTypes = assistantTypeService.listAssistantType(query).getData();
-        return ResponseInfo.success(DozerUtil.convertor(assistantTypes, SelectDTO.class));
     }
 
     public static void main(String[] args) {

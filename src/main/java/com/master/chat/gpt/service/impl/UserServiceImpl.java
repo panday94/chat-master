@@ -107,18 +107,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Transactional(rollbackFor = Exception.class, transactionManager = "masterTransactionManager")
     public ResponseInfo<UserVO> loginByTel(String tel, String password, String shareCode) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getTel, tel));
-        if (ValidatorUtil.isNotNull(user)) {
-            return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+        if (ValidatorUtil.isNull(user)) {
+            return ResponseInfo.accountNotExist();
         }
-        String name = "用户" + RandomUtil.randomString(8);
-        user = User.builder()
+        return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+    }
+
+    @Override
+    public ResponseInfo register(String name, String tel, String password) {
+        User user = User.builder()
                 .loginTime(LocalDateTime.now())
                 .uid(UUID.randomUUID().toString())
                 .name(name).nickName(name).tel(tel).password(JWTPasswordEncoder.bcryptEncode(password))
                 .type(3)
                 .build();
         userMapper.insert(user);
-        return ResponseInfo.success(DozerUtil.convertor(user, UserVO.class));
+        return ResponseInfo.success();
     }
 
     @Override

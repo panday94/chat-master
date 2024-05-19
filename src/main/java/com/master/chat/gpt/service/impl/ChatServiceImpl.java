@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.master.chat.gpt.mapper.AssistantMapper;
 import com.master.chat.gpt.mapper.ChatMapper;
 import com.master.chat.gpt.pojo.command.ChatCommand;
 import com.master.chat.gpt.pojo.command.GptCommand;
-import com.master.chat.gpt.pojo.entity.Assistant;
 import com.master.chat.gpt.pojo.entity.Chat;
 import com.master.chat.gpt.pojo.vo.ChatVO;
 import com.master.chat.gpt.service.IChatService;
@@ -39,8 +37,6 @@ import java.util.List;
 public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements IChatService {
     @Autowired
     private ChatMapper chatMapper;
-    @Autowired
-    private AssistantMapper assistantMapper;
 
     /**
      * 根据id获取聊天摘要信息
@@ -98,10 +94,6 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements IC
         Chat chat = DozerUtil.convertor(command, Chat.class);
         chat.setCreateUser(command.getOperater());
         chat.setChatNumber(String.valueOf(SnowFlakeUtil.snowflakeId()));
-        if (ValidatorUtil.isNotNull(command.getAssistantId())) {
-            Assistant assistant = assistantMapper.selectById(command.getAssistantId());
-            command.setPrompt(assistant.getSystemPrompt());
-        }
         BaseAssert.isBlankOrNull(command.getPrompt(), "请输入提示词");
         int maxLength = 30;
         chat.setTitle(command.getPrompt().substring(0, command.getPrompt().length() > maxLength ? maxLength : command.getPrompt().length()));

@@ -3,7 +3,6 @@ package com.master.chat.framework.config;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import com.github.dozermapper.core.loader.api.BeanMappingBuilder;
-import com.master.chat.gpt.pojo.vo.AssistantTypeVO;
 import com.master.chat.sys.pojo.vo.*;
 import com.master.chat.common.api.SelectDTO;
 import com.master.chat.common.converter.ToNumberConverter;
@@ -46,7 +45,6 @@ public class DozerConfig {
                 mapping(SysUserVO.class, SelectDTO.class).fields("name", "label").fields("id", "value", customConverter(ToNumberConverter.class));
                 mapping(ResourceVO.class, SelectDTO.class).fields("name", "label");
                 mapping(DictTypeVO.class, SelectDTO.class).fields("name", "label").fields("type", "value");
-                mapping(AssistantTypeVO.class, SelectDTO.class).fields("name", "label").fields("id", "value");
                 //为不同名的 property 手动配置映射关系
 //                mapping(DozerDO.class, DozerDTO.class).fields("code", "cityCode");
                 //关闭隐式匹配(即只转换配置的属性code→cityCode)

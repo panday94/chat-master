@@ -23,10 +23,9 @@
 
     <!-- 通用查询条件 -->
     <sql id="BaseSelect">
-        select <include refid="Base_Column_List"></include>, t1.nick_name as userName, concat(t2.icon,t2.title) as assistantTitle
+        select <include refid="Base_Column_List"></include>, t1.nick_name as userName
         from gpt_chat t
         left join gpt_user t1 on t.user_id = t1.id
-        left join gpt_assistant t2 on t.assistant_id = t2.id
         <where>
             t.deleted = 0
             <if test="q.id != null and q.id != ''"> and t.id = #{q.id} </if>
