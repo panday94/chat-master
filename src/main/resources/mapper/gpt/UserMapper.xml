@@ -72,4 +72,11 @@
         <include refid="BaseSelect"></include>
     </select>
 
+    <select id="getUserByChatId" resultType="com.master.chat.gpt.pojo.entity.User">
+        select <include refid="Base_Column_List"></include>
+        from gpt_user t
+        left join gpt_chat t1 on t.id = t1.user_id
+        where t1.id = #{chatId};
+    </select>
+
 </mapper>

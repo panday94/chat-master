@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.sys.mapper.LoginLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.sys.pojo.entity.LoginLog">
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="expire_time" property="expireTime"/>
+        <result column="sys_user_id" property="sysUserId"/>
+        <result column="session_id" property="sessionId"/>
+        <result column="username" property="username"/>
+        <result column="username" property="username"/>
+        <result column="ip" property="ip"/>
+        <result column="address" property="address"/>
+        <result column="domain" property="domain"/>
+        <result column="browser" property="browser"/>
+        <result column="os" property="os"/>
+        <result column="msg" property="msg"/>
+        <result column="status" property="status"/>
+        <result column="enabled" property="enabled"/>
+        <result column="authorization" property="authorization"/>
+        <result column="user_agent" property="userAgent"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_user,
+        create_time,
+        expire_time, sys_user_id, session_id, username, ip, address, domain, browser, os, msg, authorization, user_agent, status, enabled, deleted
+    </sql>
+
+    <update id="disableLogin">
+        update sys_login_log set enabled = 0 where sys_user_id = #{sysUserId}
+    </update>
+
+    <update id="disableLoginBySession">
+        update sys_login_log set enabled = 0 where sys_user_id = #{sysUserId} and session_id = #{sessionId}
+    </update>
+
+    <update id="disableLoginById">
+        update sys_login_log set enabled = 0 where id = #{id}
+    </update>
+
+    <update id="cleanLoginLog">
+        truncate table sys_login_log
+    </update>
+
+</mapper>

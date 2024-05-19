@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.sys.mapper.RoleResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.sys.pojo.entity.RoleResource">
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="role_id" property="roleId"/>
+        <result column="resource_id" property="resourceId"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_user,
+        create_time,
+        update_user,
+        update_time,
+        role_id, resource_id, status
+    </sql>
+
+    <select id="getResourceIdByRoleId" resultType="java.lang.Long">
+        select t.resource_id from sys_role_resource t where t.status = 1 and t.role_id = #{id}
+    </select>
+
+    <select id="getResourceIdByRoleIds" resultType="java.lang.Long">
+        select t.resource_id from sys_role_resource t where t.status = 1 and t.role_id in
+        <foreach collection="roleIds" item="item" open="(" close=")" index="index" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <insert id="saveRoleResource">
+        insert into sys_role_resource(create_user,update_user,role_id,resource_id,status)
+        SELECT #{operater},#{operater},#{roleId},t.id,0
+        FROM sys_resource t WHERE t.id in
+        <foreach collection="resourceIds" item="item" open="(" close=")" index="index" separator=",">
+            #{item}
+        </foreach>
+        AND t.id not in (SELECT resource_id FROM sys_role_resource WHERE role_id = #{roleId})
+    </insert>
+
+    <update id="clearResourceByRoleId">
+        update sys_role_resource t set t.status = 0 where t.role_id = #{roleId}
+    </update>
+
+    <update id="authorizationResource">
+        update sys_role_resource t set t.status = 1,t.update_user = #{operater} where t.role_id = #{roleId} and t.resource_id in
+        <foreach collection="resourceIds" item="item" open="(" close=")" index="index" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+
+</mapper>

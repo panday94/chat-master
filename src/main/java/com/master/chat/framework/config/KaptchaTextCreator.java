@@ -10,8 +10,7 @@ import java.util.Random;
  * @author: Yang
  * @date: 2023/01/31
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public class KaptchaTextCreator extends DefaultTextCreator {
     private static final String[] CNUMBERS = "0,1,2,3,4,5,6,7,8,9,10".split(",");

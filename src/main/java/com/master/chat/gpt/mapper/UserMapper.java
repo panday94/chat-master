@@ -15,8 +15,7 @@ import java.util.List;
  * @author: Yang
  * @date: 2023-04-28
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 public interface UserMapper extends BaseMapper<User> {
 
@@ -44,5 +43,13 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     UserVO getUser(@Param("q") Query query);
+
+    /**
+     * 根据聊天id获取用户信息
+     *
+     * @param chatId
+     * @return
+     */
+    User getUserByChatId(@Param("chatId") Long chatId);
 
 }

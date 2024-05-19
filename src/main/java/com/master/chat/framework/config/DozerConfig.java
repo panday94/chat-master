@@ -4,11 +4,14 @@ import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import com.github.dozermapper.core.loader.api.BeanMappingBuilder;
 import com.master.chat.gpt.pojo.vo.AssistantTypeVO;
+import com.master.chat.sys.pojo.vo.*;
 import com.master.chat.common.api.SelectDTO;
+import com.master.chat.common.converter.ToNumberConverter;
 import com.master.chat.common.utils.DozerUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.github.dozermapper.core.loader.api.FieldsMappingOptions.customConverter;
 
 /**
  * dozer 实体映射配置
@@ -16,8 +19,7 @@ import org.springframework.context.annotation.Configuration;
  * @author: Yang
  * @date: 2023/01/31
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Configuration
 public class DozerConfig {
@@ -39,6 +41,11 @@ public class DozerConfig {
             @Override
             protected void configure() {
                 // 个性化配置添加在此
+                mapping(PostVO.class, SelectDTO.class).fields("name", "label").fields("id", "value", customConverter(ToNumberConverter.class));
+                mapping(RoleVO.class, SelectDTO.class).fields("name", "label").fields("id", "value", customConverter(ToNumberConverter.class));
+                mapping(SysUserVO.class, SelectDTO.class).fields("name", "label").fields("id", "value", customConverter(ToNumberConverter.class));
+                mapping(ResourceVO.class, SelectDTO.class).fields("name", "label");
+                mapping(DictTypeVO.class, SelectDTO.class).fields("name", "label").fields("type", "value");
                 mapping(AssistantTypeVO.class, SelectDTO.class).fields("name", "label").fields("id", "value");
                 //为不同名的 property 手动配置映射关系
 //                mapping(DozerDO.class, DozerDTO.class).fields("code", "cityCode");

@@ -12,8 +12,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author: Yang
  * @date: 2023/10/20
  * @version: 1.2.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 @Slf4j
 public class AddressUtil {

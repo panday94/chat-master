@@ -3,10 +3,7 @@ package com.master.chat.controller.app;
 import com.master.chat.comm.util.RedisUtils;
 import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.vo.AgreementVO;
-import com.master.chat.gpt.service.IAgreementService;
-import com.master.chat.gpt.service.IAssistantService;
-import com.master.chat.gpt.service.IAssistantTypeService;
-import com.master.chat.gpt.service.IGptService;
+import com.master.chat.gpt.service.*;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.enums.StatusEnum;
@@ -24,8 +21,7 @@ import java.util.Map;
  * @author: Yang
  * @date: 2023/5/4
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 @RestController
 @RequestMapping("/app/api")
@@ -38,6 +34,8 @@ public class AppApiController {
     private IAgreementService contentService;
     @Autowired
     private IGptService gptService;
+    @Autowired
+    private ICombService combService;
     @Autowired
     private RedisUtils redisUtils;
 
@@ -141,6 +139,21 @@ public class AppApiController {
         query.put("status", StatusEnum.ENABLED.getValue());
         query.put("size", ValidatorUtil.isNotNull(map.get("size")) ? BaseAssert.getParamInt(map, "size") : 3);
         return assistantService.listAssistantByApp(new Query(query));
+    }
+
+    /**
+     * 获取会员套餐信息
+     *
+     * @author: Yang
+     * @date: 2023/1/9
+     * @version: 1.0.0
+     */
+    @GetMapping("/comb/{type}")
+    public ResponseInfo listComb(@PathVariable Integer type) {
+        Query query = new Query();
+        query.put("status", StatusEnum.ENABLED.getValue());
+        query.put("type", type);
+        return combService.listComb(query);
     }
 
     /**

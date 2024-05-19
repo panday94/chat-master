@@ -11,6 +11,14 @@ import com.master.chat.api.xfyun.entity.SparkMessage;
 import com.master.chat.api.xfyun.entity.SparkSyncChatResponse;
 import com.master.chat.api.xfyun.entity.request.SparkRequest;
 import com.master.chat.api.xfyun.entity.response.SparkTextUsage;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.enums.IntegerEnum;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.common.exception.ValidateException;
+import com.master.chat.common.utils.DozerUtil;
+import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.common.validator.base.BaseAssert;
 import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.mapper.AssistantMapper;
 import com.master.chat.gpt.mapper.ModelMapper;
@@ -27,13 +35,6 @@ import com.master.chat.gpt.pojo.vo.ModelVO;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.gpt.service.IChatService;
 import com.master.chat.gpt.service.IGptService;
-import com.master.chat.common.api.Query;
-import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.enums.IntegerEnum;
-import com.master.chat.common.exception.BusinessException;
-import com.master.chat.common.utils.DozerUtil;
-import com.master.chat.common.validator.ValidatorUtil;
-import com.master.chat.common.validator.base.BaseAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,12 +49,11 @@ import java.util.List;
  * @author: Yang
  * @date: 2023/5/5
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @Slf4j
 @Service
 public class GptServiceImpl implements IGptService {
+    private static SparkClient sparkClient;
     @Autowired
     private IChatService chatService;
     @Autowired
@@ -66,8 +66,6 @@ public class GptServiceImpl implements IGptService {
     private AssistantMapper assistantMapper;
     @Autowired
     private OpenkeyMapper openkeyMapper;
-    private static SparkClient sparkClient;
-
 
     @Autowired
     public void setGptClient(SparkClient sparkClient) {
@@ -205,6 +203,10 @@ public class GptServiceImpl implements IGptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void validateUser(Long userId) {
+        User user = userMapper.selectById(userId);
+        if (user.getNum() <= 0) {
+            throw new ValidateException("剩余次数不足，请开通会员");
+        }
     }
 
     @Override

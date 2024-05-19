@@ -5,15 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.master.chat.framework.security.JWTPasswordEncoder;
-import com.master.chat.gpt.constant.BaseConfigConstant;
-import com.master.chat.gpt.enums.UserTypeEnum;
-import com.master.chat.gpt.mapper.UserMapper;
-import com.master.chat.gpt.pojo.command.SysUserPasswordCommand;
-import com.master.chat.gpt.pojo.command.UserCommand;
-import com.master.chat.gpt.pojo.entity.User;
-import com.master.chat.gpt.pojo.vo.UserVO;
-import com.master.chat.gpt.service.IUserService;
 import com.master.chat.common.api.IPageInfo;
 import com.master.chat.common.api.Query;
 import com.master.chat.common.api.ResponseInfo;
@@ -24,6 +15,15 @@ import com.master.chat.common.utils.CommonUtil;
 import com.master.chat.common.utils.DozerUtil;
 import com.master.chat.common.utils.RandomUtil;
 import com.master.chat.common.validator.ValidatorUtil;
+import com.master.chat.framework.security.JWTPasswordEncoder;
+import com.master.chat.gpt.enums.UserTypeEnum;
+import com.master.chat.gpt.mapper.ChatMessageMapper;
+import com.master.chat.gpt.mapper.UserMapper;
+import com.master.chat.gpt.pojo.command.SysUserPasswordCommand;
+import com.master.chat.gpt.pojo.command.UserCommand;
+import com.master.chat.gpt.pojo.entity.User;
+import com.master.chat.gpt.pojo.vo.UserVO;
+import com.master.chat.gpt.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,13 +37,13 @@ import java.util.List;
  * @author: Yang
  * @date: 2023-04-28
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ChatMessageMapper chatMessageMapper;
 
     /**
      * 根据id获取会员用户信息
@@ -62,7 +62,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public ResponseInfo<IPageInfo<UserVO>> pageUser(Query query) {
         IPage<UserVO> iPage = userMapper.pageUser(new Page<>(query.getCurrent(), query.getSize()), query);
-        iPage.getRecords().stream().forEach(v -> v.setTel(CommonUtil.mobileEncrypt(v.getTel())));
+        iPage.getRecords().stream().forEach(v -> {
+            v.setTel(CommonUtil.mobileEncrypt(v.getTel()));
+            v.setUseNum(chatMessageMapper.getChatNumByUser(v.getId()));
+        });
         return ResponseInfo.success(new IPageInfo(iPage.getCurrent(), iPage.getSize(), iPage.getTotal(), iPage.getRecords()));
     }
 

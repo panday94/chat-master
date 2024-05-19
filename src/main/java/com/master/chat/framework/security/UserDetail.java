@@ -2,13 +2,17 @@ package com.master.chat.framework.security;
 
 import cn.hutool.core.lang.UUID;
 import com.master.chat.gpt.pojo.vo.UserVO;
+import com.master.chat.sys.pojo.vo.SysUserVO;
+import com.master.chat.common.enums.IntegerEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -17,8 +21,7 @@ import java.util.Set;
  * @author: Yang
  * @date: 2023/01/31
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 @Data
 @NoArgsConstructor
@@ -73,6 +76,28 @@ public class UserDetail implements UserDetails {
      * 权限列表
      */
     private Set<String> permissions;
+
+    /**
+     * 封装用户信息
+     *
+     * @param user   管理用户
+     * @param encode 是否加密
+     */
+    public UserDetail(SysUserVO sysUser, Set<String> permissions) {
+        this.setId(sysUser.getId());
+        this.setUid(sysUser.getUid());
+        this.setSessionId(UUID.randomUUID().toString());
+        this.setUsername(sysUser.getUsername());
+        this.setPassword(sysUser.getPassword());
+        this.setRole(1);
+        this.setAdmind(sysUser.getAdmind());
+        this.setEnabled(IntegerEnum.ONE.getValue().equals(sysUser.getStatus()));
+        this.permissions = permissions;
+        // 角色集合
+        this.authorities = new ArrayList<>();
+        // 角色必须以`ROLE_`开头，数据库中没有，则在这里加
+        Optional.ofNullable(permissions).ifPresent(v -> v.stream().forEach(d -> this.authorities.add(new SimpleGrantedAuthority(d))));
+    }
 
     /**
      * 封装用户信息

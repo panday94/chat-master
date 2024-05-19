@@ -11,12 +11,14 @@ import com.master.chat.gpt.enums.ChatStatusEnum;
 import com.master.chat.gpt.mapper.AssistantMapper;
 import com.master.chat.gpt.mapper.ChatMapper;
 import com.master.chat.gpt.mapper.ChatMessageMapper;
+import com.master.chat.gpt.mapper.UserMapper;
 import com.master.chat.gpt.pojo.command.ChatMessageCommand;
 import com.master.chat.gpt.pojo.command.GptCommand;
 import com.master.chat.gpt.pojo.dto.ChatMessageDTO;
 import com.master.chat.gpt.pojo.entity.Assistant;
 import com.master.chat.gpt.pojo.entity.Chat;
 import com.master.chat.gpt.pojo.entity.ChatMessage;
+import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.ChatMessageVO;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.common.api.IPageInfo;
@@ -40,8 +42,7 @@ import java.util.stream.Collectors;
  * @author: Yang
  * @date: 2023-04-28
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 @Service
 public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessage> implements IChatMessageService {
@@ -51,6 +52,8 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
     private ChatMapper chatMapper;
     @Autowired
     private AssistantMapper assistantMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 根据id获取对话消息信息
@@ -138,6 +141,9 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
     public ResponseInfo<String> saveChatMessage(ChatMessageCommand command) {
         ChatMessage chatMessage = DozerUtil.convertor(command, ChatMessage.class);
         chatMessageMapper.insert(chatMessage);
+        User user = userMapper.getUserByChatId(command.getChatId());
+        user.setNum(user.getNum() -1 );
+        userMapper.updateById(user);
         return ResponseInfo.success();
     }
 

@@ -8,8 +8,7 @@ import lombok.Getter;
  * @author: Yang
  * @date: 2020/10/21
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 @Getter
 public enum IntegerEnum {

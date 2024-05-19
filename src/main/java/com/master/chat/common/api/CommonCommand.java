@@ -9,8 +9,7 @@ import java.util.List;
  * @author: Yang
  * @date: 2020/12/8
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 public class CommonCommand implements Serializable {
 

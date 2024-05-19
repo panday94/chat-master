@@ -64,4 +64,11 @@
         <include refid="BaseSelect"></include>
     </select>
 
+    <select id="getChatNumByUser" resultType="java.lang.Integer">
+        select count(1)
+        from gpt_chat_message t
+        left join gpt_chat t1 on t.chat_id = t1.id
+        where t1.user_id = #{userId} and t.status = 2 and t.role = 'user'
+    </select>
+
 </mapper>

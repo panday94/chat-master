@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.sys.mapper.NoticeReadMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.sys.pojo.entity.NoticeRead" >
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="sys_user_id" property="sysUserId"/>
+        <result column="notice_id" property="noticeId"/>
+        <result column="is_read" property="isRead"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, create_user, create_time, sys_user_id, notice_id, is_read
+    </sql>
+
+    <insert id="allReadNotice">
+        INSERT INTO sys_notice_read (`sys_user_id`,`notice_id`, `is_read`)
+        select #{sysUserId}, t.id, 1
+        from sys_notice t
+        left join sys_notice_read t1 on t.id = t1.notice_id and t1.sys_user_id = #{sysUserId}
+        where t1.id is null
+    </insert>
+
+</mapper>

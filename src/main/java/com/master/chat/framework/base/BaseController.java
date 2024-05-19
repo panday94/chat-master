@@ -1,13 +1,15 @@
 package com.master.chat.framework.base;
 
+import com.master.chat.framework.security.JwtTokenUtils;
+import com.master.chat.framework.security.UserDetail;
+import com.master.chat.sys.pojo.entity.SysUser;
+import com.master.chat.sys.service.ISysUserService;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.constant.AuthConstant;
 import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.exception.ProhibitVisitException;
 import com.master.chat.common.utils.IPUtil;
 import com.master.chat.common.validator.ValidatorUtil;
-import com.master.chat.framework.security.JwtTokenUtils;
-import com.master.chat.framework.security.UserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,12 +20,13 @@ import javax.servlet.http.HttpServletRequest;
  * @author: Yang
  * @date: 2023/01/31
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public abstract class BaseController extends ResponseInfo {
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private ISysUserService sysUserService;
 
     /**
      * 获取请求ip地址
@@ -79,6 +82,15 @@ public abstract class BaseController extends ResponseInfo {
      */
     public String getSysUserName() {
         return getLoginUser().getUsername();
+    }
+
+    /**
+     * 获取登录账号信息
+     *
+     * @return
+     */
+    public SysUser getSysUser() {
+        return sysUserService.getById(getLoginUser().getId());
     }
 
 }

@@ -20,8 +20,7 @@ import java.security.cert.X509Certificate;
  * @author: Yang
  * @date: 2023/10/23
  * @version: 1.2.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+
  */
 @Slf4j
 public class HttpUtil {

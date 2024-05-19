@@ -16,8 +16,6 @@ import java.util.List;
  * @author: Yang
  * @date: 2023-04-28
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
  */
 public interface ChatMessageMapper extends BaseMapper<ChatMessage> {
 
@@ -45,6 +43,14 @@ public interface ChatMessageMapper extends BaseMapper<ChatMessage> {
      * @return
      */
     ChatMessageVO getChatMessage(@Param("q") Query query);
+
+    /**
+     * 根据用户id获取对话次数
+     *
+     * @param userId 用户id
+     * @return
+     */
+    Integer getChatNumByUser(@Param("userId") Long userId);
 
     /**
      * 更新消息状态
