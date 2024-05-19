@@ -1,23 +1,20 @@
 package com.master.chat.controller.app;
 
-import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import com.master.chat.comm.constant.RedisConstants;
 import com.master.chat.comm.constant.SysConfigConstants;
 import com.master.chat.comm.util.RedisUtils;
+import com.master.chat.common.api.ResponseInfo;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.enums.ResponseEnum;
+import com.master.chat.common.validator.ValidatorUtil;
 import com.master.chat.framework.security.JwtTokenUtils;
 import com.master.chat.framework.security.Oauth2Token;
 import com.master.chat.framework.security.UserDetail;
-import com.master.chat.framework.third.WxAppConstant;
 import com.master.chat.framework.third.WxServiceHandler;
 import com.master.chat.gpt.enums.UserTypeEnum;
 import com.master.chat.gpt.pojo.command.LoginCommand;
 import com.master.chat.gpt.pojo.vo.UserVO;
 import com.master.chat.gpt.service.IUserService;
-import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.constant.StringPoolConstant;
-import com.master.chat.common.enums.ResponseEnum;
-import com.master.chat.common.validator.ValidatorUtil;
-import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -61,26 +58,14 @@ public class LoginController {
      * @version: 1.0.0
      */
     @GetMapping("/api/oauth/token")
-    public ResponseInfo<Oauth2Token> login(LoginCommand command) {
+    public ResponseInfo login(LoginCommand command) {
         UsernamePasswordAuthenticationToken authenticationToken;
-        if (UserTypeEnum.WXAPP.getValue().equals(command.getLoginType())) {
-            WxMaPhoneNumberInfo wxInfo;
-            try {
-                wxInfo = wxServiceHandler.getMaService(WxAppConstant.APP_ID).getUserService().getNewPhoneNoInfo(command.getCode());
-            } catch (WxErrorException e) {
-                return ResponseInfo.error("获取小程序用户信息失败");
+        if (UserTypeEnum.TEL.getValue().equals(command.getLoginType())) {
+            ResponseInfo<UserVO> response = userService.loginByTel(command.getTel(), command.getPassword(), command.getCode());
+            if (!response.isSuccess()) {
+                return response;
             }
-            authenticationToken = new UsernamePasswordAuthenticationToken(wxInfo.getPurePhoneNumber(), StringPoolConstant.EMPTY);
-        } else if (UserTypeEnum.WXMP.getValue().equals(command.getLoginType())) {
-            WxMaPhoneNumberInfo wxInfo;
-            try {
-                wxInfo = wxServiceHandler.getMaService(WxAppConstant.APP_ID).getUserService().getNewPhoneNoInfo(command.getCode());
-            } catch (WxErrorException e) {
-                return ResponseInfo.error("获取小程序用户信息失败");
-            }
-            authenticationToken = new UsernamePasswordAuthenticationToken(wxInfo.getPurePhoneNumber(), StringPoolConstant.EMPTY);
-        } else if (UserTypeEnum.TEL.getValue().equals(command.getLoginType())) {
-            UserVO user = userService.loginByTel(command.getTel(), command.getPassword(), command.getCode()).getData();
+            UserVO user = response.getData();
             authenticationToken = new UsernamePasswordAuthenticationToken(user.getTel(), command.getPassword());
         } else if (UserTypeEnum.USERNAME.getValue().equals(command.getLoginType())) {
             authenticationToken = new UsernamePasswordAuthenticationToken(command.getUsername(), command.getPassword());
@@ -133,6 +118,18 @@ public class LoginController {
             redisUtils.del(keys);
         }
         redisUtils.set(key + userDetail.getSessionId(), token, JwtTokenUtils.EXPIRE_TIME / 1000L);
+    }
+
+    /**
+     * 注册
+     *
+     * @author: Yang
+     * @date: 2023/1/9
+     * @version: 1.0.0
+     */
+    @GetMapping("/api/register")
+    public ResponseInfo register(LoginCommand command) {
+        return userService.register(command.getUsername(), command.getTel(), command.getPassword());
     }
 
 }

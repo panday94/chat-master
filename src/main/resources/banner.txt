@@ -7,5 +7,5 @@ Spring Boot Version: ${spring-boot.version}
 | |  | |/ ____ \ ____) |  | |  | |____| | \ \
 |_|  |_/_/    \_\_____/   |_|  |______|_|  \_\
 
-         Chat MASTER 服务端项目正在启动···
+         言启未来 服务端项目正在启动···
 ${AnsiColor.BRIGHT_YELLOW}

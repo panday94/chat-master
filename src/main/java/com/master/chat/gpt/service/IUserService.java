@@ -1,13 +1,13 @@
 package com.master.chat.gpt.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.master.chat.common.api.IPageInfo;
+import com.master.chat.common.api.Query;
+import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.gpt.pojo.command.SysUserPasswordCommand;
 import com.master.chat.gpt.pojo.command.UserCommand;
 import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.UserVO;
-import com.master.chat.common.api.IPageInfo;
-import com.master.chat.common.api.Query;
-import com.master.chat.common.api.ResponseInfo;
 
 import java.util.List;
 
@@ -69,6 +69,15 @@ public interface IUserService extends IService<User> {
      * @return
      */
     ResponseInfo<UserVO> loginByTel(String tel, String password, String shareCode);
+
+    /**
+     * 注册
+     *
+     * @param tel       手机号
+     * @param shareCode 邀请码
+     * @return
+     */
+    ResponseInfo register(String name, String tel, String password);
 
     /**
      * 新增会员用户
