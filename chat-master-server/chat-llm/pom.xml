@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.master.chat</groupId>
+        <artifactId>chat-master</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>chat-llm</artifactId>
+    <description>ChatMASTER-大模型模块</description>
+
+    <properties>
+        <okhttp3.version>4.9.3</okhttp3.version>
+        <retrofit2.version>2.9.0</retrofit2.version>
+        <knuddels.version>0.5.0</knuddels.version>
+        <alibaba.dashscope.version>2.11.0</alibaba.dashscope.version>
+    </properties>
+
+    <dependencies>
+        <!-- 客户端模块  -->
+        <dependency>
+            <groupId>com.master.chat</groupId>
+            <artifactId>chat-client</artifactId>
+        </dependency>
+        <!-- openai token计算 -->
+        <dependency>
+            <groupId>com.knuddels</groupId>
+            <artifactId>jtokkit</artifactId>
+            <version>${knuddels.version}</version>
+        </dependency>
+        <!-- 通义千问模型sdk -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>${alibaba.dashscope.version}</version>
+        </dependency>
+        <!-- 智谱清言sdk -->
+        <dependency>
+            <groupId>cn.bigmodel.openapi</groupId>
+            <artifactId>oapi-java-sdk</artifactId>
+            <version>release-V4-2.0.2</version>
+        </dependency>
+    </dependencies>
+
+</project>

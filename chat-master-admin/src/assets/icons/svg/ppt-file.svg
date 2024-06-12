@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>PPT</title>
+    <g id="法律咨询" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="法律咨询-指定律师-聊天结束" transform="translate(-1431.000000, -765.000000)">
+            <g id="PPT" transform="translate(1431.000000, 765.000000)">
+                <rect id="矩形" fill="#000000" fill-rule="nonzero" opacity="0" x="0" y="0" width="48" height="48"></rect>
+                <path d="M7.5,0 L31.5,0 L43.5,12 L43.5,45 C43.5,46.6569 42.1569,48 40.5,48 L7.5,48 C5.8431,48 4.5,46.6569 4.5,45 L4.5,3 C4.5,1.3431 5.8431,0 7.5,0 Z" id="路径" fill="#E26B4B" fill-rule="nonzero"></path>
+                <text id="P" font-family="PingFangSC-Semibold, PingFang SC" font-size="21" font-weight="500" fill="#FFFFFF">
+                    <tspan x="17.4975" y="37">P</tspan>
+                </text>
+                <path d="M31.5,0 L43.5,12 L34.5,12 C32.8431,12 31.5,10.6569 31.5,9 L31.5,0 Z" id="路径" fill="#FFFFFF" fill-rule="nonzero" opacity="0.400000006"></path>
+            </g>
+        </g>
+    </g>
+</svg>

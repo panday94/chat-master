@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.master.chat.sys.mapper.StatisticsMapper">
+
+    <select id="getTotalData" resultType="java.util.Map">
+        SELECT
+                (SELECT count(1) FROM gpt_user t where t.deleted = 0) AS allUserCount,
+                (SELECT count(1) FROM gpt_model t where t.deleted = 0) AS allModelCount,
+                (SELECT count(1) FROM gpt_order t WHERE t.status = 2 and t.deleted = 0) AS allOrderCount,
+                (SELECT ifnull(sum(t.price),0) FROM gpt_order t WHERE t.status > 1 and t.deleted = 0) AS allOrderAmount,
+                (SELECT count(1) FROM gpt_chat t WHERE t.deleted = 0) AS allChatCount
+    </select>
+
+    <select id="getLineData" resultType="java.util.Map">
+        SELECT t.date_string as dateString, IFNULL(t1.count,0) as `userData`, IFNULL(t2.count,0) as `taskData`, IFNULL(t3.count,0) as `orderCountData`,
+               IFNULL(t4.amount,0) as `orderAmountData`
+        FROM sys_date t
+                 LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date, count(1) as `count`
+                            FROM gpt_user t WHERE t.deleted = 0 and t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t1
+                           ON t.date_string = t1.date
+                 LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date, count(1) as `count`
+                            FROM gpt_chat t WHERE t.deleted = 0 and t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t2
+                           ON t.date_string = t2.date
+                 LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date, count(1) as `count`
+                            FROM gpt_order t WHERE t.deleted = 0 and t.status = 2 and t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t3
+                           ON t.date_string = t3.date
+                 LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date, sum(t.price) as amount
+                            FROM gpt_order t WHERE t.deleted = 0 and t.status > 1 and t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t4
+                           ON t.date_string = t4.date
+        WHERE t.date_time >= #{q.startDate} AND t.date_time &lt;= #{q.endDate} ORDER BY t.date_time
+    </select>
+
+    <select id="getRaddarData" resultType="java.util.Map">
+        SELECT t.date_string as `date`, IFNULL(t1.chatCount,0) as chatCount, IFNULL(t1.drawCount,0) AS drawCount
+        FROM sys_date t
+                 LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date,SUM(if(t.model != 'Midjourny',1,0)) AS chatCount,
+                                   SUM(if(t.model = 'Midjourny',1,0)) AS drawCount
+                            FROM gpt_chat_message t WHERE t.role = 'user' and t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t1
+                           ON t.date_string = t1.date
+        WHERE t.date_time >= #{q.startDate} AND t.date_time &lt;= #{q.endDate} ORDER BY t.date_time
+    </select>
+
+    <select id="getPieData" resultType="java.util.Map">
+        SELECT ifnull(SUM(q.a),0) as a, ifnull(SUM(q.b),0) as b, ifnull(SUM(q.c),0) as c, ifnull(SUM(q.d),0) as d, ifnull(SUM(q.e),0) as e
+        FROM (SELECT
+                  (CASE WHEN t.model = 'ChatGPT' THEN 1 ELSE 0 END) as a,
+                  (CASE WHEN t.model = 'WENXIN' THEN 1 ELSE 0 END) as b,
+                  (CASE WHEN t.model = 'QIANWEN' THEN 1 ELSE 0 END) as c,
+                  (CASE WHEN t.model = 'SPARK' THEN 1 ELSE 0 END) as d,
+                  (CASE WHEN t.model = 'ChatGLM' THEN 1 ELSE 0 END) as e
+              FROM gpt_chat_message t where t.role = 'user') as q
+    </select>
+
+    <select id="getBarData" resultType="java.util.Map">
+        SELECT t.date_string as `date`, IFNULL(t1.count,0) AS 'value'
+        FROM sys_date t
+                 LEFT JOIN (SELECT DATE_FORMAT(t.create_time,'%Y-%m-%d') AS date,count(1) as `count`
+                            FROM gpt_order t WHERE t.deleted = 0 and t.status = 2 and t.create_time >= #{q.startDate} AND t.create_time &lt;= #{q.endDate} GROUP BY DATE_FORMAT(t.create_time,'%Y-%m-%d')) t1
+                           ON t.date_string = t1.date
+        WHERE t.date_time >= #{q.startDate} AND t.date_time &lt;= #{q.endDate} ORDER BY t.date_time
+    </select>
+
+</mapper>
