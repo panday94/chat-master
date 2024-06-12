@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.master.chat.gpt.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.master.chat.gpt.pojo.entity.User" >
+        <result column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="login_time" property="loginTime"/>
+        <result column="uid" property="uid"/>
+        <result column="name" property="name"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="tel" property="tel"/>
+        <result column="password" property="password"/>
+        <result column="avatar" property="avatar"/>
+        <result column="openid" property="openid"/>
+        <result column="unionid" property="unionid"/>
+        <result column="ip" property="ip"/>
+        <result column="context" property="context"/>
+        <result column="num" property="num"/>
+        <result column="share_id" property="shareId"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.login_time, t.uid, t.name, t.nick_name, t.tel, t.password,
+            t.avatar, t.openid, t.unionid, t.ip, t.context, t.num, t.share_id, t.type, t.status, t.deleted
+    </sql>
+
+    <!-- 通用查询条件 -->
+    <sql id="BaseSelect">
+        select <include refid="Base_Column_List"></include>, t1.nick_name as shareName
+        from gpt_user t
+        left join gpt_user t1 on t.share_id = t1.id
+        <where>
+            t.deleted = 0
+            <if test="q.id != null and q.id != ''"> and t.id = #{q.id} </if>
+            <if test="q.name != null and q.name != ''"> and t.name like concat('%', #{q.name}, '%')</if>
+            <if test="q.nickName != null and q.nickName != ''"> and t.nick_name like concat('%', #{q.nickName}, '%')</if>
+            <if test="q.tel != null and q.tel != ''"> and t.tel = #{q.tel}</if>
+            <if test="q.password != null and q.password != ''"> and t.password = #{q.password}</if>
+            <if test="q.avatar != null and q.avatar != ''"> and t.avatar = #{q.avatar}</if>
+            <if test="q.openid != null and q.openid != ''"> and t.openid = #{q.openid}</if>
+            <if test="q.unionid != null and q.unionid != ''"> and t.unionid = #{q.unionid}</if>
+            <if test="q.ip != null and q.ip != ''"> and t.ip = #{q.ip}</if>
+            <if test="q.num != null"> and t.num = #{q.num}</if>
+            <if test="q.shareId != null"> and t.share_id = #{q.shareId}</if>
+            <if test="q.type != null"> and t.type = #{q.type}</if>
+            <if test="q.status != null"> and t.status = #{q.status}</if>
+            <if test="q.startDate != null and q.startDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &gt;= #{q.startDate} </if>
+            <if test="q.endDate != null and q.endDate != ''"> and date_format(t.create_time,'%Y-%m-%d') &lt;= #{q.endDate} </if>
+            <if test="q.dataScope != null and q.dataScope != ''"> ${q.dataScope} </if>
+        </where>
+        order by t.id desc
+    </sql>
+
+    <select id="pageUser" resultType="com.master.chat.gpt.pojo.vo.UserVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="listUser" resultType="com.master.chat.gpt.pojo.vo.UserVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="getUser" resultType="com.master.chat.gpt.pojo.vo.UserVO">
+        <include refid="BaseSelect"></include>
+    </select>
+
+    <select id="getUserByChatId" resultType="com.master.chat.gpt.pojo.entity.User">
+        select <include refid="Base_Column_List"></include>
+        from gpt_user t
+        left join gpt_chat t1 on t.id = t1.user_id
+        where t1.id = #{chatId};
+    </select>
+
+</mapper>

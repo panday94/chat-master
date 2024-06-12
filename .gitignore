@@ -16,7 +16,7 @@ target/
 *.iws
 *.iml
 *.ipr
-application-prod.yml
+
 
 ### NetBeans ###
 /nbproject/private/
@@ -28,6 +28,47 @@ build/
 
 ### VS Code ###
 .vscode/
+.vscode
+!.vscode/settings.json
+!.vscode/extensions.json
 *.orig
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.local
+*.sw?
 
+# Environment variables files
 application-test.yml
+application-prod.yml
+
+# web
+.DS_Store
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/*.log
+logs
+*.log
+pnpm-debug.log*
+lerna-debug.log*
+
+tests/**/coverage/
+tests/e2e/reports
+selenium-debug.log
+
+package-lock.json
+yarn.lock
+
+dist-ssr
+coverage
+/cypress/videos/
+/cypress/screenshots/
+
+# Environment variables files
+.env.production
+.env.staging
+*.local
