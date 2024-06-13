@@ -68,9 +68,6 @@ public class SSEListener {
             log.error("客户端非sse推送");
             return;
         }
-        if (!isWs) {
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
         log.info("书生浦语建立sse连接...");
