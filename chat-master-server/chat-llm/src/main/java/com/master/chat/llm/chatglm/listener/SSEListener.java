@@ -80,9 +80,6 @@ public class SSEListener {
             log.error("客户端非sse推送");
             return;
         }
-        if (!isWs) {
-            response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
-        }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
         log.info("智谱清言建立sse连接...");

@@ -50,9 +50,6 @@ public class SSEListener extends ResultCallback<GenerationResult> {
         this.semaphore = semaphore;
         this.chatId = chatId;
         this.parentMessageId = parentMessageId;
-        if (!isWs) {
-            this.response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
-        }
         this.response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         this.response.setStatus(HttpStatus.OK.value());
         this.uid = uid;

@@ -87,9 +87,6 @@ public class SSEListener extends WebSocketListener {
             throw new LLMException("请求数据 SparkRequest 序列化失败");
         }
         webSocket.send(requestJson);
-        if (!isWs) {
-            response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
-        }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
     }

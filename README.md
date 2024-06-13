@@ -106,7 +106,8 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 9. 系统管理：对系统中基础业务进行管理维护。
 
 ## 环境搭建/运行&提示
-> 初始化sql已去除sys.date默认数据，如需统计功能可执行doc/sql/sys_date.sql。ChatGPT需要在后台配置管理中进行站点配置或加入微信群咨询。
+### chat-master-server
+> ChatGPT需要在后台配置管理中进行站点配置或加入微信群咨询。
 
 ``` 
 1、idea导入chat-master项目，请更换spring.profiles.active为dev
@@ -117,6 +118,26 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 ```
 - com.master.chat.api.config.InitBean 初始化模型
 - com.master.chat.llm.base.service.LLMService 模型接口实现
+
+### chat-master-web
+> node 要求建议14.20或14.21，打包时候需要安装node 16 +，建议使用nvm 安装node版本，可进行切换多版本控制，[nvm](https://github.com/nvm-sh/nvm) 
+
+```
+# 前提已安装好node
+1、cd chat-master-web
+2、npm i 
+3、npm run dev
+```
+
+### chat-master-admin
+> node 要求建议14.20或14.21，建议使用nvm 安装node版本，可进行切换多版本控制，[nvm](https://github.com/nvm-sh/nvm) 
+
+```
+# 前提已安装好node
+1、cd chat-master-admin
+2、npm i 
+3、npm run dev
+```
 
 ## 参与贡献
 
