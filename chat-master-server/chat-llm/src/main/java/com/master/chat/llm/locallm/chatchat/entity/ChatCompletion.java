@@ -1,0 +1,50 @@
+package com.master.chat.llm.locallm.chatchat.entity;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Data
+@Builder
+@Slf4j
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
+public class ChatCompletion implements Serializable {
+
+    private String query;
+
+    @JsonProperty("conversation_id")
+    private String conversationId;
+
+    @JsonProperty("history_len")
+    private Integer historyLen = -1;
+
+    @JsonProperty("knowledge_base_name")
+    private String knowledgeBaseName;
+
+    @JsonProperty("top_k")
+    private Integer topK = 3;
+
+    @JsonProperty("score_threshold")
+    private Integer scoreThreshold = 1;
+
+    private List<ChatCompletionMessage> history;
+
+    private Boolean stream = false;
+
+    private String modelName;
+
+    private Double temperature = 0.7;
+
+    @JsonProperty("max_tokens")
+    private Integer maxTokens = 0;
+
+    @JsonProperty("prompt_name")
+    private String promptName = "default";
+
+}
+
+

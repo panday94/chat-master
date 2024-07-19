@@ -47,6 +47,16 @@ public class ModelCommand extends CommonCommand implements Serializable {
     private String version;
 
     /**
+     * 模型接口地址
+     */
+    private String modelUrl;
+
+    /**
+     * 知识库名称
+     */
+    private String knowledge;
+
+    /**
      * 状态 0 禁用 1 启用
      */
     private Integer status;

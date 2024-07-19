@@ -6,23 +6,24 @@ import com.master.chat.client.model.command.ChatCommand;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.dto.ChatMessageDTO;
 import com.master.chat.client.service.GptService;
-import com.master.chat.llm.base.entity.ChatData;
-import com.master.chat.llm.base.exception.LLMException;
-import com.master.chat.llm.base.service.impl.*;
-import com.master.chat.llm.chatglm.ChatGLMClient;
-import com.master.chat.llm.internlm.InternlmClient;
-import com.master.chat.llm.moonshot.MoonshotClient;
-import com.master.chat.llm.openai.OpenAiClient;
-import com.master.chat.llm.openai.OpenAiStreamClient;
-import com.master.chat.llm.spark.SparkClient;
-import com.master.chat.llm.tongyi.TongYiClient;
-import com.master.chat.llm.wenxin.WenXinClient;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.enums.IntegerEnum;
 import com.master.chat.common.exception.BusinessException;
 import com.master.chat.common.exception.ErrorException;
 import com.master.chat.common.utils.DozerUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
+import com.master.chat.llm.base.entity.ChatData;
+import com.master.chat.llm.base.exception.LLMException;
+import com.master.chat.llm.base.service.impl.*;
+import com.master.chat.llm.chatglm.ChatGLMClient;
+import com.master.chat.llm.internlm.InternlmClient;
+import com.master.chat.llm.locallm.LocalLMClient;
+import com.master.chat.llm.moonshot.MoonshotClient;
+import com.master.chat.llm.openai.OpenAiClient;
+import com.master.chat.llm.openai.OpenAiStreamClient;
+import com.master.chat.llm.spark.SparkClient;
+import com.master.chat.llm.tongyi.TongYiClient;
+import com.master.chat.llm.wenxin.WenXinClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,12 +56,13 @@ public class LLMService {
     private static SparkClient sparkClient;
     private static MoonshotClient moonshotClient;
     private static InternlmClient internlmClient;
+    private static LocalLMClient localLMClient;
     private final GptService gptService;
 
     @Autowired
     public LLMService(GptService gptService, OpenAiClient openAiClient, OpenAiStreamClient openAiStreamClient, WenXinClient wenXinClient,
                       ChatGLMClient chatGLMClient, TongYiClient tongYiClient, SparkClient sparkClient, MoonshotClient moonshotClient,
-                      InternlmClient internlmClient) {
+                      InternlmClient internlmClient, LocalLMClient localLMClient) {
         this.gptService = gptService;
         LLMService.openAiClient = openAiClient;
         LLMService.openAiStreamClient = openAiStreamClient;
@@ -70,6 +72,7 @@ public class LLMService {
         LLMService.sparkClient = sparkClient;
         LLMService.moonshotClient = moonshotClient;
         LLMService.internlmClient = internlmClient;
+        LLMService.localLMClient = localLMClient;
     }
 
     public SseEmitter createSse(String uid) {
@@ -141,6 +144,8 @@ public class LLMService {
                 return new InternLMServiceImpl(internlmClient);
             case MOONSHOT:
                 return new MoonshotServiceImpl(moonshotClient);
+            case LOCALLM:
+                return new LocalLMServiceImpl(localLMClient);
             default:
                 return null;
         }

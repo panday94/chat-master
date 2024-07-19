@@ -5,14 +5,22 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
-import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.command.ChatCommand;
+import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.dto.ChatMessageDTO;
-import com.master.chat.gpt.pojo.dto.ModelDTO;
+import com.master.chat.client.model.dto.ModelDTO;
+import com.master.chat.client.model.dto.Query;
 import com.master.chat.client.service.BaseConfigService;
 import com.master.chat.client.service.GptService;
+import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.config.dto.AppInfoDTO;
+import com.master.chat.common.enums.StatusEnum;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.common.exception.ProhibitVisitException;
+import com.master.chat.common.utils.DozerUtil;
 import com.master.chat.framework.base.BaseEntity;
+import com.master.chat.framework.validator.ValidatorUtil;
+import com.master.chat.framework.validator.base.BaseAssert;
 import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.mapper.AssistantMapper;
 import com.master.chat.gpt.mapper.ModelMapper;
@@ -22,14 +30,6 @@ import com.master.chat.gpt.pojo.entity.User;
 import com.master.chat.gpt.pojo.vo.ChatVO;
 import com.master.chat.gpt.service.IChatMessageService;
 import com.master.chat.gpt.service.IChatService;
-import com.master.chat.client.model.dto.Query;
-import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.enums.StatusEnum;
-import com.master.chat.common.exception.BusinessException;
-import com.master.chat.common.exception.ProhibitVisitException;
-import com.master.chat.common.utils.DozerUtil;
-import com.master.chat.framework.validator.ValidatorUtil;
-import com.master.chat.framework.validator.base.BaseAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,7 +63,8 @@ public class GptServiceImpl implements GptService {
     @Autowired
     private BaseConfigService baseConfigService;
 
-    private ModelDTO getModel(String model) {
+    @Override
+    public ModelDTO getModel(String model) {
         Query query = new Query();
         query.put("model", model);
         return DozerUtil.convertor(modelMapper.getModel(query), ModelDTO.class);
@@ -192,5 +193,6 @@ public class GptServiceImpl implements GptService {
     public void updateMessageUsedTokens(String messageId, Long usedTokens) {
         chatMessageService.updateMessageUsedTokens(messageId, usedTokens);
     }
+
 
 }
