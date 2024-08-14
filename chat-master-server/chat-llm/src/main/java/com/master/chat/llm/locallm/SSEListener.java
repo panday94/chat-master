@@ -2,6 +2,7 @@ package com.master.chat.llm.locallm;
 
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.master.chat.client.enums.ChatContentEnum;
 import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
@@ -13,6 +14,7 @@ import com.master.chat.framework.util.ApplicationContextUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.entity.ChatData;
 import com.master.chat.llm.locallm.chatchat.entity.ChatResponse;
+import com.master.chat.llm.locallm.chatchat.entity.Glm4Response;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,7 @@ import java.util.concurrent.CountDownLatch;
 @NoArgsConstructor(force = true)
 public class SSEListener extends EventSourceListener {
     private static final String FINISH = "[finish]";
+    private static final String STOP = "stop";
     private long tokens;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
     private HttpServletResponse response;
@@ -85,6 +88,48 @@ public class SSEListener extends EventSourceListener {
     /**
      * {@inheritDoc}
      */
+//    @SneakyThrows
+//    @Override
+//    public void onEvent(EventSource eventSource, String id, String type, String data) {
+//        log.info("SSE返回，模型：{}，ID：{}，TYPE：{}，数据：{}", model, id, type, data);
+//        ChatData chatData;
+//        String text;
+//        try {
+//            switch (model) {
+//                case "langchain":
+//                    text = handleLangchain(type, data);
+//                    break;
+//                case "langchain-know":
+//                    text = handleLangchainKnowledge(type, data);
+//                    break;
+//                default:
+//                    throw new BusinessException("未知的模型类型，功能未接入");
+//            }
+//            if (FINISH.equals(text)) {
+//                log.info("{}返回数据结束了", model);
+//                sseEmitter.complete();
+//                ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
+//                        .model(model).modelVersion(version)
+//                        .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
+//                        .status(ChatStatusEnum.SUCCESS.getValue()).usedTokens(tokens)
+//                        .build();
+//                ApplicationContextUtil.getBean(GptService.class).saveChatMessage(chatMessage);
+//                return;
+//            }
+//            chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
+//                    .parentMessageId(parentMessageId)
+//                    .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
+//            response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
+//            response.getWriter().flush();
+//        } catch (Exception e) {
+//            log.error("消息错误", e);
+//            eventSource.cancel();
+//            countDownLatch.countDown();
+//            throw new ErrorException();
+//        }
+//    }
+
+
     @SneakyThrows
     @Override
     public void onEvent(EventSource eventSource, String id, String type, String data) {
@@ -94,7 +139,7 @@ public class SSEListener extends EventSourceListener {
         try {
             switch (model) {
                 case "langchain":
-                    text = handleLangchain(type, data);
+                    text = handleLangchain1(type, data);
                     break;
                 case "langchain-know":
                     text = handleLangchainKnowledge(type, data);
@@ -102,7 +147,7 @@ public class SSEListener extends EventSourceListener {
                 default:
                     throw new BusinessException("未知的模型类型，功能未接入");
             }
-            if (FINISH.equals(text)) {
+            if (STOP.equals(text)) {
                 log.info("{}返回数据结束了", model);
                 sseEmitter.complete();
                 ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
@@ -125,7 +170,31 @@ public class SSEListener extends EventSourceListener {
             throw new ErrorException();
         }
     }
+    /**
+     * 处理Langchain流式返回
+     *
+     * @return
+     */
+    private String handleLangchain1(String type, String data) {
+        Glm4Response chatResponse = JSON.parseObject(data, Glm4Response.class);
+        List<JSONObject> choices = chatResponse.getChoices();
+        String finish_reason= "";
+        finish_reason = choices.get(0).getString("finish_reason");
 
+        if (finish_reason != null && finish_reason.equals("stop")) {
+            return "stop";
+        }else{
+            JSONObject delta = choices.get(0).getJSONObject("delta");
+
+            String role = delta.getString("role");
+            if (role.equals("assistant")) {
+                String content = delta.getString("content");
+                output.append(content).toString();
+            }
+            return output.toString();
+        }
+
+    }
 
     /**
      * 处理Langchain流式返回

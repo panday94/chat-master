@@ -3,7 +3,7 @@ spring:
   redis:
     open: true  # 是否开启redis缓存  true开启   false关闭
     database: 0
-    host: 127.0.0.1
+    host: 192.168.20.174
     port: 6379
     password:  # 密码（默认为空）
     timeout: 6000  # 连接超时时长（毫秒
@@ -24,15 +24,15 @@ spring:
         # 数据库1
         master:
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/chat_gpt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
-          username: root
-          password: 123456
+          url: jdbc:mysql://192.168.20.153:3306/chat_gpt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: zhxg
+          password: Zhxg@2019!
         # 数据库2
         slave_1:
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/chat_gpt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
-          username: root
-          password: 123456
+          url: jdbc:mysql://192.168.20.153:3306/chat_gpt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: zhxg
+          password: Zhxg@2019!
       druid:
         # 初始连接数
         initialSize: 5

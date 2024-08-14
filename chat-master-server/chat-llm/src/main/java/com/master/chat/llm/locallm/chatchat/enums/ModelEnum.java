@@ -16,7 +16,8 @@ public enum ModelEnum {
     /**
      * 对话模型类型
      */
-    LLM("llm模型对话", "/chat/chat"),
+//    LLM("llm模型对话", "/chat/chat"),
+    LLM("llm模型对话", "/v1/chat/completions"),
 
     KNOWLEDGE("知识库对话", "/chat/knowledge_base_chat"),
 

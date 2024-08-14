@@ -18,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,12 +36,15 @@ import java.util.List;
 @Service
 public class LocalLMServiceImpl implements ModelService {
     private static LocalLMClient localLMClient;
-    @Autowired
-    private GptService gptService;
+//    @Autowired
+//    private GptService gptService;
+
+    private static GptService gptService;
 
     @Autowired
-    public LocalLMServiceImpl(LocalLMClient localLMClient) {
+    public LocalLMServiceImpl(GptService gptService,LocalLMClient localLMClient) {
         LocalLMServiceImpl.localLMClient = localLMClient;
+        LocalLMServiceImpl.gptService = gptService;
     }
 
     @Override
@@ -58,17 +63,21 @@ public class LocalLMServiceImpl implements ModelService {
             history.add(message);
         });
         String modelVaersion = ValidatorUtil.isNotNull(version) ? version : ApiConstant.DEFAULT_MODEL;
-        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, "", version, prompt);
+        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, "langchain", version, prompt);
         ChatCompletion chat = ChatCompletion
                 .builder()
-                .query(prompt)
-                .knowledgeBaseName(ApiConstant.DEFAULT_KNOWLEDGE)
+                .messages(chatMessages)
+//                .knowledgeBaseName(ApiConstant.DEFAULT_KNOWLEDGE)
                 .history(history)
-                .modelName(modelVaersion)
+                .model(modelVaersion)
+                .presencePenalty(1.2)
+                .temperature(0.3)
+                .topP(0.7)
+                .maxTokens(8196)
                 .build();
         ModelDTO model = gptService.getModel(ChatModelEnum.LOCALLM.getValue());
         String domain = ValidatorUtil.isNotNull(model.getModelUrl()) ? model.getModelUrl() : ApiConstant.BASE_DOMAIN;
-        localLMClient.streamChat(chat, sseListener, ModelEnum.KNOWLEDGE, domain);
+        localLMClient.streamChat(chat, sseListener, ModelEnum.LLM, domain);
         sseListener.getCountDownLatch().await();
         return sseListener.getError();
     }

@@ -1,6 +1,7 @@
 package com.master.chat.llm.locallm;
 
 import cn.hutool.http.ContentType;
+import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master.chat.llm.base.exception.LLMException;
 import com.master.chat.llm.locallm.chatchat.entity.ChatCompletion;
@@ -87,7 +88,8 @@ public class LocalLMClient {
             EventSource.Factory factory = EventSources.createFactory(this.okHttpClient);
             Request request = new Request.Builder().url(domain + model.getUrl())
                     .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()),
-                            new ObjectMapper().writeValueAsString(chat))).build();
+//                    .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+            new ObjectMapper().writeValueAsString(chat))).build();
             factory.newEventSource(request, eventSourceListener);
         } catch (Exception e) {
             log.error("请求参数解析异常：", e);

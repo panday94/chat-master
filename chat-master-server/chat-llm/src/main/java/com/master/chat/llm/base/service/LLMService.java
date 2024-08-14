@@ -145,7 +145,7 @@ public class LLMService {
             case MOONSHOT:
                 return new MoonshotServiceImpl(moonshotClient);
             case LOCALLM:
-                return new LocalLMServiceImpl(localLMClient);
+                return new LocalLMServiceImpl(gptService,localLMClient);
             default:
                 return null;
         }
