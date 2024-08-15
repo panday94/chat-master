@@ -101,7 +101,7 @@ window.addEventListener("resize", () => {
 });
 
 // 禁止代码调试
-(() => {
+/* (() => {
   function block() {
     if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
       document.body.innerHTML = "检测到非法调试,请关闭后刷新重试!";
@@ -118,6 +118,7 @@ window.addEventListener("resize", () => {
     block();
   } catch (err) { }
 })();
+*/
 
 onMounted(() => {
   if (inputRef.value && !isMobile.value) {
