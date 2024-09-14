@@ -81,7 +81,7 @@ public class SparkServiceImpl implements ModelService {
 
     @Override
     @SneakyThrows
-    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isDraw,
+    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
         if (ValidatorUtil.isNull(sparkClient.appid)) {
             throw new BusinessException("未加载到密钥信息");
@@ -102,8 +102,11 @@ public class SparkServiceImpl implements ModelService {
                 .chatId(chatId.toString())
                 .build();
         chatRequest.getHeader().setAppId(sparkClient.appid);
-        SSEListener sseListener = new SSEListener(chatRequest, response, chatId, conversationId, uid, version);
+        SSEListener sseListener = new SSEListener(chatRequest, response, chatId, conversationId, uid, version, isWs);
         sparkClient.streamChat(chatRequest, sseListener);
+        if (isWs) {
+            return false;
+        }
         sseListener.getCountDownLatch().await();
         return sseListener.getError();
     }

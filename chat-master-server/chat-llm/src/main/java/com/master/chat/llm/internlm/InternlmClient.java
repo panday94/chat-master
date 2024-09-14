@@ -3,6 +3,7 @@ package com.master.chat.llm.internlm;
 import cn.hutool.http.ContentType;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.master.chat.common.constant.AuthConstant;
 import com.master.chat.llm.internlm.constant.ApiConstant;
 import com.master.chat.llm.internlm.entity.ModelsList;
 import com.master.chat.llm.internlm.entity.request.ChatCompletion;
@@ -11,7 +12,6 @@ import com.master.chat.llm.internlm.interceptor.InternlmInterceptor;
 import com.master.chat.llm.internlm.interceptor.InternlmLogger;
 import com.master.chat.llm.internlm.listener.SSEListener;
 import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.constant.AuthConstant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -105,7 +105,7 @@ public class InternlmClient {
      * @param request
      * @param query
      */
-    public Boolean streamChat(HttpServletResponse response, ChatCompletion chat, Long chatId, String parentMessageId, String version, String uid) {
+    public Boolean streamChat(HttpServletResponse response, ChatCompletion chat, Long chatId, String parentMessageId, String version, String uid, Boolean isWs) {
         chat.stream = true;
         try {
             Request request = new Request.Builder().url(ApiConstant.CHAT_COMPLETION_URL)
@@ -117,7 +117,7 @@ public class InternlmClient {
                 log.error("书生浦语流式响应失败: " + callResponse.body().string());
                 return true;
             }
-            SSEListener sseListener = new SSEListener(response, chatId, parentMessageId, version, uid);
+            SSEListener sseListener = new SSEListener(response, chatId, parentMessageId, version, uid, isWs);
             return sseListener.streamChat(callResponse);
         } catch (Exception e) {
             return true;

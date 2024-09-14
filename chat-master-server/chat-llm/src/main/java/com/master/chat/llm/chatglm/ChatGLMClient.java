@@ -86,11 +86,11 @@ public class ChatGLMClient {
      * @param request
      * @param query
      */
-    public Boolean streamChat(HttpServletResponse response, ChatCompletionRequest request, Long chatId, String parentMessageId, String version, String uid) {
+    public Boolean streamChat(HttpServletResponse response, ChatCompletionRequest request, Long chatId, String parentMessageId, String version, String uid, Boolean isWs) {
         request.setStream(Boolean.TRUE);
         request.setRequestId(String.format(requestIdTemplate, System.currentTimeMillis()));
         ModelApiResponse sseModelApiResp = this.clientV4.invokeModelApi(request);
-        SSEListener sseListener = new SSEListener(response, chatId, parentMessageId, version, uid);
+        SSEListener sseListener = new SSEListener(response, chatId, parentMessageId, version, uid, isWs);
         return sseListener.streamChat(sseModelApiResp);
     }
 

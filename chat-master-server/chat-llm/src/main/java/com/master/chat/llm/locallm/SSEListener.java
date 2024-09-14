@@ -12,7 +12,11 @@ import com.master.chat.common.exception.ErrorException;
 import com.master.chat.framework.util.ApplicationContextUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.entity.ChatData;
+import com.master.chat.llm.base.websocket.WebsocketServer;
+import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
+import com.master.chat.llm.base.websocket.entity.WebSocketData;
 import com.master.chat.llm.locallm.chatchat.entity.ChatResponse;
+import com.master.chat.llm.locallm.enums.ModelTypeEnum;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +24,7 @@ import okhttp3.Response;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,20 +55,28 @@ public class SSEListener extends EventSourceListener {
     private String parentMessageId;
     private String conversationId;
     private String finishReason;
-    private String model;
+    private ModelTypeEnum model;
     private String version;
+    private String knowledge;
     private Boolean error;
     private String errTxt;
+    private String uid;
+    private Boolean isWs = false;
     private String prompt;
     private List<String> docs;
 
-    public SSEListener(HttpServletResponse response, SseEmitter sseEmitter, Long chatId, String parentMessageId, String model, String version, String prompt) {
+    public SSEListener(HttpServletResponse response, SseEmitter sseEmitter, Long chatId, String parentMessageId, ModelTypeEnum model, String version, String knowledge, String prompt, String uid, Boolean isWs) {
         this.response = response;
         this.sseEmitter = sseEmitter;
         this.chatId = chatId;
         this.parentMessageId = parentMessageId;
+        if (!isWs) {
+            this.response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
+        }
         this.model = model;
         this.version = version;
+        this.knowledge = knowledge;
+        this.isWs = isWs;
         this.error = false;
         this.prompt = prompt;
     }
@@ -77,6 +90,9 @@ public class SSEListener extends EventSourceListener {
             log.error("客户端非sse推送");
             return;
         }
+        if (!isWs) {
+            response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
+        }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
         log.info("{}建立sse连接...", model);
@@ -88,25 +104,26 @@ public class SSEListener extends EventSourceListener {
     @SneakyThrows
     @Override
     public void onEvent(EventSource eventSource, String id, String type, String data) {
-        log.info("SSE返回，模型：{}，ID：{}，TYPE：{}，数据：{}", model, id, type, data);
+        log.info("SSE返回，模型：{}，ID：{}，TYPE：{}，数据：{}", model.getLabel(), id, type, data);
         ChatData chatData;
-        String text;
+        String text = null;
         try {
             switch (model) {
-                case "langchain":
-                    text = handleLangchain(type, data);
+                case LANGCHAIN:
+                    text = ValidatorUtil.isNull(knowledge) ? handleLangchain(type, data) : handleLangchainKnowledge(type, data);
                     break;
-                case "langchain-know":
-                    text = handleLangchainKnowledge(type, data);
+                case OLLAMA:
+                    break;
+                case GITEE_AI:
                     break;
                 default:
                     throw new BusinessException("未知的模型类型，功能未接入");
             }
-            if (FINISH.equals(text)) {
-                log.info("{}返回数据结束了", model);
+            if (text.equals(FINISH)) {
+                log.info("{}返回数据结束了", model.getLabel());
                 sseEmitter.complete();
                 ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
-                        .model(model).modelVersion(version)
+                        .model(model.getLabel()).modelVersion(version)
                         .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
                         .status(ChatStatusEnum.SUCCESS.getValue()).usedTokens(tokens)
                         .build();
@@ -116,8 +133,13 @@ public class SSEListener extends EventSourceListener {
             chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                     .parentMessageId(parentMessageId)
                     .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
-            response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
-            response.getWriter().flush();
+            if (isWs) {
+                WebSocketData wsData = WebSocketData.builder().functionCode(FunctionCodeConstant.MESSAGE).message(chatData).build();
+                WebsocketServer.sendMessageByUserId(uid, JSON.toJSONString(wsData));
+            } else {
+                response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
+                response.getWriter().flush();
+            }
         } catch (Exception e) {
             log.error("消息错误", e);
             eventSource.cancel();
@@ -161,10 +183,10 @@ public class SSEListener extends EventSourceListener {
 
     @Override
     public void onClosed(EventSource eventSource) {
-        log.info("{}关闭sse连接，流式输出返回值总共{}tokens", model, tokens());
+        log.info("{}关闭sse连接，流式输出返回值总共{}tokens", model.getLabel(), tokens());
         tokens = output.toString().length() + prompt.length();
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
-                .model(model).modelVersion(version)
+                .model(model.getLabel()).modelVersion(version)
                 .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
                 .status(ChatStatusEnum.SUCCESS.getValue()).usedTokens(tokens)
                 .build();

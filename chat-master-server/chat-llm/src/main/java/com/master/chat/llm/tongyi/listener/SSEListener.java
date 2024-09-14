@@ -11,8 +11,11 @@ import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.service.GptService;
 import com.master.chat.framework.util.ApplicationContextUtil;
-import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.entity.ChatData;
+import com.master.chat.llm.base.websocket.WebsocketServer;
+import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
+import com.master.chat.llm.base.websocket.entity.WebSocketData;
+import com.master.chat.framework.validator.ValidatorUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,15 +48,19 @@ public class SSEListener extends ResultCallback<GenerationResult> {
     private Boolean isWs = false;
 
 
-    public SSEListener(HttpServletResponse response, Semaphore semaphore, Long chatId, String parentMessageId, String uid, String version) {
+    public SSEListener(HttpServletResponse response, Semaphore semaphore, Long chatId, String parentMessageId, String uid, String version, Boolean isWs) {
         this.response = response;
         this.semaphore = semaphore;
         this.chatId = chatId;
         this.parentMessageId = parentMessageId;
+        if (!isWs) {
+            this.response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
+        }
         this.response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         this.response.setStatus(HttpStatus.OK.value());
         this.uid = uid;
         this.version = version;
+        this.isWs = isWs;
         this.error = false;
     }
 
@@ -77,8 +84,13 @@ public class SSEListener extends ResultCallback<GenerationResult> {
         ChatData chatData = ChatData.builder().id(result.getRequestId()).conversationId(result.getRequestId())
                 .parentMessageId(parentMessageId)
                 .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
-        response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
-        response.getWriter().flush();
+        if (isWs) {
+            WebSocketData wsData = WebSocketData.builder().functionCode(FunctionCodeConstant.MESSAGE).message(chatData).build();
+            WebsocketServer.sendMessageByUserId(uid, JSON.toJSONString(wsData));
+        } else {
+            response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
+            response.getWriter().flush();
+        }
     }
 
     @Override

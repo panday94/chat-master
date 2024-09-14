@@ -6,11 +6,11 @@ import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.dto.ChatMessageDTO;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.exception.LLMException;
 import com.master.chat.llm.base.service.ModelService;
 import com.master.chat.llm.chatglm.ChatGLMClient;
-import com.master.chat.common.exception.BusinessException;
-import com.master.chat.framework.validator.ValidatorUtil;
 import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.service.v4.model.ChatCompletionRequest;
 import com.zhipu.oapi.service.v4.model.ChatMessage;
@@ -89,7 +89,7 @@ public class ChatGLMServiceImpl implements ModelService {
 
     @Override
     @SneakyThrows
-    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isDraw,
+    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
         if (ValidatorUtil.isNull(chatGLMClient.getAppKey())) {
             throw new BusinessException("未加载到密钥信息");
@@ -104,7 +104,10 @@ public class ChatGLMServiceImpl implements ModelService {
                 .stream(Boolean.TRUE)
                 .messages(messages)
                 .build();
-        Boolean flag = chatGLMClient.streamChat(response, chatCompletionRequest, chatId, conversationId, modelVaersion, uid);
+        Boolean flag = chatGLMClient.streamChat(response, chatCompletionRequest, chatId, conversationId, modelVaersion, uid, isWs);
+        if (isWs) {
+            return false;
+        }
         return flag;
     }
 

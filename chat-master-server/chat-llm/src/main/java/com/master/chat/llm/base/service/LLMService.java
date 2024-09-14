@@ -145,7 +145,7 @@ public class LLMService {
             case MOONSHOT:
                 return new MoonshotServiceImpl(moonshotClient);
             case LOCALLM:
-                return new LocalLMServiceImpl(localLMClient);
+                return new LocalLMServiceImpl(localLMClient, gptService);
             default:
                 return null;
         }
@@ -177,7 +177,7 @@ public class LLMService {
     }
 
 
-    public void sseChat(HttpServletResponse response, String uid, String conversationId) {
+    public void sseChat(HttpServletResponse response, Boolean isWs, String uid, String conversationId) {
         ChatMessageDTO chatMessage = gptService.getMessageByConverstationId(conversationId);
         String prompt = chatMessage.getContent();
         String version = chatMessage.getModelVersion();
@@ -195,7 +195,7 @@ public class LLMService {
         Integer status = ChatStatusEnum.SUCCESS.getValue();
         try {
             // ChatGPT、文心一言统一在SSEListener中处理流式返回，通义千问与讯飞星火\智谱清言单独处理
-            error = getLLM(modelEnum).streamChat(response, sseEmitter, chatMessages, isDraw(prompt), chatMessage.getChatId(), conversationId, prompt, version, uid);
+            error = getLLM(modelEnum).streamChat(response, sseEmitter, chatMessages, isWs, isDraw(prompt), chatMessage.getChatId(), conversationId, prompt, version, uid);
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {

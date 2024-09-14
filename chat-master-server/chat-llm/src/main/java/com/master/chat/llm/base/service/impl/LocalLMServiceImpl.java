@@ -13,6 +13,7 @@ import com.master.chat.llm.locallm.chatchat.constant.ApiConstant;
 import com.master.chat.llm.locallm.chatchat.entity.ChatCompletion;
 import com.master.chat.llm.locallm.chatchat.entity.ChatCompletionMessage;
 import com.master.chat.llm.locallm.chatchat.enums.ModelEnum;
+import com.master.chat.llm.locallm.enums.ModelTypeEnum;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,12 +35,12 @@ import java.util.List;
 @Service
 public class LocalLMServiceImpl implements ModelService {
     private static LocalLMClient localLMClient;
-    @Autowired
-    private GptService gptService;
+    private static GptService gptService;
 
     @Autowired
-    public LocalLMServiceImpl(LocalLMClient localLMClient) {
+    public LocalLMServiceImpl(LocalLMClient localLMClient, GptService gptService) {
         LocalLMServiceImpl.localLMClient = localLMClient;
+        LocalLMServiceImpl.gptService = gptService;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class LocalLMServiceImpl implements ModelService {
 
     @Override
     @SneakyThrows
-    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isDraw,
+    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
 
         List<ChatCompletionMessage> history = new ArrayList<>();
@@ -57,18 +58,19 @@ public class LocalLMServiceImpl implements ModelService {
             ChatCompletionMessage message = ChatCompletionMessage.builder().content(v.getContent()).role(v.getRole()).build();
             history.add(message);
         });
-        String modelVaersion = ValidatorUtil.isNotNull(version) ? version : ApiConstant.DEFAULT_MODEL;
-        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, "", version, prompt);
+        ModelDTO model = gptService.getModel(ChatModelEnum.LOCALLM.getValue());
+        String modelVersion = ValidatorUtil.isNotNull(version) ? version : ApiConstant.DEFAULT_MODEL;
+        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, ModelTypeEnum.getEnum(model.getLocalModelType()), version, model.getKnowledge(), prompt, uid, isWs);
         ChatCompletion chat = ChatCompletion
                 .builder()
                 .query(prompt)
                 .knowledgeBaseName(ApiConstant.DEFAULT_KNOWLEDGE)
                 .history(history)
-                .modelName(modelVaersion)
+                .modelName(modelVersion)
                 .build();
-        ModelDTO model = gptService.getModel(ChatModelEnum.LOCALLM.getValue());
         String domain = ValidatorUtil.isNotNull(model.getModelUrl()) ? model.getModelUrl() : ApiConstant.BASE_DOMAIN;
-        localLMClient.streamChat(chat, sseListener, ModelEnum.KNOWLEDGE, domain);
+        ModelEnum modelUrl = ValidatorUtil.isNotNull(model.getKnowledge()) ? ModelEnum.KNOWLEDGE : ModelEnum.LLM;
+        localLMClient.streamChat(chat, sseListener, domain, modelUrl);
         sseListener.getCountDownLatch().await();
         return sseListener.getError();
     }

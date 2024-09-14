@@ -78,7 +78,7 @@ public class LocalLMClient {
      * @param eventSourceListener
      * @param model
      */
-    public void streamChat(ChatCompletion chat, EventSourceListener eventSourceListener, ModelEnum model, String domain) {
+    public void streamChat(ChatCompletion chat, EventSourceListener eventSourceListener, String domain, ModelEnum model) {
         if (Objects.isNull(eventSourceListener)) {
             throw new LLMException("参数异常：EventSourceListener不能为空");
         }

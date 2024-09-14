@@ -1,7 +1,7 @@
 # Tomcat
 server:
   # 应用服务 WEB 访问端口
-  port: 8088
+  port: 8089
   servlet:
     context-path: /chat-master
   tomcat:

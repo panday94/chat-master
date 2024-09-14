@@ -10,9 +10,9 @@ package com.master.chat.llm.locallm.chatchat.constant;
  */
 public interface ApiConstant {
 
-    String BASE_DOMAIN = "http://127.0.0.1:49068";
+    String BASE_DOMAIN = "http://127.0.0.1:7861";
 
-    String DEFAULT_MODEL= "chatglm3-6b-32k";
+    String DEFAULT_MODEL= "chatglm3-6b";
 
     String DEFAULT_KNOWLEDGE = "samples";
 

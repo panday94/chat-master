@@ -13,6 +13,7 @@
         <result column="icon" property="icon"/>
         <result column="model" property="model"/>
         <result column="version" property="version"/>
+        <result column="local_model_type" property="localModelType"/>
         <result column="model_url" property="modelUrl"/>
         <result column="knowledge" property="knowledge"/>
         <result column="status" property="status"/>
@@ -21,7 +22,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.name, t.icon, t.model, t.version, t.model_url, t.knowledge, t.status, t.deleted
+        t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.name, t.icon, t.model, t.version, t.local_model_type, t.model_url, t.knowledge, t.status, t.deleted
     </sql>
 
     <!-- 通用查询条件 -->

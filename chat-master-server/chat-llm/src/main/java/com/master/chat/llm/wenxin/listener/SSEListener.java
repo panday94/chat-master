@@ -6,11 +6,14 @@ import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.service.GptService;
-import com.master.chat.common.exception.ErrorException;
 import com.master.chat.framework.util.ApplicationContextUtil;
-import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.entity.ChatData;
+import com.master.chat.llm.base.websocket.WebsocketServer;
+import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
+import com.master.chat.llm.base.websocket.entity.WebSocketData;
 import com.master.chat.llm.wenxin.entity.response.ChatResponse;
+import com.master.chat.common.exception.ErrorException;
+import com.master.chat.framework.validator.ValidatorUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -52,7 +55,7 @@ public class SSEListener extends EventSourceListener {
     private String uid;
     private Boolean isWs;
 
-    public SSEListener(HttpServletResponse response, SseEmitter sseEmitter, Long chatId, String parentMessageId, String model, String version, String uid) {
+    public SSEListener(HttpServletResponse response, SseEmitter sseEmitter, Long chatId, String parentMessageId, String model, String version, String uid, Boolean isWs) {
         this.response = response;
         this.sseEmitter = sseEmitter;
         this.chatId = chatId;
@@ -60,6 +63,7 @@ public class SSEListener extends EventSourceListener {
         this.model = model;
         this.version = version;
         this.uid = uid;
+        this.isWs = isWs;
         this.error = false;
     }
 
@@ -71,6 +75,9 @@ public class SSEListener extends EventSourceListener {
         if (response == null) {
             log.error("客户端非sse推送");
             return;
+        }
+        if (!isWs) {
+            response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
         }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
@@ -101,8 +108,13 @@ public class SSEListener extends EventSourceListener {
             chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                     .parentMessageId(parentMessageId)
                     .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
-            response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
-            response.getWriter().flush();
+            if (isWs) {
+                WebSocketData wsData = WebSocketData.builder().functionCode(FunctionCodeConstant.MESSAGE).message(chatData).build();
+                WebsocketServer.sendMessageByUserId(uid, JSON.toJSONString(wsData));
+            } else {
+                response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
+                response.getWriter().flush();
+            }
         } catch (Exception e) {
             log.error("消息错误", e);
             eventSource.cancel();

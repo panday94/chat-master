@@ -3,13 +3,13 @@ package com.master.chat.llm.base.service.impl;
 import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.dto.ChatMessageDTO;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.service.ModelService;
 import com.master.chat.llm.moonshot.MoonshotClient;
 import com.master.chat.llm.moonshot.constant.ModelConstant;
 import com.master.chat.llm.moonshot.entity.request.ChatCompletion;
 import com.master.chat.llm.moonshot.entity.request.ChatCompletionMessage;
-import com.master.chat.common.exception.BusinessException;
-import com.master.chat.framework.validator.ValidatorUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class MoonshotServiceImpl implements ModelService {
 
     @Override
     @SneakyThrows
-    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isDraw,
+    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
         if (ValidatorUtil.isNull(moonshotClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
@@ -58,7 +58,7 @@ public class MoonshotServiceImpl implements ModelService {
                 .model(modelVaersion)
                 .messages(messages)
                 .build();
-        return moonshotClient.streamChat(response, chatCompletion, chatId, conversationId, modelVaersion, uid);
+        return moonshotClient.streamChat(response, chatCompletion, chatId, conversationId, modelVaersion, uid, isWs);
     }
 
 }
