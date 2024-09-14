@@ -58,7 +58,8 @@ public class t1 {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         // 请求对象
         Request request =new Request.Builder()
-                .url("http://101.126.30.60:8000/v1/chat/completions")
+//                .url("http://101.126.30.60:8000/v1/chat/completions")
+                .url("http://43.140.221.161:8000/v1/chat/completions")
                 .post(body)
                 .build();
 
