@@ -1,7 +1,7 @@
 # Tomcat
 server:
   # 应用服务 WEB 访问端口
-  port: 8089
+  port: 8088
   servlet:
     context-path: /chat-master
   tomcat:
@@ -34,7 +34,7 @@ management:
 spring:
   # 环境 dev|test|prod
   profiles:
-    active: test
+    active: dev
   # 应用名称
   application:
     name: chat-master

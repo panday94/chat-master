@@ -1,4 +1,4 @@
-package com.master.chat.llm.locallm.chatchat.entity;
+package com.master.chat.llm.locallm.langchain.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

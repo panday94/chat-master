@@ -1,4 +1,4 @@
-package com.master.chat.llm.locallm.chatchat.interceptor;
+package com.master.chat.llm.locallm.interceptor;
 
 import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
@@ -8,9 +8,9 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-public class LangchainInterceptor implements Interceptor {
+public class LocalLMInterceptor implements Interceptor {
 
-    public LangchainInterceptor() {
+    public LocalLMInterceptor() {
     }
     @Override
     public Response intercept(Chain chain) throws IOException {

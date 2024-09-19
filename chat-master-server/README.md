@@ -18,7 +18,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 欢迎小伙伴或有合作意向一起加入交流群[添加微信](#扫码进群)或提Issues。使用参考下面具体介绍：
 
-* 支持支持一键切换ChatGPT(3.5、4.0)模型、月之暗面（Kimi）、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)等主流模型
+* 支持支持一键切换ChatGPT(3.5、4.0)模型、月之暗面（Kimi）、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)、本地模型(Langchain、Ollama)等主流模型
 * 免费提供多种类型助手按指定prompt输出，也可在管理后台创建自定义助手模版。如需更多万花筒信息可关注公众号[扫码获取](#联系我们)获取
 * 管理端端采用Vue2、Element UI，ChatMASTER网页端使用Vue3、TypeScript、NaiveUI进行开发
 * 服务端采用Spring Boot、Spring Security + JWT、Mybatis-Plus、Lombok、 Mysql & Redis，代码通俗易懂，上手即用
@@ -42,6 +42,10 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 ![cover](./doc/file/index.png)
 ![cover](./doc/file/chat.gif)
 
+## 新增功能
+1. 移动端websocket支持
+2. 支持本地模型及知识库问答如Langchain、Ollama、扣子(Coze)
+
 ## 已实现功能
 1. 支持后台配置大模型信息及模型版本信息，同时支持配置模型密钥信息
 2. 支持后台配置assistant助手模版，按指定prompt输出
@@ -49,13 +53,11 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 4. 支持个人信息修改，支持个人用户账号禁用功能
 5. 支持按使用次数或者开通会员使用，也可全局判断不校验使用次数及会员，电量赠送次数或者不校验电量可在[chat-master-admin](https://gitee.com/panday94/chat-master-admin)中进行配置
 6. 支持配置网站信息，支持对接GPT代理地址及本地代理，支持配置微信公众号、小程序及微信支付信息，支持腾讯oss/sms和阿里云oss/sms
-7. 移动端websocket支持
 
 ## 待实现功能
 1. 文档对话、国内模型绘画
 2. 知识库
 3. MJ/SD
-4. 分销
 
 ## 模型功能对比
 

@@ -1,9 +1,9 @@
-package com.master.chat.llm.locallm.chatchat.enums;
+package com.master.chat.llm.locallm.coze.enums;
 
 import lombok.Getter;
 
 /**
- * Langchain 对话模型类型
+ * 扣子 对话模型类型
  *
  * @author: Yang
  * @date: 2023/01/31
@@ -16,9 +16,7 @@ public enum ModelEnum {
     /**
      * 对话模型类型
      */
-    LLM("llm模型对话", "/chat/chat"),
-
-    KNOWLEDGE("知识库对话", "/chat/knowledge_base_chat"),
+    LLM("llm模型对话", "/chat"),
 
     ;
 

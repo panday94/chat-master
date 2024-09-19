@@ -17,7 +17,9 @@ import com.master.chat.llm.base.exception.LLMException;
 import com.master.chat.llm.base.service.impl.*;
 import com.master.chat.llm.chatglm.ChatGLMClient;
 import com.master.chat.llm.internlm.InternlmClient;
-import com.master.chat.llm.locallm.LocalLMClient;
+import com.master.chat.llm.locallm.coze.CozeClient;
+import com.master.chat.llm.locallm.langchain.LangchainClient;
+import com.master.chat.llm.locallm.ollama.OllamaClient;
 import com.master.chat.llm.moonshot.MoonshotClient;
 import com.master.chat.llm.openai.OpenAiClient;
 import com.master.chat.llm.openai.OpenAiStreamClient;
@@ -56,13 +58,15 @@ public class LLMService {
     private static SparkClient sparkClient;
     private static MoonshotClient moonshotClient;
     private static InternlmClient internlmClient;
-    private static LocalLMClient localLMClient;
+    private static LangchainClient langchainClient;
+    private static OllamaClient ollamaClient;
+    private static CozeClient cozeClient;
     private final GptService gptService;
 
     @Autowired
     public LLMService(GptService gptService, OpenAiClient openAiClient, OpenAiStreamClient openAiStreamClient, WenXinClient wenXinClient,
                       ChatGLMClient chatGLMClient, TongYiClient tongYiClient, SparkClient sparkClient, MoonshotClient moonshotClient,
-                      InternlmClient internlmClient, LocalLMClient localLMClient) {
+                      InternlmClient internlmClient, LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient) {
         this.gptService = gptService;
         LLMService.openAiClient = openAiClient;
         LLMService.openAiStreamClient = openAiStreamClient;
@@ -72,7 +76,9 @@ public class LLMService {
         LLMService.sparkClient = sparkClient;
         LLMService.moonshotClient = moonshotClient;
         LLMService.internlmClient = internlmClient;
-        LLMService.localLMClient = localLMClient;
+        LLMService.langchainClient = langchainClient;
+        LLMService.ollamaClient = ollamaClient;
+        LLMService.cozeClient = cozeClient;
     }
 
     public SseEmitter createSse(String uid) {
@@ -145,7 +151,7 @@ public class LLMService {
             case MOONSHOT:
                 return new MoonshotServiceImpl(moonshotClient);
             case LOCALLM:
-                return new LocalLMServiceImpl(localLMClient, gptService);
+                return new LocalLMServiceImpl(langchainClient, ollamaClient, cozeClient, gptService);
             default:
                 return null;
         }

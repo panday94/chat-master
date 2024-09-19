@@ -1,3 +1,16 @@
+## v1.1.8
+
+`2024-09-19`
+
+> [chat-master](https://gitee.com/yoli9/chat-master)
+
+## Enhancement
+
+- 支持websocket响应，方便对接移动端
+- 支持Langchain-chatchat 对话文档/知识库问答
+- 支持Ollama加在本地模型调用
+- 支持扣子（Coze）在线接口调用
+
 ## v1.1.7
 
 `2024-05-30`

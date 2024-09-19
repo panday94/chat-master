@@ -1,13 +1,13 @@
-package com.master.chat.llm.locallm;
+package com.master.chat.llm.locallm.langchain.listenter;
 
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSON;
 import com.master.chat.client.enums.ChatContentEnum;
+import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.service.GptService;
-import com.master.chat.common.exception.BusinessException;
 import com.master.chat.common.exception.ErrorException;
 import com.master.chat.framework.util.ApplicationContextUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
@@ -15,8 +15,7 @@ import com.master.chat.llm.base.entity.ChatData;
 import com.master.chat.llm.base.websocket.WebsocketServer;
 import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
 import com.master.chat.llm.base.websocket.entity.WebSocketData;
-import com.master.chat.llm.locallm.chatchat.entity.ChatResponse;
-import com.master.chat.llm.locallm.enums.ModelTypeEnum;
+import com.master.chat.llm.locallm.langchain.entity.ChatResponse;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,7 @@ import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * 月之暗面 流式监听处理
+ * langchain 流式监听处理
  *
  * @author: Yang
  * @date: 2024/3/25
@@ -55,7 +54,6 @@ public class SSEListener extends EventSourceListener {
     private String parentMessageId;
     private String conversationId;
     private String finishReason;
-    private ModelTypeEnum model;
     private String version;
     private String knowledge;
     private Boolean error;
@@ -65,7 +63,7 @@ public class SSEListener extends EventSourceListener {
     private String prompt;
     private List<String> docs;
 
-    public SSEListener(HttpServletResponse response, SseEmitter sseEmitter, Long chatId, String parentMessageId, ModelTypeEnum model, String version, String knowledge, String prompt, String uid, Boolean isWs) {
+    public SSEListener(HttpServletResponse response, SseEmitter sseEmitter, Long chatId, String parentMessageId, String version, String knowledge, String prompt, String uid, Boolean isWs) {
         this.response = response;
         this.sseEmitter = sseEmitter;
         this.chatId = chatId;
@@ -73,10 +71,10 @@ public class SSEListener extends EventSourceListener {
         if (!isWs) {
             this.response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
         }
-        this.model = model;
         this.version = version;
         this.knowledge = knowledge;
         this.isWs = isWs;
+        this.uid = uid;
         this.error = false;
         this.prompt = prompt;
     }
@@ -95,7 +93,7 @@ public class SSEListener extends EventSourceListener {
         }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
-        log.info("{}建立sse连接...", model);
+        log.info("{}建立sse连接...", "langchain");
     }
 
     /**
@@ -104,26 +102,16 @@ public class SSEListener extends EventSourceListener {
     @SneakyThrows
     @Override
     public void onEvent(EventSource eventSource, String id, String type, String data) {
-        log.info("SSE返回，模型：{}，ID：{}，TYPE：{}，数据：{}", model.getLabel(), id, type, data);
+        log.info("SSE返回，模型：{}，ID：{}，TYPE：{}，数据：{}", "langchain", id, type, data);
         ChatData chatData;
-        String text = null;
+        String text;
         try {
-            switch (model) {
-                case LANGCHAIN:
-                    text = ValidatorUtil.isNull(knowledge) ? handleLangchain(type, data) : handleLangchainKnowledge(type, data);
-                    break;
-                case OLLAMA:
-                    break;
-                case GITEE_AI:
-                    break;
-                default:
-                    throw new BusinessException("未知的模型类型，功能未接入");
-            }
+            text = ValidatorUtil.isNull(knowledge) ? handleLangchain(type, data) : handleLangchainKnowledge(type, data);
             if (text.equals(FINISH)) {
-                log.info("{}返回数据结束了", model.getLabel());
+                log.info("{}返回数据结束了", "langchain");
                 sseEmitter.complete();
                 ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
-                        .model(model.getLabel()).modelVersion(version)
+                        .model(ChatModelEnum.LOCALLM.getValue()).modelVersion(version)
                         .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
                         .status(ChatStatusEnum.SUCCESS.getValue()).usedTokens(tokens)
                         .build();
@@ -155,7 +143,7 @@ public class SSEListener extends EventSourceListener {
      * @return
      */
     private String handleLangchain(String type, String data) {
-        ChatResponse chatResponse = JSON.parseObject(data, ChatResponse.class);
+        ChatResponse chatResponse = JSON.parseObject(data, ChatResponse.class);;
         conversationId = chatResponse.getMessageId();
         output.append(chatResponse.getText()).toString();
         return output.toString();
@@ -183,10 +171,10 @@ public class SSEListener extends EventSourceListener {
 
     @Override
     public void onClosed(EventSource eventSource) {
-        log.info("{}关闭sse连接，流式输出返回值总共{}tokens", model.getLabel(), tokens());
+        log.info("{}关闭sse连接，流式输出返回值总共{}tokens", "langchain", tokens());
         tokens = output.toString().length() + prompt.length();
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
-                .model(model.getLabel()).modelVersion(version)
+                .model(ChatModelEnum.LOCALLM.getValue()).modelVersion(version)
                 .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
                 .status(ChatStatusEnum.SUCCESS.getValue()).usedTokens(tokens)
                 .build();
@@ -199,9 +187,9 @@ public class SSEListener extends EventSourceListener {
     @Override
     public void onFailure(EventSource eventSource, Throwable t, Response response) {
         if (ValidatorUtil.isNotNull(response) && Objects.nonNull(response.body())) {
-            log.error("sse连接异常data.body：{}，异常：{}", response.body().string(), t);
+            log.error("sse连接异常data.body:{}，异常:{}", response.body().string(), t);
         } else {
-            log.error("sse连接异常data：{}，异常：{}", response, t);
+            log.error("sse连接异常data:{}，异常:{}", response, t);
         }
         ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                 .parentMessageId(parentMessageId)

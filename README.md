@@ -10,6 +10,7 @@
 
 # 项目简介
 ChatMASTER，基于AI大模型api实现的自建后端Chat服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换ChatGPT(3.5、4.0)模型、月之暗面（Kimi）、文心一言(支持Stable-Diffusion-XL作图)、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型，后续模型持续对接中。
+目前已支持Langchain-chatchat、Ollama、扣子（Coze）本地或在线接口调用，FastGPT对接中。
 项目包含java服务端、网页端、移动端及管理后台配置。
 
 > 项目已更新为多模块项目，如有bug可提Issues或加入微信群反馈。如果觉得项目好用，请点个Star吧！如需GPT免魔法访问，可[联系作者](#联系我们)。
@@ -58,6 +59,10 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
         <td><img src="./doc/file/admin/7.jpg"/></td>
     </tr>
 </table>
+
+## 新增功能
+1. 移动端websocket支持
+2. 支持本地模型及知识库问答如Langchain、Ollama、扣子(Coze)
 
 ## 已实现功能
 1. 支持后台配置大模型信息及模型版本信息，同时支持配置模型密钥信息

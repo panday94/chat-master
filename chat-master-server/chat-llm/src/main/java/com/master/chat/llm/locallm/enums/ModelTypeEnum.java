@@ -19,6 +19,8 @@ public enum ModelTypeEnum {
     LANGCHAIN("LANGCHAIN", 1),
     OLLAMA("Ollama", 2),
     GITEE_AI("GiteeAI", 3),
+    COZE("Coze", 4),
+    FASTGPT("FastGPT", 5),
 
     ;
 

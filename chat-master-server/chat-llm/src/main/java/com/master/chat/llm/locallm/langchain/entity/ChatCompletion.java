@@ -1,10 +1,10 @@
-package com.master.chat.llm.locallm.chatchat.entity;
+package com.master.chat.llm.locallm.langchain.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.master.chat.llm.locallm.base.BaseChatCompletion;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
-public class ChatCompletion implements Serializable {
+public class ChatCompletion extends BaseChatCompletion {
 
     private String query;
 
@@ -32,8 +32,6 @@ public class ChatCompletion implements Serializable {
     private Integer scoreThreshold = 1;
 
     private List<ChatCompletionMessage> history;
-
-    private Boolean stream = false;
 
     private String modelName;
 

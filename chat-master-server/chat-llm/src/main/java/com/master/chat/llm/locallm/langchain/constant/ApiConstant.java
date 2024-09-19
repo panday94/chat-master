@@ -1,4 +1,4 @@
-package com.master.chat.llm.locallm.chatchat.constant;
+package com.master.chat.llm.locallm.langchain.constant;
 
 /**
  * LangChain 常量
@@ -6,7 +6,7 @@ package com.master.chat.llm.locallm.chatchat.constant;
  * @author: Yang
  * @date: 2023/12/4
  * @version: 1.0.0
- * Copyright Ⓒ 2023 MasterComputer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2023 Master Computer Corporation Limited All rights reserved.
  */
 public interface ApiConstant {
 

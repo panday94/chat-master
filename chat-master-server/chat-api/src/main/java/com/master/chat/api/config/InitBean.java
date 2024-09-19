@@ -261,12 +261,16 @@ public class InitBean {
 
     /**
      * LocalLM 本地模型
-     * 支持Langchain-Chatchat、Ollama
+     * 支持Langchain-Chatchat、Ollama、GiteeAI、扣子、FastGPT
      *
      * @return
      */
     @Bean
     public LocalLMClient localLMClient() {
+        List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.LOCALLM.getValue());
+        if (ValidatorUtil.isNotNullIncludeArray(openkeys)) {
+            return LocalLMClient.builder().apiKey(openkeys.get(0).getAppKey()).build();
+        }
         return LocalLMClient.builder().build();
     }
 
