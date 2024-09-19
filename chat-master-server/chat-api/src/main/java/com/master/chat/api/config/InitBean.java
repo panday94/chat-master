@@ -2,11 +2,15 @@ package com.master.chat.api.config;
 
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.common.config.dto.BaseInfoDTO;
+import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.enums.IntegerEnum;
+import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.mapper.OpenkeyMapper;
 import com.master.chat.gpt.pojo.vo.OpenkeyVO;
 import com.master.chat.llm.chatglm.ChatGLMClient;
 import com.master.chat.llm.internlm.InternlmClient;
+import com.master.chat.llm.locallm.LocalLMClient;
 import com.master.chat.llm.moonshot.MoonshotClient;
 import com.master.chat.llm.openai.OpenAiClient;
 import com.master.chat.llm.openai.OpenAiStreamClient;
@@ -16,9 +20,6 @@ import com.master.chat.llm.spark.SparkClient;
 import com.master.chat.llm.tongyi.TongYiClient;
 import com.master.chat.llm.wenxin.WenXinClient;
 import com.master.chat.sys.service.IBaseConfigService;
-import com.master.chat.common.constant.StringPoolConstant;
-import com.master.chat.common.enums.IntegerEnum;
-import com.master.chat.framework.validator.ValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -256,6 +257,21 @@ public class InitBean {
             return new InternlmClient();
         }
         return InternlmClient.builder().token(openkey.getAppKey()).build();
+    }
+
+    /**
+     * LocalLM 本地模型
+     * 支持Langchain-Chatchat、Ollama、GiteeAI、扣子、FastGPT
+     *
+     * @return
+     */
+    @Bean
+    public LocalLMClient localLMClient() {
+        List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.LOCALLM.getValue());
+        if (ValidatorUtil.isNotNullIncludeArray(openkeys)) {
+            return LocalLMClient.builder().apiKey(openkeys.get(0).getAppKey()).build();
+        }
+        return LocalLMClient.builder().build();
     }
 
 }

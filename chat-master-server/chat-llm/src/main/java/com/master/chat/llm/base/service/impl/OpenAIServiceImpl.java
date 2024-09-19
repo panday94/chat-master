@@ -75,7 +75,7 @@ public class OpenAIServiceImpl implements ModelService {
 
     @Override
     @SneakyThrows
-    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isDraw,
+    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
         if (ValidatorUtil.isNullIncludeArray(openAiStreamClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
@@ -85,13 +85,16 @@ public class OpenAIServiceImpl implements ModelService {
             Message currentMessage = Message.builder().content(v.getContent()).role(v.getRole()).build();
             messages.add(currentMessage);
         });
-        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, ChatModelEnum.OPENAI.getValue(), version, uid);
+        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, ChatModelEnum.OPENAI.getValue(), version, uid, isWs);
         ChatCompletion completion = ChatCompletion
                 .builder()
                 .messages(messages)
                 .model(ValidatorUtil.isNotNull(version) ? version : ChatCompletion.Model.GPT_3_5_TURBO_0613.getName())
                 .build();
         openAiStreamClient.streamChatCompletion(completion, sseListener);
+        if (isWs) {
+            return false;
+        }
         sseListener.getCountDownLatch().await();
         return sseListener.getError();
     }

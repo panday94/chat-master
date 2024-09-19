@@ -6,9 +6,6 @@ import com.master.chat.framework.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-;
-;
-
 /**
  *  大模型信息对象 gpt_model
  *
@@ -48,6 +45,21 @@ public class Model extends BaseEntity {
      * 模型版本
      */
     private String version;
+
+    /**
+     * 本地模型类型：1、Langchian；2、ollama；3、Giteeai
+     */
+    private Integer localModelType;
+
+    /**
+     * 模型接口地址
+     */
+    private String modelUrl;
+
+    /**
+     * 知识库名称
+     */
+    private String knowledge;
 
     /**
      * 状态 0 禁用 1 启用

@@ -1,4 +1,4 @@
-package com.master.chat.gpt.pojo.dto;
+package com.master.chat.client.model.dto;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- *  大模型信息对象 DTO
+ * 大模型信息对象 DTO
  *
  * @author: Yang
  * @date: 2023-12-01
@@ -63,6 +63,21 @@ public class ModelDTO implements Serializable {
      * 模型版本
      */
     private String version;
+
+    /**
+     * 本地模型类型：1、Langchian；2、ollama；3、Giteeai
+     */
+    private Integer localModelType;
+
+    /**
+     * 模型接口地址
+     */
+    private String modelUrl;
+
+    /**
+     * 知识库名称
+     */
+    private String knowledge;
 
     /**
      * 状态 0 禁用 1 启用

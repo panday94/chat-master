@@ -161,8 +161,12 @@ public class ChatController extends BaseAppController {
      * @version: 1.0.0
      */
     @GetMapping("/completions")
-    public void completions(String conversationId, HttpServletResponse response) {
-        llmService.sseChat(response, getLoginUser().getUid(), conversationId);
+    public void completions(HttpServletResponse response, @RequestParam(required = false) String ws, String conversationId) {
+        Boolean isWs = false;
+        if (ValidatorUtil.isNotNull(ws)) {
+            isWs = Boolean.valueOf(ws);
+        }
+        llmService.sseChat(response, isWs, getLoginUser().getUid(), conversationId);
     }
 
     /**

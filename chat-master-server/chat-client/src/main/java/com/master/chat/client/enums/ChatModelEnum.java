@@ -31,6 +31,8 @@ public enum ChatModelEnum {
 
     INTERNLM("Internlm", "书生·浦语"),
 
+    LOCALLM("LocalLM", "本地模型"),
+
     ;
 
     /**

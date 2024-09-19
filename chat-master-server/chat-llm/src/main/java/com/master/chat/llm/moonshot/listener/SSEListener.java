@@ -8,12 +8,15 @@ import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.service.GptService;
+import com.master.chat.llm.base.entity.ChatData;
+import com.master.chat.llm.base.websocket.WebsocketServer;
+import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
+import com.master.chat.llm.base.websocket.entity.WebSocketData;
+import com.master.chat.llm.moonshot.entity.response.ChatStreamResponse;
+import com.master.chat.llm.moonshot.entity.response.Usage;
 import com.master.chat.common.exception.ErrorException;
 import com.master.chat.framework.util.ApplicationContextUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
-import com.master.chat.llm.base.entity.ChatData;
-import com.master.chat.llm.moonshot.entity.response.ChatStreamResponse;
-import com.master.chat.llm.moonshot.entity.response.Usage;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import lombok.NoArgsConstructor;
@@ -58,7 +61,7 @@ public class SSEListener {
      * @param request
      * @param query
      */
-    public SSEListener(HttpServletResponse response, Long chatId, String parentMessageId, String version, String uid) {
+    public SSEListener(HttpServletResponse response, Long chatId, String parentMessageId, String version, String uid, Boolean isWs) {
         this.response = response;
         this.chatId = chatId;
         this.parentMessageId = parentMessageId;
@@ -68,6 +71,9 @@ public class SSEListener {
         if (response == null) {
             log.error("客户端非sse推送");
             return;
+        }
+        if (!isWs) {
+            response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
         }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
@@ -82,12 +88,12 @@ public class SSEListener {
     public Boolean streamChat(Response response) {
         ChatStreamResponse chatMessageAccumulator = mapStreamToAccumulator(response)
                 .doOnNext(accumulator -> {
-                    if (accumulator.getChoices() != null && accumulator.getChoices().get(0).getDelta().getContent() != null) {
-                        log.info("月之暗面返回，数据：{}", accumulator.getChoices().get(0).getDelta().getContent());
-                        output.append(accumulator.getChoices().get(0).getDelta().getContent()).toString();
-                        // 向客户端发送信息
-                        output();
-                    }
+                        if (accumulator.getChoices() != null && accumulator.getChoices().get(0).getDelta().getContent() != null) {
+                            log.info("月之暗面返回，数据：{}", accumulator.getChoices().get(0).getDelta().getContent());
+                            output.append(accumulator.getChoices().get(0).getDelta().getContent()).toString();
+                            // 向客户端发送信息
+                            output();
+                        }
                 }).doOnComplete(System.out::println).lastElement().blockingGet();
         this.conversationId = chatMessageAccumulator.getId();
         Usage usage = chatMessageAccumulator.getChoices().get(0).getUsage();
@@ -108,8 +114,13 @@ public class SSEListener {
             ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                     .parentMessageId(parentMessageId)
                     .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
-            response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
-            response.getWriter().flush();
+            if (isWs) {
+                WebSocketData wsData = WebSocketData.builder().functionCode(FunctionCodeConstant.MESSAGE).message(chatData).build();
+                WebsocketServer.sendMessageByUserId(uid, JSON.toJSONString(wsData));
+            } else {
+                response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
+                response.getWriter().flush();
+            }
         } catch (IOException e) {
             log.error("消息错误", e);
             throw new ErrorException();

@@ -6,23 +6,26 @@ import com.master.chat.client.model.command.ChatCommand;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.dto.ChatMessageDTO;
 import com.master.chat.client.service.GptService;
-import com.master.chat.llm.base.entity.ChatData;
-import com.master.chat.llm.base.exception.LLMException;
-import com.master.chat.llm.base.service.impl.*;
-import com.master.chat.llm.chatglm.ChatGLMClient;
-import com.master.chat.llm.internlm.InternlmClient;
-import com.master.chat.llm.moonshot.MoonshotClient;
-import com.master.chat.llm.openai.OpenAiClient;
-import com.master.chat.llm.openai.OpenAiStreamClient;
-import com.master.chat.llm.spark.SparkClient;
-import com.master.chat.llm.tongyi.TongYiClient;
-import com.master.chat.llm.wenxin.WenXinClient;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.enums.IntegerEnum;
 import com.master.chat.common.exception.BusinessException;
 import com.master.chat.common.exception.ErrorException;
 import com.master.chat.common.utils.DozerUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
+import com.master.chat.llm.base.entity.ChatData;
+import com.master.chat.llm.base.exception.LLMException;
+import com.master.chat.llm.base.service.impl.*;
+import com.master.chat.llm.chatglm.ChatGLMClient;
+import com.master.chat.llm.internlm.InternlmClient;
+import com.master.chat.llm.locallm.coze.CozeClient;
+import com.master.chat.llm.locallm.langchain.LangchainClient;
+import com.master.chat.llm.locallm.ollama.OllamaClient;
+import com.master.chat.llm.moonshot.MoonshotClient;
+import com.master.chat.llm.openai.OpenAiClient;
+import com.master.chat.llm.openai.OpenAiStreamClient;
+import com.master.chat.llm.spark.SparkClient;
+import com.master.chat.llm.tongyi.TongYiClient;
+import com.master.chat.llm.wenxin.WenXinClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,12 +58,15 @@ public class LLMService {
     private static SparkClient sparkClient;
     private static MoonshotClient moonshotClient;
     private static InternlmClient internlmClient;
+    private static LangchainClient langchainClient;
+    private static OllamaClient ollamaClient;
+    private static CozeClient cozeClient;
     private final GptService gptService;
 
     @Autowired
     public LLMService(GptService gptService, OpenAiClient openAiClient, OpenAiStreamClient openAiStreamClient, WenXinClient wenXinClient,
                       ChatGLMClient chatGLMClient, TongYiClient tongYiClient, SparkClient sparkClient, MoonshotClient moonshotClient,
-                      InternlmClient internlmClient) {
+                      InternlmClient internlmClient, LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient) {
         this.gptService = gptService;
         LLMService.openAiClient = openAiClient;
         LLMService.openAiStreamClient = openAiStreamClient;
@@ -70,6 +76,9 @@ public class LLMService {
         LLMService.sparkClient = sparkClient;
         LLMService.moonshotClient = moonshotClient;
         LLMService.internlmClient = internlmClient;
+        LLMService.langchainClient = langchainClient;
+        LLMService.ollamaClient = ollamaClient;
+        LLMService.cozeClient = cozeClient;
     }
 
     public SseEmitter createSse(String uid) {
@@ -141,6 +150,8 @@ public class LLMService {
                 return new InternLMServiceImpl(internlmClient);
             case MOONSHOT:
                 return new MoonshotServiceImpl(moonshotClient);
+            case LOCALLM:
+                return new LocalLMServiceImpl(langchainClient, ollamaClient, cozeClient, gptService);
             default:
                 return null;
         }
@@ -172,7 +183,7 @@ public class LLMService {
     }
 
 
-    public void sseChat(HttpServletResponse response, String uid, String conversationId) {
+    public void sseChat(HttpServletResponse response, Boolean isWs, String uid, String conversationId) {
         ChatMessageDTO chatMessage = gptService.getMessageByConverstationId(conversationId);
         String prompt = chatMessage.getContent();
         String version = chatMessage.getModelVersion();
@@ -190,7 +201,7 @@ public class LLMService {
         Integer status = ChatStatusEnum.SUCCESS.getValue();
         try {
             // ChatGPT、文心一言统一在SSEListener中处理流式返回，通义千问与讯飞星火\智谱清言单独处理
-            error = getLLM(modelEnum).streamChat(response, sseEmitter, chatMessages, isDraw(prompt), chatMessage.getChatId(), conversationId, prompt, version, uid);
+            error = getLLM(modelEnum).streamChat(response, sseEmitter, chatMessages, isWs, isDraw(prompt), chatMessage.getChatId(), conversationId, prompt, version, uid);
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {

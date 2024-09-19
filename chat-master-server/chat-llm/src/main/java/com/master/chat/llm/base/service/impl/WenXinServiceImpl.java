@@ -85,7 +85,7 @@ public class WenXinServiceImpl implements ModelService {
 
     @Override
     @SneakyThrows
-    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isDraw,
+    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
         if (ValidatorUtil.isNull(wenXinClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
@@ -97,12 +97,15 @@ public class WenXinServiceImpl implements ModelService {
         chatMessages.stream().filter(d -> !d.getRole().equals(ChatRoleEnum.SYSTEM.getValue())).forEach(v -> {
             messages.add(ChatCompletionMessage.builder().role(v.getRole()).content(v.getContent()).build());
         });
-        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, ChatModelEnum.WENXIN.getValue(), version, uid);
+        SSEListener sseListener = new SSEListener(response, sseEmitter, chatId, conversationId, ChatModelEnum.WENXIN.getValue(), version, uid, isWs);
         ModelEnum model = ValidatorUtil.isNotNull(version) ? ModelEnum.getEnum(version) : ModelEnum.ERNIE_Bot_turbo;
         if (ValidatorUtil.isNull(model)) {
             throw new BusinessException("文心大模型不存在，请检查模型名称。");
         }
         wenXinClient.streamChat(messages, sseListener, model);
+        if (isWs) {
+            return false;
+        }
         sseListener.getCountDownLatch().await();
         return sseListener.getError();
     }

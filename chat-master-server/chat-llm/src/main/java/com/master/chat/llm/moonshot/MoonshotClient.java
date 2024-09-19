@@ -5,6 +5,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.master.chat.common.constant.AuthConstant;
 import com.master.chat.llm.moonshot.constant.ApiConstant;
 import com.master.chat.llm.moonshot.entity.ModelsList;
 import com.master.chat.llm.moonshot.entity.request.ChatCompletion;
@@ -13,7 +14,6 @@ import com.master.chat.llm.moonshot.interceptor.MoonshotInterceptor;
 import com.master.chat.llm.moonshot.interceptor.MoonshotLogger;
 import com.master.chat.llm.moonshot.listener.SSEListener;
 import com.master.chat.common.api.ResponseInfo;
-import com.master.chat.common.constant.AuthConstant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -110,7 +110,7 @@ public class MoonshotClient {
      * @param request
      * @param query
      */
-    public Boolean streamChat(HttpServletResponse response, ChatCompletion chat, Long chatId, String parentMessageId, String version, String uid) {
+    public Boolean streamChat(HttpServletResponse response, ChatCompletion chat, Long chatId, String parentMessageId, String version, String uid, Boolean isWs) {
         chat.stream = true;
         try {
             Request request = new Request.Builder().url(ApiConstant.CHAT_COMPLETION_URL)
@@ -122,7 +122,7 @@ public class MoonshotClient {
                 log.error("月之暗面流式响应失败: " + callResponse.body().string());
                 return true;
             }
-            SSEListener sseListener = new SSEListener(response, chatId, parentMessageId, version, uid);
+            SSEListener sseListener = new SSEListener(response, chatId, parentMessageId, version, uid, isWs);
             return sseListener.streamChat(callResponse);
         } catch (Exception e) {
             return true;

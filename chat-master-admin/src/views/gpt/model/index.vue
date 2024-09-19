@@ -116,11 +116,24 @@
             <el-option v-for="item in dict.type.gpt_model_type" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="普会版本" prop="version">
-          <el-input v-model="form.version" placeholder="请输入普通会员模型版本" />
+        <el-form-item label="模型版本" prop="version">
+          <el-input v-model="form.version" placeholder="请输入模型版本" />
         </el-form-item>
-        <el-form-item label="超会版本" prop="plusVersion">
-          <el-input v-model="form.plusVersion" placeholder="请输入超级会员模型版本" />
+        <el-form-item v-if="form.model == 'LocalLM'" label="本地模型类型" prop="localModelType">
+          <el-select v-model="form.localModelType" placeholder="请选择本地模型类型">
+            <el-option
+              v-for="item in dict.type.gpt_local_model"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="form.model == 'LocalLM'" label="本地模型地址" prop="modelUrl">
+          <el-input v-model="form.modelUrl" placeholder="请输入本地模型地址" />
+        </el-form-item>
+        <el-form-item v-if="form.model == 'LocalLM'" label="知识库">
+          <el-input v-model="form.knowledge" placeholder="请输入知识库名称" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-switch v-model="form.status" :active-value="1" :inactive-value="0"></el-switch>
@@ -146,7 +159,7 @@ import {
 
 export default {
   name: "Model",
-  dicts: ["sys_normal_disable", "gpt_model_type"],
+  dicts: ["sys_normal_disable", "gpt_model_type", "gpt_local_model"],
   data() {
     return {
       // 遮罩层
@@ -192,10 +205,19 @@ export default {
         version: [
           { required: true, message: "模型版本不能为空", trigger: "blur" }
         ],
+        localModelType: [
+          { required: true, message: "本地模型类型不能为空", trigger: "blur" }
+        ],
+        modelUrl: [
+          { required: true, message: "本地模型地址不能为空", trigger: "blur" }
+        ],
+        knowledge: [
+          { required: true, message: "知识库不能为空", trigger: "blur" }
+        ],
         status: [
           {
             required: true,
-            message: "状态 0 禁用 1 启用不能为空",
+            message: "状态不能为空",
             trigger: "blur"
           }
         ]

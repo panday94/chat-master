@@ -82,7 +82,7 @@ public class TongYiServiceImpl implements ModelService {
 
     @Override
     @SneakyThrows
-    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isDraw,
+    public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
         if (ValidatorUtil.isNull(tongYiClient.getAppKey())) {
             throw new BusinessException("未加载到密钥信息");
@@ -100,8 +100,11 @@ public class TongYiServiceImpl implements ModelService {
                 .enableSearch(true)
                 .build();
         Semaphore semaphore = new Semaphore(0);
-        SSEListener sseListener = new SSEListener(response, semaphore, chatId, conversationId, uid, version);
+        SSEListener sseListener = new SSEListener(response, semaphore, chatId, conversationId, uid, version, isWs);
         gen.streamCall(param, sseListener);
+        if (isWs) {
+            return false;
+        }
         semaphore.acquire();
         return sseListener.getError();
     }

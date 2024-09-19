@@ -10,10 +10,11 @@ import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.service.GptService;
-import com.master.chat.framework.util.ApplicationContextUtil;
-import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.entity.ChatData;
 import com.master.chat.llm.base.exception.LLMException;
+import com.master.chat.llm.base.websocket.WebsocketServer;
+import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
+import com.master.chat.llm.base.websocket.entity.WebSocketData;
 import com.master.chat.llm.spark.constant.SparkErrorCode;
 import com.master.chat.llm.spark.constant.StatusConstant;
 import com.master.chat.llm.spark.entity.request.ChatCompletionMessage;
@@ -22,6 +23,8 @@ import com.master.chat.llm.spark.entity.response.ChatResponse;
 import com.master.chat.llm.spark.entity.response.ChatResponseChoices;
 import com.master.chat.llm.spark.entity.response.ChatResponseHeader;
 import com.master.chat.llm.spark.entity.response.ChatUsage;
+import com.master.chat.framework.util.ApplicationContextUtil;
+import com.master.chat.framework.validator.ValidatorUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -63,7 +66,7 @@ public class SSEListener extends WebSocketListener {
     private String uid;
     private Boolean isWs;
 
-    public SSEListener(ChatRequest request, HttpServletResponse response, Long chatId, String parentMessageId, String uid, String version) {
+    public SSEListener(ChatRequest request, HttpServletResponse response, Long chatId, String parentMessageId, String uid, String version, Boolean isWs) {
         objectMapper = new ObjectMapper();
         // 排除值为null的字段
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -73,6 +76,7 @@ public class SSEListener extends WebSocketListener {
         this.parentMessageId = parentMessageId;
         this.uid = uid;
         this.version = version;
+        this.isWs = isWs;
         this.error = false;
     }
 
@@ -87,6 +91,9 @@ public class SSEListener extends WebSocketListener {
             throw new LLMException("请求数据 SparkRequest 序列化失败");
         }
         webSocket.send(requestJson);
+        if (!isWs) {
+            response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
+        }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
     }
@@ -146,8 +153,13 @@ public class SSEListener extends WebSocketListener {
             ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                     .parentMessageId(parentMessageId)
                     .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
-            response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
-            response.getWriter().flush();
+            if (isWs) {
+                WebSocketData wsData = WebSocketData.builder().functionCode(FunctionCodeConstant.MESSAGE).message(chatData).build();
+                WebsocketServer.sendMessageByUserId(uid, JSON.toJSONString(wsData));
+            } else {
+                response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
+                response.getWriter().flush();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("消息错误", e);

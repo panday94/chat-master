@@ -1,8 +1,9 @@
 package com.master.chat.client.service;
 
-import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.command.ChatCommand;
+import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.dto.ChatMessageDTO;
+import com.master.chat.client.model.dto.ModelDTO;
 
 import java.util.List;
 
@@ -90,5 +91,13 @@ public interface GptService {
      * @return
      */
     void updateMessageUsedTokens(String messageId, Long usedTokens);
+
+    /**
+     * 获取模型信息
+     *
+     * @param model 模型名称
+     * @return
+     */
+    ModelDTO getModel(String model);
 
 }
