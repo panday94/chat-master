@@ -26,7 +26,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 * 完善的权限控制，权限认证使用Jwt，支持多终端认证系统
 * 管理端项目，请移步[chat-master-admin](https://gitee.com/panday94/chat-master-admin)
 * 网页端项目，请移步[chat-master-web](https://gitee.com/panday94/chat-master-web)
-* 移动端项目，请移步[chat-master-uniapp](https://gitee.com/panday94/chat-master-uniapp)
+* 移动端项目，请移步[chat-master-uniapp](https://gitee.com/panday94/chat-master-uniapp)(暂未开源，如需购买或咨询商业版可[联系作者](#联系我们))
 * 如需了解更多可访问[这里](https://www.yuque.com/the6/ct0azl/ehxcgoy0xg41l9c3?singleDoc# 《ChatMASTER部署教程》)
 * 扫码加入微信群获取一键部署教程[扫码加入](#扫码进群)
 * 阿里云折扣场：[点我进入](https://www.aliyun.com/minisite/goods?userCode=iqguofg4)，腾讯云秒杀场：[点我进入](https://curl.qcloud.com/11y0ob0f)&nbsp;&nbsp;
@@ -116,7 +116,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ``` 
 1、idea导入chat-master项目，请更换spring.profiles.active为dev
-2、执行doc/sql/chat_gpt全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
+2、执行chat-master-server/doc/sql/chat_gpt全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
 3、版本更新时候需执行doc/sql/update.sql
 4、更改application-dev中redis连接和mysql连接配置
 5、启动ChatApplication中main方法

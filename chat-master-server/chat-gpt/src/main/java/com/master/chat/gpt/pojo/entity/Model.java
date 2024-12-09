@@ -47,7 +47,7 @@ public class Model extends BaseEntity {
     private String version;
 
     /**
-     * 本地模型类型：1、Langchian；2、ollama；3、Giteeai
+     * 本地模型类型：1、Langchian；2、ollama；3、Giteeai 4、Coze
      */
     private Integer localModelType;
 
