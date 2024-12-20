@@ -34,7 +34,7 @@ management:
 spring:
   # 环境 dev|test|prod
   profiles:
-    active: dev
+    active: test
   # 应用名称
   application:
     name: chat-master
