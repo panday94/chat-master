@@ -80,7 +80,6 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 提示：
 1. ChatGPT 可通过`Cloudflare`访问openai接口或者使用代理，ChatGPT及国内模型密钥由后台系统配置
-3. 后期可接入使用自己token或者key使用
 
 | 名称                                          | 免费？ | 是否国内     | 地址 |
 | --------------------------------------------- | ------ | ---------- | ---- |
