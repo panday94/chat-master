@@ -5,7 +5,7 @@ import wxapp from '@/assets/wxapp.jpg'
 import { SvgIcon } from '@/components/common'
 import { defineAsyncComponent } from 'vue'
 import { useAppStore, useChatStore } from '@/store'
-import { NPopover, NDropdown, useMessage } from 'naive-ui'
+import { NPopover, NDropdown, useMessage, DropdownOption, menuProps, DropdownMenuProps } from 'naive-ui'
 import { fetchModel } from '@/api/user'
 import type { Theme } from '@/store/modules/app/helper'
 
@@ -132,7 +132,6 @@ function updateOptions() {
               placement="right-start"
               :options="options"
               @select="handleSelect"
-              style="border: none;"
             >
               <SvgIcon :name="model" width="32" height="32" />
             </NDropdown>
@@ -183,3 +182,10 @@ function updateOptions() {
     <Setting v-if="show" v-model:visible="show" />
   </div>
 </template>
+
+<style>
+.n-dropdown-menu {
+  height: 174px;
+  overflow-y: auto;
+}
+</style>
