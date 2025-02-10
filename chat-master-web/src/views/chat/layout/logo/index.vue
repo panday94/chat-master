@@ -98,6 +98,7 @@ function updateOptions() {
         return option;
     })
 }
+
 </script>
 <template>
   <div>
@@ -129,7 +130,7 @@ function updateOptions() {
           >
             <NDropdown
               trigger="hover"
-              placement="right-start"
+              placement="right"
               :options="options"
               @select="handleSelect"
             >
@@ -183,9 +184,9 @@ function updateOptions() {
   </div>
 </template>
 
-<style>
+<style lang="less">
 .n-dropdown-menu {
-  height: 174px;
+  max-height: 212px;
   overflow-y: auto;
 }
 </style>

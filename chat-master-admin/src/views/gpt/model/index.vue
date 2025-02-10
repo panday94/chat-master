@@ -68,7 +68,7 @@
         </template>
       </el-table-column>
       <el-table-column label="普会版本" align="center" prop="version" />
-      <el-table-column label="超会版本" align="center" prop="plusVersion" />
+      <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="是否可用" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status" />
@@ -134,6 +134,9 @@
         </el-form-item>
         <el-form-item v-if="form.model == 'LocalLM'" label="知识库">
           <el-input v-model="form.knowledge" placeholder="请输入知识库名称" />
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input-number v-model="form.sort" placeholder="请输入排序"/>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-switch v-model="form.status" :active-value="1" :inactive-value="0"></el-switch>
@@ -213,6 +216,13 @@ export default {
         ],
         knowledge: [
           { required: true, message: "知识库不能为空", trigger: "blur" }
+        ],
+        sort: [
+          {
+            required: true,
+            message: "排序不能为空",
+            trigger: "blur"
+          }
         ],
         status: [
           {

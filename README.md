@@ -10,7 +10,7 @@
 
 # 项目简介
 ChatMASTER，基于AI大模型api实现的自建后端对话服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换DeepSeek、月之暗面（Kimi）、豆包、ChatGPT(3.5、4.0)、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型，并且支持扣子(Coze)和使用Ollama和Langchain进行加载本地模型及知识库问答。
-目前已支持Langchain-chatchat、Ollama、扣子（Coze）本地或在线接口调用，FastGPT对接中。
+目前已支持Langchain-chatchat、Ollama、扣子（Coze）本地或在线接口调用，Dify、LinkAI、FastGPT对接中。
 项目包含java服务端、网页端、移动端及管理后台配置。
 
 > 如果觉得项目好用，请点个Star吧！如需ChatGPT或者Claude支持，可[联系作者](#联系我们)获取。
@@ -21,7 +21,8 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 欢迎小伙伴或有合作意向一起加入交流群[添加微信](#扫码进群)或提Issues。使用参考下面具体介绍：
 
-* 支持一键切换DeepSeek、月之暗面（Kimi）、豆包、ChatGPT(3.5、4.0)、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型，并且支持扣子(Coze)和使用Ollama和Langchain进行加载本地模型及知识库问答。
+* 支持一键切换DeepSeek、月之暗面（Kimi）、豆包、ChatGPT(3.5、4.0)、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型。
+* 不仅支持国内外官方模型接口，并且支持使用Ollama和Langchain进行加载本地模型及知识库问答，也可以使用扣子(Coze)的在线api进行使用。LinkAi、FastGPT
 * 免费提供多种类型助手按指定prompt输出，也可在管理后台创建自定义助手模版。如需更多万花筒信息可关注公众号[扫码获取](#联系我们)获取
 * 管理端端采用Vue2、Element UI，ChatMASTER网页端使用Vue3、TypeScript、NaiveUI进行开发
 * 服务端采用Spring Boot、Spring Security + JWT、Mybatis-Plus、Lombok、 Mysql & Redis，代码通俗易懂，上手即用

@@ -1,5 +1,7 @@
 # ChatMASTER 运行部署教程
 
+> 若需要二开建议您参考运行教程，若您是小白只想直接使用，可以查看[一键部署教程](#docker一键部署)
+
 ## 运行（适用于windows/mac/linux）
 
 ### 运行服务端（chat-master-server）
@@ -112,7 +114,8 @@ cp .env.development .env.production
 pnpm build:prod
 ```
 
-## Docker一键部署
+## docker一键部署
+
 
 ## 防止爬虫抓取
 
