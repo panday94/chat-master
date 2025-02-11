@@ -14,7 +14,7 @@
 - 运行
 
 1. idea导入chat-master项目，请更换spring.profiles.active为dev
-2. 使用navicat或其他数据库管理工具导入../chat-master-server/sql/chat_gpt全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
+2. 使用navicat或其他数据库管理工具导入../chat-master-server/sql/chat_master全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
 3. 版本更新时候需执行doc/sql/update.sql或者查看版本更新记录获取最新sql
 4. 更改application-dev中redis连接和mysql连接配置
 5. 启动ChatApplication中main方法
@@ -86,8 +86,32 @@ npm run dev
 ```
 
 ## 部署
+## docker一键部署
 
-## 手动打包部署
+```shell
+# 安装Docker
+# 设置仓库
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+# 设置稳定的仓库
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+# 安装Docker
+sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# 启动Docker
+sudo systemctl start docker
+
+# 开机默认启动
+systemctl enable docker
+
+# 运行ChatMaster服务端
+
+# 运行ChatMaster客户端
+
+```
+
+## 手动部署
 
 ### 打包服务端（chat-master-server）
 > 使用idea中Maven插件打包 或 maven clean package 手动打包
@@ -113,8 +137,6 @@ cp .env.development .env.production
 # 修改生成环境配置信息
 pnpm build:prod
 ```
-
-## docker一键部署
 
 
 ## 防止爬虫抓取
