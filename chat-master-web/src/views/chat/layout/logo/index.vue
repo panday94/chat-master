@@ -5,7 +5,7 @@ import wxapp from '@/assets/wxapp.jpg'
 import { SvgIcon } from '@/components/common'
 import { defineAsyncComponent } from 'vue'
 import { useAppStore, useChatStore } from '@/store'
-import { NPopover, NDropdown, useMessage, DropdownOption, menuProps, DropdownMenuProps } from 'naive-ui'
+import { NPopover, NDropdown, useMessage } from 'naive-ui'
 import { fetchModel } from '@/api/user'
 import type { Theme } from '@/store/modules/app/helper'
 

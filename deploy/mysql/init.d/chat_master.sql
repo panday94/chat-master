@@ -17,6 +17,12 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+--
+-- 数据库： `chat_master`
+--
+CREATE DATABASE IF NOT EXISTS `chat_master` DEFAULT CHARACTER SET utf8mb4;
+USE `chat_master`;
+
 -- ----------------------------
 -- Table structure for gpt_agreement
 -- ----------------------------
