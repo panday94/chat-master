@@ -1,6 +1,6 @@
 # ChatMASTER 运行部署教程
 
-> 若需要二开建议您参考运行教程，若您是小白只想直接使用，可以查看[一键部署教程](#docker一键部署)
+> 若需要二开建议您参考运行教程，若您是小白只想直接使用，可以查看[一键部署教程](#部署)
 - 后台管理系统默认密码为admin 123456 
 - 客户端账号密码自行注册，登录即注册
 
@@ -93,8 +93,9 @@ npm run dev
 
 > 数据库名称chat_master，账号chat_master 密码chat_master
 
+### 安装Docker(如已安装则跳过，可能会出现镜像源无法拉取问题自行百度)
+
 ```shell
-# 安装Docker(如已安装则跳过，可能会出现镜像源无法拉取问题自行百度)
 # 设置仓库
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
