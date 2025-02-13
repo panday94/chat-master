@@ -89,7 +89,12 @@ npm run dev
 ```
 
 ## 部署
-## docker部署（不推荐）
+
+1. docker[部署](#docker部署)
+
+2. Docker Compose [一键部署](#docker-compose-一键部署推荐)（推荐）
+
+## docker部署
 
 > 数据库名称chat_master，账号chat_master 密码chat_master
 
