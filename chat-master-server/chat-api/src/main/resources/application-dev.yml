@@ -24,15 +24,15 @@ spring:
         # 数据库1
         master:
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/chat_gpt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
-          username: root
-          password: 123456
+          url: jdbc:mysql://127.0.0.1:3306/chat_master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: chat_master
+          password: chat_master
         # 数据库2
         slave_1:
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/chat_gpt?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
-          username: root
-          password: 123456
+          url: jdbc:mysql://127.0.0.1:3306/chat_master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: chat_master
+          password: chat_master
       druid:
         # 初始连接数
         initialSize: 5

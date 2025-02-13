@@ -50,6 +50,8 @@ public class ChatVO implements Serializable {
      */
     private Long assistantId;
     private String assistantTitle;
+    private String assistantIcon;
+    private String assistantAvatar;
 
     /**
      * 提示词

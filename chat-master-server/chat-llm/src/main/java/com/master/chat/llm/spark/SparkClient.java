@@ -1,5 +1,6 @@
 package com.master.chat.llm.spark;
 
+import com.alibaba.fastjson.JSON;
 import com.master.chat.llm.base.exception.LLMException;
 import com.master.chat.llm.spark.entity.request.ChatRequest;
 import com.master.chat.llm.spark.entity.response.ChatSyncResponse;
@@ -91,6 +92,7 @@ public class SparkClient {
             throw new LLMException("构建鉴权url失败");
         }
         // 发送请求
+        System.out.println(JSON.toJSONString(chatRequest));
         client.newWebSocket(request, listener);
     }
 

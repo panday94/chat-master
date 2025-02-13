@@ -62,7 +62,7 @@ public class SparkServiceImpl implements ModelService {
                 // 核采样阈值。用于决定结果随机性,取值越高随机性越强即相同的问题得到的不同答案的可能性越高 非必传,取值为[0,1],默认为0.5
                 .temperature(0.5)
                 // 指定请求版本，默认使用最新2.0版本
-                .apiVersion(ValidatorUtil.isNotNull(version) ? ModelEnum.getEnum(version) : ModelEnum.V2_0)
+                .apiVersion(ValidatorUtil.isNotNull(version) ? ModelEnum.getEnum(version) : ModelEnum.Lite)
                 .chatId(chatId.toString())
                 .build();
         ChatSyncResponse response = sparkClient.chat(chatRequest);
@@ -71,7 +71,7 @@ public class SparkServiceImpl implements ModelService {
         }
         Usage textUsage = response.getTextUsage();
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(UUID.fastUUID().toString())
-                .model(ChatModelEnum.SPARK.getValue()).modelVersion(ModelEnum.V2_0.getVersion())
+                .model(ChatModelEnum.SPARK.getValue()).modelVersion(ModelEnum.Lite.getVersion())
                 .content(response.getContent()).role(ChatRoleEnum.ASSISTANT.getValue())
                 .status(ChatStatusEnum.SUCCESS.getValue()).appKey(sparkClient.apiKey).usedTokens(Long.valueOf(textUsage.getTotalTokens()))
                 .response(JSON.toJSONString(response))
@@ -98,10 +98,11 @@ public class SparkServiceImpl implements ModelService {
                 // 核采样阈值。用于决定结果随机性,取值越高随机性越强即相同的问题得到的不同答案的可能性越高 非必传,取值为[0,1],默认为0.5
                 .temperature(0.5)
                 // 指定请求版本，默认使用最新2.0版本
-                .apiVersion(ValidatorUtil.isNotNull(version) ? ModelEnum.getEnum(version) : ModelEnum.V2_0)
+                .apiVersion(ValidatorUtil.isNotNull(version) ? ModelEnum.getEnum(version) : ModelEnum.Lite)
                 .chatId(chatId.toString())
                 .build();
         chatRequest.getHeader().setAppId(sparkClient.appid);
+//        chatRequest.getHeader().setUid(uid);
         SSEListener sseListener = new SSEListener(chatRequest, response, chatId, conversationId, uid, version, isWs);
         sparkClient.streamChat(chatRequest, sseListener);
         if (isWs) {

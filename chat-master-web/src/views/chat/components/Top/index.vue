@@ -70,7 +70,7 @@ function clickAssistant(assistantId: number) {
 
 // 跳转码云仓库
 function jumpMayun() {
-  window.open("https://gitee.com/panday94/chat-master-web", "_blank");
+  window.open("https://gitee.com/panday94/chat-master", "_blank");
 }
 </script>
 <template>

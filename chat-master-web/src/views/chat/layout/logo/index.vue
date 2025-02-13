@@ -98,6 +98,7 @@ function updateOptions() {
         return option;
     })
 }
+
 </script>
 <template>
   <div>
@@ -129,10 +130,9 @@ function updateOptions() {
           >
             <NDropdown
               trigger="hover"
-              placement="right-start"
+              placement="right"
               :options="options"
               @select="handleSelect"
-              style="border: none;"
             >
               <SvgIcon :name="model" width="32" height="32" />
             </NDropdown>
@@ -183,3 +183,10 @@ function updateOptions() {
     <Setting v-if="show" v-model:visible="show" />
   </div>
 </template>
+
+<style lang="less">
+.n-dropdown-menu {
+  max-height: 212px;
+  overflow-y: auto;
+}
+</style>

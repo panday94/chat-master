@@ -30,4 +30,5 @@ coverage
 
 # Environment variables files
 .env.production
+.env.stage
 

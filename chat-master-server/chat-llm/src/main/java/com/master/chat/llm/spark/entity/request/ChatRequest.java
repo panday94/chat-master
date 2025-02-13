@@ -26,7 +26,7 @@ public class ChatRequest implements Serializable {
     private ChatPayload payload;
 
     @JsonIgnore
-    private transient ModelEnum apiVersion = ModelEnum.V2_0;
+    private transient ModelEnum apiVersion = ModelEnum.Lite;
     public static ChatRequestBuilder builder() {
         return new ChatRequestBuilder();
     }

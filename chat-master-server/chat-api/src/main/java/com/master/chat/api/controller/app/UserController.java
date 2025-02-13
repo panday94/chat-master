@@ -4,6 +4,7 @@ import com.master.chat.api.base.BaseAppController;
 import com.master.chat.common.config.dto.ExtraInfoDTO;
 import com.master.chat.common.constant.OssConstant;
 import com.master.chat.common.enums.OssEnum;
+import com.master.chat.common.enums.StatusEnum;
 import com.master.chat.framework.config.SystemConfig;
 import com.master.chat.framework.util.AliyunOSSUtil;
 import com.master.chat.framework.util.file.FileUploadUtils;
@@ -66,7 +67,9 @@ public class UserController extends BaseAppController {
      */
     @GetMapping("/model")
     public ResponseInfo<List<ModelVO>> getUserModel() {
-        return modelService.listModel(new Query());
+        Query query = new Query();
+        query.put("status", StatusEnum.ENABLED.getValue());
+        return modelService.listModel(query);
     }
 
     /**
