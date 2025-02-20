@@ -18,6 +18,7 @@
         <retrofit2.version>2.9.0</retrofit2.version>
         <knuddels.version>0.5.0</knuddels.version>
         <alibaba.dashscope.version>2.11.0</alibaba.dashscope.version>
+        <doubao.version>0.1.151</doubao.version>
     </properties>
 
     <dependencies>
@@ -43,6 +44,12 @@
             <groupId>cn.bigmodel.openapi</groupId>
             <artifactId>oapi-java-sdk</artifactId>
             <version>release-V4-2.0.2</version>
+        </dependency>
+        <!-- 豆包 -->
+        <dependency>
+            <groupId>com.volcengine</groupId>
+            <artifactId>volcengine-java-sdk-ark-runtime</artifactId>
+            <version>${doubao.version}</version>
         </dependency>
     </dependencies>
 

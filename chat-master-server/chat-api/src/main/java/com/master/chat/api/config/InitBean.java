@@ -9,6 +9,7 @@ import com.master.chat.gpt.constant.BaseConfigConstant;
 import com.master.chat.gpt.mapper.OpenkeyMapper;
 import com.master.chat.gpt.pojo.vo.OpenkeyVO;
 import com.master.chat.llm.chatglm.ChatGLMClient;
+import com.master.chat.llm.doubao.DouBaoClient;
 import com.master.chat.llm.internlm.InternlmClient;
 import com.master.chat.llm.locallm.LocalLMClient;
 import com.master.chat.llm.moonshot.MoonshotClient;
@@ -237,6 +238,24 @@ public class InitBean {
             return new MoonshotClient();
         }
         return MoonshotClient.builder().apiKey(openkey.getAppKey()).build();
+    }
+
+    /**
+     * 豆包
+     *
+     * @return
+     */
+    @Bean
+    public DouBaoClient douBaoClient() {
+        List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.DOUBAO.getValue());
+        if (ValidatorUtil.isNullIncludeArray(openkeys)) {
+            log.error("未加载到豆包模型token数据，请添加后需要重启系统");
+            return new DouBaoClient();
+        }
+        if (ValidatorUtil.isNotNullIncludeArray(openkeys)) {
+            return DouBaoClient.builder().apiKey(openkeys.get(0).getAppKey()).build();
+        }
+        return DouBaoClient.builder().build();
     }
 
     /**
