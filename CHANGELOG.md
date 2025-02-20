@@ -2,7 +2,7 @@
 
 `2025-02-08`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -16,7 +16,7 @@
 
 `2024-09-19`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -29,7 +29,7 @@
 
 `2024-05-30`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -59,7 +59,7 @@
 
 `2024-03-17`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -76,7 +76,7 @@
 
 `2024-03-14`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -92,7 +92,7 @@
 
 `2024-03-04`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -108,7 +108,7 @@
 
 `2024-02-29`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -125,7 +125,7 @@
 
 `2024-01-20`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -143,7 +143,7 @@
 
 `2023-01-06`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -159,7 +159,7 @@
 
 `2023-12-26`
 
-> [chat-master](https://gitee.com/yoli9/chat-master)
+> [chat-master](https://gitee.com/panday94/chat-master)
 
 ## Enhancement
 
@@ -169,4 +169,4 @@
 
 `2023-12-1`
 
-> [chat-master](https://gitee.com/yoli9/chat-master) ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json返回及流式响应，完美呈现打印机效果。
+> [chat-master](https://gitee.com/panday94/chat-master) ChatMASTER，基于AI大模型api实现的自建后端ChatGPT服务，支出json返回及流式响应，完美呈现打印机效果。
