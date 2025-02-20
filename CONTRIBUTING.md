@@ -7,7 +7,7 @@
 每个重大更改都将记录在 `changelog` 中。
 
 ## 提交 Pull Request
-Fork [此仓库](https://gitee.com/yoli9/chat-master)，从 `master` 创建分支。新功能实现请发 pull request 到 `feature` 分支。其他更改发到 `main` 分支。
+Fork [此仓库](https://gitee.com/panday94/chat-master)，从 `master` 创建分支。新功能实现请发 pull request 到 `feature` 分支。其他更改发到 `main` 分支。
 
 ## Commit 指南
 
