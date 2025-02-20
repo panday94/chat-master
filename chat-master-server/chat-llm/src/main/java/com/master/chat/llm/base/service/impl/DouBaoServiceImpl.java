@@ -6,11 +6,11 @@ import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.model.dto.ChatMessageDTO;
+import com.master.chat.common.exception.BusinessException;
+import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.service.ModelService;
 import com.master.chat.llm.doubao.DouBaoClient;
 import com.master.chat.llm.doubao.enums.ModelEnum;
-import com.master.common.exception.BusinessException;
-import com.master.common.validator.ValidatorUtil;
 import com.volcengine.ark.runtime.model.completion.chat.ChatCompletionRequest;
 import com.volcengine.ark.runtime.model.completion.chat.ChatCompletionResult;
 import com.volcengine.ark.runtime.model.completion.chat.ChatMessage;
@@ -19,6 +19,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;

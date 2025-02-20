@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/SpringBoot-2.3.7-brightgreen.svg) [![star](https://gitcode.com/panday94/chat-master/star/badge.svg)](https://gitcode.com/panday94/chat-master)
 
 
-> 声明：此项目只发布于码云和GitHub，基于 Apache 协议，免费且作为开源学习使用，禁止转卖、谨防受骗。如需商用必须保留版权信息，请自觉遵守。确保合法合规使用，在运营过程中产生的一切任何后果自负，与作者无关。
+> 声明：此项目发布于码云、GitCode和GitHub，基于 Apache 协议，免费且作为开源学习使用，禁止转卖、谨防受骗。如需商用必须保留版权信息，请自觉遵守。确保合法合规使用，在运营过程中产生的一切任何后果自负，与作者无关。
 
 # 项目简介
 ChatMASTER，基于AI大模型api实现的自建后端对话服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换DeepSeek、月之暗面（Kimi）、豆包、ChatGPT(3.5、4.0)、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型，并且支持扣子(Coze)和使用Ollama和Langchain进行加载本地模型及知识库问答。
