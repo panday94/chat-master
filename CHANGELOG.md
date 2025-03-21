@@ -7,13 +7,14 @@
 ## Enhancement
 
 - 密钥自动更新功能优化
-- 优化llm初始化代码，优化openai及deepseek初始化代码
+- 优化llm模块代码，统一LocalLM请求。
 - 将Java中chat-gpt模块更改为chat-core模块
 - 增加Springboot3分支，支持SpringBoot3/JDK17/JDK21，同步修改了以下模块
     - 修改了javax.servlet包替换为jakarta.servlet
     - 更新了Mybatis-Plus包、Druid包，将mysql-connector包改为8.0+
     - 更新了WebSecurity配置
     - 更新了Dozer版本
+- 支持Dify
 
 ## BugFix
 - 前端用户/后端用户同时登录问题，区分前台用户token和后台用户token

@@ -1,4 +1,4 @@
-package com.master.chat.llm.locallm.base;
+package com.master.chat.llm.locallm.base.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

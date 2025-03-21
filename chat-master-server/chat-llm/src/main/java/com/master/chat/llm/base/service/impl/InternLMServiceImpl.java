@@ -46,7 +46,7 @@ public class InternLMServiceImpl implements ModelService {
     @SneakyThrows
     public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
-        if (ValidatorUtil.isNull(internlmClient.getToken())) {
+        if (ValidatorUtil.isNull(internlmClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
         }
         List<ChatCompletionMessage> messages = new ArrayList<>();

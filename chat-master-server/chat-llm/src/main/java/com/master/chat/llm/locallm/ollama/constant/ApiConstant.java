@@ -1,7 +1,7 @@
 package com.master.chat.llm.locallm.ollama.constant;
 
 /**
- * LangChain 常量
+ * Ollama 常量
  *
  * @author: Yang
  * @date: 2023/12/4

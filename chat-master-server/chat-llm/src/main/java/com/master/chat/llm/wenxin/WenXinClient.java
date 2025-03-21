@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.constant.StringPoolConstant;
+import com.master.chat.common.exception.ValidateException;
 import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.base.exception.LLMException;
 import com.master.chat.llm.base.key.KeyUpdater;
@@ -71,6 +72,9 @@ public class WenXinClient implements KeyUpdater {
     private OkHttpClient okHttpClient;
 
     private WenXinClient(Builder builder) {
+        if (StrUtil.isBlank(builder.apiKey)) {
+            throw new ValidateException("构造错误: apiKey不能为空");
+        }
         apiKey = builder.apiKey;
         secretKey = builder.secretKey;
         if (Objects.isNull(builder.okHttpClient)) {
@@ -84,7 +88,7 @@ public class WenXinClient implements KeyUpdater {
         // 获取token
         accessToken = updateAccessTokenFromBaidu();
         if (StrUtil.isBlank(accessToken)) {
-            throw new LLMException("构造错误: accessToken不能为空");
+            throw new LLMException("构造错误: apiKey不能为空");
         }
     }
 
@@ -243,15 +247,6 @@ public class WenXinClient implements KeyUpdater {
                 .build();
     }
 
-    /**
-     * 构造
-     *
-     * @return
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     public String supportModel() {
         return ChatModelEnum.WENXIN.getValue();
@@ -261,6 +256,15 @@ public class WenXinClient implements KeyUpdater {
     public void updateKey(KeyModel keyModel) {
         this.setSecretKey(keyModel.getAppSecret());
         this.setApiKey(keyModel.getAppKey());
+    }
+
+    /**
+     * 构造
+     *
+     * @return
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static final class Builder {

@@ -20,6 +20,7 @@ import com.master.chat.llm.deepseek.DeepSeekClient;
 import com.master.chat.llm.doubao.DouBaoClient;
 import com.master.chat.llm.internlm.InternlmClient;
 import com.master.chat.llm.locallm.coze.CozeClient;
+import com.master.chat.llm.locallm.dify.DifyClient;
 import com.master.chat.llm.locallm.gitee.GiteeClient;
 import com.master.chat.llm.locallm.langchain.LangchainClient;
 import com.master.chat.llm.locallm.ollama.OllamaClient;
@@ -65,12 +66,14 @@ public class LLMService {
     private static OllamaClient ollamaClient;
     private static CozeClient cozeClient;
     private static GiteeClient giteeClient;
+    private static DifyClient difyClient;
     private final GptService gptService;
 
     @Autowired
     public LLMService(GptService gptService, OpenAiClient openAiClient, DeepSeekClient deepSeekClient, WenXinClient wenXinClient,
                       ChatGLMClient chatGLMClient, TongYiClient tongYiClient, SparkClient sparkClient, MoonshotClient moonshotClient, DouBaoClient douBaoClient,
-                      InternlmClient internlmClient, LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient, GiteeClient giteeClient) {
+                      InternlmClient internlmClient, LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient, GiteeClient giteeClient,
+                      DifyClient difyClient) {
         this.gptService = gptService;
         LLMService.openAiClient = openAiClient;
         LLMService.deepSeekClient = deepSeekClient;
@@ -85,6 +88,7 @@ public class LLMService {
         LLMService.ollamaClient = ollamaClient;
         LLMService.cozeClient = cozeClient;
         LLMService.giteeClient = giteeClient;
+        LLMService.difyClient = difyClient;
     }
 
     public SseEmitter createSse(String uid) {
@@ -161,7 +165,7 @@ public class LLMService {
             case DOUBAO:
                 return new DouBaoServiceImpl(douBaoClient);
             case LOCALLM:
-                return new LocalLMServiceImpl(langchainClient, ollamaClient, cozeClient, gptService,giteeClient);
+                return new LocalLMServiceImpl(langchainClient, ollamaClient, cozeClient, gptService, giteeClient, difyClient);
             default:
                 return null;
         }

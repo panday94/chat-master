@@ -1,4 +1,4 @@
-package com.master.chat.llm.locallm.interceptor;
+package com.master.chat.llm.locallm.base.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.logging.HttpLoggingInterceptor;

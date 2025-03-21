@@ -1,6 +1,8 @@
 package com.master.chat.llm.doubao;
 
+import cn.hutool.core.util.StrUtil;
 import com.master.chat.client.enums.ChatModelEnum;
+import com.master.chat.common.exception.ValidateException;
 import com.master.chat.llm.base.key.KeyUpdater;
 import com.master.chat.llm.doubao.listener.SSEListener;
 import com.volcengine.ark.runtime.model.completion.chat.ChatCompletionChunk;
@@ -29,6 +31,7 @@ public class DouBaoClient implements KeyUpdater {
     @Getter
     @Setter
     private String apiKey;
+    private ArkService service;
 
     public DouBaoClient() {
     }
@@ -37,8 +40,12 @@ public class DouBaoClient implements KeyUpdater {
         this.apiKey = apiKey;
     }
 
-    private DouBaoClient(DouBaoClient.Builder builder) {
+    private DouBaoClient(Builder builder) {
+        if (StrUtil.isBlank(builder.apiKey)) {
+            throw new ValidateException("构造错误: apiKey不能为空");
+        }
         apiKey = builder.apiKey;
+        service = ArkService.builder().apiKey(apiKey).build();
     }
 
     /**
@@ -47,7 +54,6 @@ public class DouBaoClient implements KeyUpdater {
      * @param request
      */
     public ChatCompletionResult chat(ChatCompletionRequest request) {
-        ArkService service = ArkService.builder().apiKey(apiKey).build();
         ChatCompletionResult invokeModelApiResp = service.createChatCompletion(request);
         try {
             return invokeModelApiResp;
@@ -63,23 +69,12 @@ public class DouBaoClient implements KeyUpdater {
      * @param request
      */
     public Boolean streamChat(HttpServletResponse response, ChatCompletionRequest request, Long chatId, String parentMessageId, String version, String uid, Boolean isWs) {
-        ArkService service = ArkService.builder().apiKey(apiKey).build();
         SSEListener sseListener = new SSEListener(response, chatId, parentMessageId, version, uid, isWs);
         Flowable<ChatCompletionChunk> chunks =  service.streamChatCompletion(request);
         Boolean flag = sseListener.streamChat(chunks);
         // shutdown service
         service.shutdownExecutor();
         return flag;
-    }
-
-
-    /**
-     * 构造
-     *
-     * @return
-     */
-    public static DouBaoClient.Builder builder() {
-        return new DouBaoClient.Builder();
     }
 
     @Override
@@ -90,6 +85,16 @@ public class DouBaoClient implements KeyUpdater {
     @Override
     public void updateKey(KeyModel keyModel) {
         this.setApiKey(keyModel.getAppKey());
+        service = ArkService.builder().apiKey(apiKey).build();
+    }
+
+    /**
+     * 构造
+     *
+     * @return
+     */
+    public static DouBaoClient.Builder builder() {
+        return new DouBaoClient.Builder();
     }
 
     public static final class Builder {

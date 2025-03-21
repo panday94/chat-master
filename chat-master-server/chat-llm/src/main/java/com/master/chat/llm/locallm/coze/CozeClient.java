@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Ollama client
+ * Coze client
  *
  * @author: Yang
  * @date: 2023/12/4

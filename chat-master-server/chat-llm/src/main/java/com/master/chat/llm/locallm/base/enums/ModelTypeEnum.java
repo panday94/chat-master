@@ -1,9 +1,9 @@
-package com.master.chat.llm.locallm.enums;
+package com.master.chat.llm.locallm.base.enums;
 
 import lombok.Getter;
 
 /**
- * Langchain 对话模型类型
+ * LocalLM 本地/在线 对话模型类型
  *
  * @author: Yang
  * @date: 2023/01/31
@@ -21,6 +21,12 @@ public enum ModelTypeEnum {
     GITEE_AI("GiteeAI", 3),
     COZE("Coze", 4),
     FASTGPT("FastGPT", 5),
+    Dify("Dify", 6),
+    LinkAI("LinkAI", 7),
+    /**
+     * 代表openai格式的通用API
+     */
+    OpenAI("OpenAI", 99),
 
     ;
 

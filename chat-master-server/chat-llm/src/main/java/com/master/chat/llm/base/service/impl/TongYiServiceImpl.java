@@ -56,7 +56,7 @@ public class TongYiServiceImpl implements ModelService {
         chatMessages.stream().forEach(v -> {
             msgManager.add(Message.builder().role(v.getRole()).content(v.getContent()).build());
         });
-        QwenParam param = QwenParam.builder().apiKey(tongYiClient.getAppKey())
+        QwenParam param = QwenParam.builder().apiKey(tongYiClient.getApiKey())
                 .model(ValidatorUtil.isNotNull(version) ? version : Generation.Models.QWEN_TURBO)
                 .messages(msgManager.get())
                 .resultFormat(QwenParam.ResultFormat.MESSAGE)
@@ -84,7 +84,7 @@ public class TongYiServiceImpl implements ModelService {
     @SneakyThrows
     public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
-        if (ValidatorUtil.isNull(tongYiClient.getAppKey())) {
+        if (ValidatorUtil.isNull(tongYiClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
         }
         MessageManager msgManager = new MessageManager(20);
@@ -92,7 +92,7 @@ public class TongYiServiceImpl implements ModelService {
             msgManager.add(Message.builder().role(v.getRole()).content(v.getContent()).build());
         });
         Generation gen = new Generation();
-        QwenParam param = QwenParam.builder().apiKey(tongYiClient.getAppKey())
+        QwenParam param = QwenParam.builder().apiKey(tongYiClient.getApiKey())
                 .model(ValidatorUtil.isNotNull(version) ? version : Generation.Models.QWEN_TURBO)
                 .messages(msgManager.get())
                 .resultFormat(QwenParam.ResultFormat.MESSAGE)

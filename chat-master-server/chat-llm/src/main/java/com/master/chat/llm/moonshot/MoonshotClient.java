@@ -1,5 +1,6 @@
 package com.master.chat.llm.moonshot;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.constant.AuthConstant;
+import com.master.chat.common.exception.ValidateException;
 import com.master.chat.llm.base.key.KeyUpdater;
 import com.master.chat.llm.moonshot.constant.ApiConstant;
 import com.master.chat.llm.moonshot.entity.ModelsList;
@@ -49,11 +51,13 @@ public class MoonshotClient implements KeyUpdater {
     @Getter
     @Setter
     private String apiKey;
-
     @Getter
     private OkHttpClient okHttpClient;
 
     private MoonshotClient(Builder builder) {
+        if (StrUtil.isBlank(builder.apiKey)) {
+            throw new ValidateException("构造错误: apiKey不能为空");
+        }
         apiKey = builder.apiKey;
         if (Objects.isNull(builder.okHttpClient)) {
             log.info("提示：禁止在生产环境使用BODY级别日志，可以用：NONE,BASIC,HEADERS");
@@ -244,15 +248,6 @@ public class MoonshotClient implements KeyUpdater {
                 .build();
     }
 
-    /**
-     * 构造
-     *
-     * @return
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     public String supportModel() {
         return ChatModelEnum.MOONSHOT.getValue();
@@ -261,6 +256,15 @@ public class MoonshotClient implements KeyUpdater {
     @Override
     public void updateKey(KeyModel keyModel) {
         this.setApiKey(keyModel.getAppKey());
+    }
+
+    /**
+     * 构造
+     *
+     * @return
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static final class Builder {

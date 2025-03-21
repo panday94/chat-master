@@ -1,13 +1,13 @@
-package com.master.chat.llm.locallm.ollama.listener;
+package com.master.chat.llm.locallm.dify.listener;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 import com.master.chat.client.enums.ChatContentEnum;
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.client.enums.ChatRoleEnum;
 import com.master.chat.client.enums.ChatStatusEnum;
 import com.master.chat.client.model.command.ChatMessageCommand;
 import com.master.chat.client.service.GptService;
+import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.exception.ErrorException;
 import com.master.chat.framework.util.ApplicationContextUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
@@ -15,7 +15,8 @@ import com.master.chat.llm.base.entity.ChatData;
 import com.master.chat.llm.base.websocket.WebsocketServer;
 import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
 import com.master.chat.llm.base.websocket.entity.WebSocketData;
-import com.master.chat.llm.locallm.ollama.entity.ChatResponse;
+import com.master.chat.llm.locallm.dify.entity.ChatResponse;
+import com.master.chat.llm.locallm.dify.enums.MessageTypeEnum;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import lombok.NoArgsConstructor;
@@ -25,14 +26,14 @@ import okhttp3.ResponseBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
- * ollama 流式监听处理
+ * coze 流式监听处理
  *
  * @author: Yang
  * @date: 2024/3/25
@@ -54,7 +55,9 @@ public class SSEListener {
     private String errTxt;
     private String uid;
     private Boolean isWs = false;
+    private Boolean isCompleted = false;
     private List<String> docs;
+    private List<String> followUps;
 
     /**
      * 流式响应
@@ -69,6 +72,8 @@ public class SSEListener {
         this.version = version;
         this.uid = uid;
         this.isWs = isWs;
+        this.docs = new ArrayList<>();
+        this.followUps = new ArrayList<>();
         if (response == null) {
             log.error("客户端非sse推送");
             return;
@@ -78,7 +83,7 @@ public class SSEListener {
         }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
-        log.info("ollama建立sse连接...");
+        log.info("coze建立sse连接...");
     }
 
     /**
@@ -89,15 +94,15 @@ public class SSEListener {
     public Boolean streamChat(Response response) {
         ChatResponse chatMessageAccumulator = mapStreamToAccumulator(response)
                 .doOnNext(accumulator -> {
-                        if (accumulator.getMessage() != null) {
-                            log.info("ollama返回，数据：{}", accumulator.getMessage().getContent());
-                            output.append(accumulator.getMessage().getContent()).toString();
-                            // 向客户端发送信息
-                            output();
-                        }
+                    if (accumulator.getAnswer() != null) {
+                        log.info("dify返回，数据：{}", accumulator.getAnswer());
+                        output.append(accumulator.getAnswer()).toString();
+                        // 向客户端发送信息
+                        output();
+                    }
                 }).doOnComplete(System.out::println).lastElement().blockingGet();
-        this.conversationId = chatMessageAccumulator.getCreatedAt();
-        log.info("ollama返回数据结束了:{}", JSON.toJSONString(chatMessageAccumulator));
+        this.conversationId = chatMessageAccumulator.getConversationId();
+        log.info("dify返回数据结束了:{}", JSON.toJSONString(chatMessageAccumulator));
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
                 .model(ChatModelEnum.LOCALLM.getValue()).modelVersion(version)
                 .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
@@ -105,6 +110,7 @@ public class SSEListener {
                 .build();
         ApplicationContextUtil.getBean(GptService.class).saveChatMessage(chatMessage);
         return false;
+
     }
 
     private void output() {
@@ -126,7 +132,7 @@ public class SSEListener {
         }
     }
 
-    public static Flowable<ChatResponse> mapStreamToAccumulator(Response response) {
+    public Flowable<ChatResponse> mapStreamToAccumulator(Response response) {
         return Flowable.create(emitter -> {
             ResponseBody responseBody = response.body();
             if (responseBody == null) {
@@ -135,24 +141,28 @@ public class SSEListener {
             }
             String line;
             while ((line = responseBody.source().readUtf8Line()) != null) {
-                if (line.startsWith("data:")) {
-                    line = line.substring(5);
-                    line = line.trim();
+                if (line.equals(StringPoolConstant.EMPTY) || line.equals(StringPoolConstant.NEWLINE)) {
+                    continue;
                 }
-                if (Objects.equals(line, "[DONE]")) {
+                log.info("Dify返回数据：" + line);
+                ChatResponse streamResponse = JSON.parseObject(line.replaceAll("^data: ", "").replaceAll("\n\n$", ""), ChatResponse.class);
+                if (streamResponse.getEvent().equals(MessageTypeEnum.ERROR.getValue())) {
+                    emitter.onError(new ErrorException("Error: " + streamResponse.getMessage()));
+                    return;
+                }
+                if (streamResponse.getEvent().equals(MessageTypeEnum.MESSAGE_END.getValue()) || streamResponse.getEvent().equals(MessageTypeEnum.TTS_MESSAGE_END.getValue())) {
                     emitter.onComplete();
                     return;
                 }
-                line = line.trim();
-                if (line.isEmpty()) {
+                // 过滤掉非消息事件
+                if (!streamResponse.getEvent().equals(MessageTypeEnum.MESSAGE.getValue())) {
                     continue;
                 }
-                Gson gson = new Gson();
-                ChatResponse streamResponse = gson.fromJson(line, ChatResponse.class);
                 emitter.onNext(streamResponse);
             }
             emitter.onComplete();
         }, BackpressureStrategy.BUFFER);
     }
+
 
 }

@@ -1,7 +1,9 @@
 package com.master.chat.llm.spark;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.master.chat.client.enums.ChatModelEnum;
+import com.master.chat.common.exception.ValidateException;
 import com.master.chat.llm.base.exception.LLMException;
 import com.master.chat.llm.base.key.KeyUpdater;
 import com.master.chat.llm.spark.entity.request.ChatRequest;
@@ -38,16 +40,19 @@ public class SparkClient implements KeyUpdater {
     public String appid;
     public String apiKey;
     public String apiSecret;
-
-    public OkHttpClient client = new OkHttpClient.Builder().build();
+    public OkHttpClient client;
 
     public SparkClient() {
     }
 
-    public SparkClient(String appid, String apiKey, String apiSecret) {
-        this.appid = appid;
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
+    public SparkClient(Builder builder) {
+        if (StrUtil.isBlank(builder.appKey)) {
+            throw new ValidateException("构造错误: apiKey不能为空");
+        }
+        this.appid = builder.appId;
+        this.apiKey = builder.appKey;
+        this.apiSecret = builder.appSecret;
+        this.client = new OkHttpClient.Builder().build();
     }
 
     /**
@@ -145,4 +150,42 @@ public class SparkClient implements KeyUpdater {
         this.setApiSecret(keyModel.getAppSecret());
         this.setApiKey(keyModel.getAppKey());
     }
+
+    /**
+     * 构造
+     *
+     * @return
+     */
+    public static SparkClient.Builder builder() {
+        return new SparkClient.Builder();
+    }
+
+    public static final class Builder {
+        private String appId;
+        private String appKey;
+        private String appSecret;
+
+        public Builder() {
+        }
+
+        public SparkClient.Builder appId(String val) {
+            appId = val;
+            return this;
+        }
+
+        public SparkClient.Builder appKey(String val) {
+            appKey = val;
+            return this;
+        }
+
+        public SparkClient.Builder appSecret(String val) {
+            appSecret = val;
+            return this;
+        }
+
+        public SparkClient build() {
+            return new SparkClient(this);
+        }
+    }
+
 }

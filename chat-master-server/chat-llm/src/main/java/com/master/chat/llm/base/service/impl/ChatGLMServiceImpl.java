@@ -81,7 +81,7 @@ public class ChatGLMServiceImpl implements ModelService {
         ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(response.getData().getTaskId())
                 .model(ChatModelEnum.CHATGLM.getValue()).modelVersion(modelVaersion)
                 .content(response.getData().getChoices().get(0).getDelta().getContent()).role(ChatRoleEnum.ASSISTANT.getValue())
-                .status(ChatStatusEnum.SUCCESS.getValue()).appKey(chatGLMClient.getAppKey()).usedTokens(Long.valueOf(response.getData().getUsage().getTotalTokens()))
+                .status(ChatStatusEnum.SUCCESS.getValue()).appKey(chatGLMClient.getApiKey()).usedTokens(Long.valueOf(response.getData().getUsage().getTotalTokens()))
                 .response(JSON.toJSONString(response))
                 .build();
         return chatMessage;
@@ -91,7 +91,7 @@ public class ChatGLMServiceImpl implements ModelService {
     @SneakyThrows
     public Boolean streamChat(HttpServletResponse response, SseEmitter sseEmitter, List<ChatMessageDTO> chatMessages, Boolean isWs, Boolean isDraw,
                               Long chatId, String conversationId, String prompt, String version, String uid) {
-        if (ValidatorUtil.isNull(chatGLMClient.getAppKey())) {
+        if (ValidatorUtil.isNull(chatGLMClient.getApiKey())) {
             throw new BusinessException("未加载到密钥信息");
         }
         List<ChatMessage> messages = new ArrayList<>();

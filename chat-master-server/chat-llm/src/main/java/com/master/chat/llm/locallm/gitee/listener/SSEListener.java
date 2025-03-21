@@ -50,7 +50,8 @@ public class SSEListener extends EventSourceListener {
     private volatile long lastReceivedTime = System.currentTimeMillis();
     private final long idleTimeoutMs;
     private ThreadPoolTaskExecutor scheduler;
-    private EventSource eventSource; // 保存 eventSource 对象
+    // 保存 eventSource 对象
+    private EventSource eventSource;
 
     /**
      * 构造函数中传入 idleTimeoutMs（毫秒），用以实现滑动超时

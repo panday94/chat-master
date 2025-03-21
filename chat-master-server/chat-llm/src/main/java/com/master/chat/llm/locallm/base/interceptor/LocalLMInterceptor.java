@@ -1,4 +1,4 @@
-package com.master.chat.llm.locallm.interceptor;
+package com.master.chat.llm.locallm.base.interceptor;
 
 import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;

@@ -1,6 +1,6 @@
 package com.master.chat.llm.locallm.ollama.entity;
 
-import com.master.chat.llm.locallm.base.BaseChatCompletion;
+import com.master.chat.llm.locallm.base.entity.BaseChatCompletion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

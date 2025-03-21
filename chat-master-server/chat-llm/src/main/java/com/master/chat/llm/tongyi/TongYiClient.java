@@ -1,7 +1,10 @@
 package com.master.chat.llm.tongyi;
 
+import cn.hutool.core.util.StrUtil;
 import com.master.chat.client.enums.ChatModelEnum;
+import com.master.chat.common.exception.ValidateException;
 import com.master.chat.llm.base.key.KeyUpdater;
+import com.master.chat.llm.chatglm.ChatGLMClient;
 import lombok.Data;
 
 /**
@@ -16,13 +19,16 @@ import lombok.Data;
 @Data
 public class TongYiClient implements KeyUpdater {
 
-    private String appKey;
+    private String apiKey;
 
     public TongYiClient() {
     }
 
-    public TongYiClient(String appKey) {
-        this.appKey = appKey;
+    public TongYiClient(Builder builder) {
+        if (StrUtil.isBlank(builder.apiKey)) {
+            throw new ValidateException("构造错误: apiKey不能为空");
+        }
+        this.apiKey = builder.apiKey;
     }
 
 
@@ -33,6 +39,32 @@ public class TongYiClient implements KeyUpdater {
 
     @Override
     public void updateKey(KeyModel keyModel) {
-        this.setAppKey(keyModel.getAppKey());
+        this.setApiKey(keyModel.getAppKey());
     }
+
+    /**
+     * 构造
+     *
+     * @return
+     */
+    public static TongYiClient.Builder builder() {
+        return new TongYiClient.Builder();
+    }
+
+    public static final class Builder {
+        private String apiKey;
+
+        public Builder() {
+        }
+
+        public TongYiClient.Builder apiKey(String val) {
+            apiKey = val;
+            return this;
+        }
+
+        public TongYiClient build() {
+            return new TongYiClient(this);
+        }
+    }
+
 }

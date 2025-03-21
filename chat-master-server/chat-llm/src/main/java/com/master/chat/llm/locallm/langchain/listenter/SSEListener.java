@@ -2,6 +2,7 @@ package com.master.chat.llm.locallm.langchain.listenter;
 
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.master.chat.client.enums.ChatContentEnum;
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.client.enums.ChatRoleEnum;
@@ -16,17 +17,18 @@ import com.master.chat.llm.base.websocket.WebsocketServer;
 import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
 import com.master.chat.llm.base.websocket.entity.WebSocketData;
 import com.master.chat.llm.locallm.langchain.entity.ChatResponse;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
-import okhttp3.sse.EventSource;
-import okhttp3.sse.EventSourceListener;
+import okhttp3.ResponseBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +45,7 @@ import java.util.concurrent.CountDownLatch;
  */
 @Slf4j
 @NoArgsConstructor(force = true)
-public class SSEListener extends EventSourceListener {
+public class SSEListener {
     private static final String FINISH = "[finish]";
     private long tokens;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -68,57 +70,55 @@ public class SSEListener extends EventSourceListener {
         this.sseEmitter = sseEmitter;
         this.chatId = chatId;
         this.parentMessageId = parentMessageId;
-        if (!isWs) {
-            this.response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
-        }
         this.version = version;
         this.knowledge = knowledge;
         this.isWs = isWs;
         this.uid = uid;
         this.error = false;
         this.prompt = prompt;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onOpen(EventSource eventSource, Response rp) {
         if (response == null) {
             log.error("客户端非sse推送");
             return;
         }
         if (!isWs) {
-            response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
+            this.response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
         }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
-        log.info("{}建立sse连接...", "langchain");
+        log.info("langchain建立sse连接...");
     }
 
     /**
-     * {@inheritDoc}
+     * 流式回答
+     *
+     * @param request
      */
-    @SneakyThrows
-    @Override
-    public void onEvent(EventSource eventSource, String id, String type, String data) {
-        log.info("SSE返回，模型：{}，ID：{}，TYPE：{}，数据：{}", "langchain", id, type, data);
-        ChatData chatData;
-        String text;
+    public Boolean streamChat(Response response) {
+        ChatResponse chatMessageAccumulator = mapStreamToAccumulator(response)
+                .doOnNext(accumulator -> {
+                    if (accumulator!= null) {
+                        String content = ValidatorUtil.isNull(knowledge) ? handleLangchain(accumulator) : handleLangchainKnowledge(accumulator);
+                        log.info("langchain返回，数据：{}", content);
+                        output.append(content).toString();
+                        // 向客户端发送信息
+                        output();
+                    }
+                }).doOnComplete(System.out::println).lastElement().blockingGet();
+        this.conversationId = chatMessageAccumulator.getMessageId();
+        log.info("langchain返回数据结束了:{}", JSON.toJSONString(chatMessageAccumulator));
+        ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
+                .model(ChatModelEnum.LOCALLM.getValue()).modelVersion(version)
+                .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
+                .status(ChatStatusEnum.SUCCESS.getValue()).appKey("").usedTokens(Long.valueOf(0L))
+                .build();
+        ApplicationContextUtil.getBean(GptService.class).saveChatMessage(chatMessage);
+        return false;
+    }
+
+    private void output() {
         try {
-            text = ValidatorUtil.isNull(knowledge) ? handleLangchain(type, data) : handleLangchainKnowledge(type, data);
-            if (text.equals(FINISH)) {
-                log.info("{}返回数据结束了", "langchain");
-                sseEmitter.complete();
-                ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
-                        .model(ChatModelEnum.LOCALLM.getValue()).modelVersion(version)
-                        .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
-                        .status(ChatStatusEnum.SUCCESS.getValue()).usedTokens(tokens)
-                        .build();
-                ApplicationContextUtil.getBean(GptService.class).saveChatMessage(chatMessage);
-                return;
-            }
-            chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
+            String text = output.toString();
+            ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
                     .parentMessageId(parentMessageId)
                     .role(ChatRoleEnum.ASSISTANT.getValue()).content(text).build();
             if (isWs) {
@@ -128,12 +128,39 @@ public class SSEListener extends EventSourceListener {
                 response.getWriter().write(ValidatorUtil.isNull(text) ? JSON.toJSONString(chatData) : "\n" + JSON.toJSONString(chatData));
                 response.getWriter().flush();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("消息错误", e);
-            eventSource.cancel();
-            countDownLatch.countDown();
             throw new ErrorException();
         }
+    }
+
+    public static Flowable<ChatResponse> mapStreamToAccumulator(Response response) {
+        return Flowable.create(emitter -> {
+            ResponseBody responseBody = response.body();
+            if (responseBody == null) {
+                emitter.onError(new RuntimeException("Response body is null"));
+                return;
+            }
+            String line;
+            while ((line = responseBody.source().readUtf8Line()) != null) {
+                if (line.startsWith("data:")) {
+                    line = line.substring(5);
+                    line = line.trim();
+                }
+                if (Objects.equals(line, "[DONE]")) {
+                    emitter.onComplete();
+                    return;
+                }
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+                Gson gson = new Gson();
+                ChatResponse streamResponse = gson.fromJson(line, ChatResponse.class);
+                emitter.onNext(streamResponse);
+            }
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 
 
@@ -142,8 +169,7 @@ public class SSEListener extends EventSourceListener {
      *
      * @return
      */
-    private String handleLangchain(String type, String data) {
-        ChatResponse chatResponse = JSON.parseObject(data, ChatResponse.class);;
+    private String handleLangchain(ChatResponse chatResponse) {
         conversationId = chatResponse.getMessageId();
         output.append(chatResponse.getText()).toString();
         return output.toString();
@@ -154,8 +180,7 @@ public class SSEListener extends EventSourceListener {
      *
      * @return
      */
-    private String handleLangchainKnowledge(String type, String data) {
-        ChatResponse chatResponse = JSON.parseObject(data, ChatResponse.class);
+    private String handleLangchainKnowledge(ChatResponse chatResponse) {
         if (ValidatorUtil.isNotNullIncludeArray(chatResponse.getDocs())) {
             tokens = output.toString().length() + prompt.length();
             finishReason = FINISH;
@@ -166,61 +191,6 @@ public class SSEListener extends EventSourceListener {
         String content = chatResponse.getAnswer();
         output.append(content).toString();
         return output.toString();
-    }
-
-
-    @Override
-    public void onClosed(EventSource eventSource) {
-        log.info("{}关闭sse连接，流式输出返回值总共{}tokens", "langchain", tokens());
-        tokens = output.toString().length() + prompt.length();
-        ChatMessageCommand chatMessage = ChatMessageCommand.builder().chatId(chatId).messageId(conversationId).parentMessageId(parentMessageId)
-                .model(ChatModelEnum.LOCALLM.getValue()).modelVersion(version)
-                .content(output.toString()).contentType(ChatContentEnum.TEXT.getValue()).role(ChatRoleEnum.ASSISTANT.getValue()).finishReason(finishReason)
-                .status(ChatStatusEnum.SUCCESS.getValue()).usedTokens(tokens)
-                .build();
-        ApplicationContextUtil.getBean(GptService.class).saveChatMessage(chatMessage);
-        eventSource.cancel();
-        countDownLatch.countDown();
-    }
-
-    @SneakyThrows
-    @Override
-    public void onFailure(EventSource eventSource, Throwable t, Response response) {
-        if (ValidatorUtil.isNotNull(response) && Objects.nonNull(response.body())) {
-            log.error("sse连接异常data.body:{}，异常:{}", response.body().string(), t);
-        } else {
-            log.error("sse连接异常data:{}，异常:{}", response, t);
-        }
-        ChatData chatData = ChatData.builder().id(conversationId).conversationId(conversationId)
-                .parentMessageId(parentMessageId)
-                .role(ChatRoleEnum.ASSISTANT.getValue()).content("AI大模型接口请求失败，无法响应！").contentType(ChatContentEnum.TEXT.getValue()).build();
-        this.error = true;
-        this.errTxt = "大模型接口连接异常";
-        this.response.getWriter().write(JSON.toJSONString(chatData));
-        this.response.getWriter().flush();
-        eventSource.cancel();
-        countDownLatch.countDown();
-    }
-
-    public CountDownLatch getCountDownLatch() {
-        return this.countDownLatch;
-    }
-
-    /**
-     * tokens
-     *
-     * @return
-     */
-    public long tokens() {
-        return tokens;
-    }
-
-    public Boolean getError() {
-        return error;
-    }
-
-    public String getErrTxt() {
-        return errTxt;
     }
 
 }

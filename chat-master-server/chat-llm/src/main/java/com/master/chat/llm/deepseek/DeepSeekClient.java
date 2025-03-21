@@ -147,15 +147,6 @@ public class DeepSeekClient implements KeyUpdater {
     @Getter
     private static final Headers assistantsHeader = Headers.of("OpenAI-Beta", "assistants=v1");
 
-    /**
-     * 构造器
-     *
-     * @return OpenAiClient.Builder
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public DeepSeekClient() {
     }
 
@@ -1656,6 +1647,15 @@ public class DeepSeekClient implements KeyUpdater {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build().create(OpenAiApi.class);
+    }
+
+    /**
+     * 构造器
+     *
+     * @return OpenAiClient.Builder
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static final class Builder {

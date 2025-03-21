@@ -37,7 +37,7 @@ public class ChatGLMClient implements KeyUpdater {
     private static final String requestIdTemplate = "master-%d";
     @Getter
     @Setter
-    private String appKey;
+    private String apiKey;
     @Getter
     @Setter
     private String appSecret;
@@ -48,16 +48,16 @@ public class ChatGLMClient implements KeyUpdater {
     private ClientV4 clientV4;
 
     private ChatGLMClient(Builder builder) {
-        if (StrUtil.isBlank(builder.appKey)) {
-            throw new ValidateException("构造错误: accessToken不能为空");
+        if (StrUtil.isBlank(builder.apiKey)) {
+            throw new ValidateException("构造错误: apiKey不能为空");
         }
-        appKey = builder.appKey;
+        apiKey = builder.apiKey;
         appSecret = builder.appSecret;
         apiSecretKey = builder.apiSecretKey;
         if (StrUtil.isNotBlank(builder.apiSecretKey) && StrUtil.isBlank(builder.appSecret)) {
             this.clientV4 = new ClientV4.Builder(apiSecretKey).build();
         } else {
-            this.clientV4 = new ClientV4.Builder(appKey, appSecret).build();
+            this.clientV4 = new ClientV4.Builder(apiKey, appSecret).build();
         }
     }
 
@@ -139,7 +139,6 @@ public class ChatGLMClient implements KeyUpdater {
         return request;
     }
 
-
     @Override
     public String supportModel() {
         return ChatModelEnum.CHATGLM.getValue();
@@ -148,15 +147,15 @@ public class ChatGLMClient implements KeyUpdater {
     @Override
     public void updateKey(KeyModel keyModel) {
         if (StrUtil.isBlank(keyModel.getAppKey())) {
-            throw new ValidateException("构造错误: accessToken不能为空");
+            throw new ValidateException("构造错误: apiKey不能为空");
         }
-        this.appKey = keyModel.getAppKey();
+        this.apiKey = keyModel.getAppKey();
         this.appSecret = keyModel.getAppSecret();
         this.apiSecretKey = keyModel.getAppKey();
         if (StrUtil.isNotBlank(this.apiSecretKey) && StrUtil.isBlank(this.appSecret)) {
             this.clientV4 = new ClientV4.Builder(apiSecretKey).build();
         } else {
-            this.clientV4 = new ClientV4.Builder(appKey, appSecret).build();
+            this.clientV4 = new ClientV4.Builder(apiKey, appSecret).build();
         }
     }
 
@@ -170,15 +169,15 @@ public class ChatGLMClient implements KeyUpdater {
     }
 
     public static final class Builder {
-        private String appKey;
+        private String apiKey;
         private String appSecret;
         private String apiSecretKey;
 
         public Builder() {
         }
 
-        public Builder appKey(String val) {
-            appKey = val;
+        public Builder apiKey(String val) {
+            apiKey = val;
             return this;
         }
 

@@ -112,16 +112,15 @@ public class GiteeClient implements KeyUpdater {
             ChatCompletion chat,
             String domain) throws Exception {
 
-        Response callResponse = localLMClient.streamChat(chat, domain + ApiConstant.CHAT);
+        Response callResponse = localLMClient.streamChat(chat, domain, ApiConstant.CHAT);
         if (!isSuccessResponse(callResponse)) {
-            return true; // 响应错误时返回true
+            // 响应错误时返回true
+            return true;
         }
-
         // 构造 SSEListener 时传入 idleTimeout 参数（单位毫秒）
         SSEListener listener = new SSEListener(response, chatId, conversationId, version, uid, isWs, IDLE_TIMEOUT_MS);
         EventSource eventSource = EventSources.createFactory(client)
                 .newEventSource(callResponse.request(), listener);
-
         // 阻塞等待直到 SSEListener 内部完成（成功或错误均会通过 countDown 释放锁）
         listener.latch.await();
         return false;

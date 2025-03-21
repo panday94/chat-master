@@ -7,8 +7,9 @@ import com.master.chat.client.model.dto.ModelDTO;
 import com.master.chat.client.service.GptService;
 import com.master.chat.common.exception.BusinessException;
 import com.master.chat.llm.base.service.ModelService;
+import com.master.chat.llm.locallm.base.enums.ModelTypeEnum;
 import com.master.chat.llm.locallm.coze.CozeClient;
-import com.master.chat.llm.locallm.enums.ModelTypeEnum;
+import com.master.chat.llm.locallm.dify.DifyClient;
 import com.master.chat.llm.locallm.gitee.GiteeClient;
 import com.master.chat.llm.locallm.langchain.LangchainClient;
 import com.master.chat.llm.locallm.ollama.OllamaClient;
@@ -36,14 +37,17 @@ public class LocalLMServiceImpl implements ModelService {
     private static CozeClient cozeClient;
     private static GptService gptService;
     private static GiteeClient giteeClient;
+    private static DifyClient difyClient;
 
     @Autowired
-    public LocalLMServiceImpl(LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient, GptService gptService,GiteeClient giteeClient) {
+    public LocalLMServiceImpl(LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient, GptService gptService,
+                              GiteeClient giteeClient, DifyClient difyClient) {
         LocalLMServiceImpl.langchainClient = langchainClient;
         LocalLMServiceImpl.ollamaClient = ollamaClient;
         LocalLMServiceImpl.cozeClient = cozeClient;
         LocalLMServiceImpl.gptService = gptService;
         LocalLMServiceImpl.giteeClient = giteeClient;
+        LocalLMServiceImpl.difyClient = difyClient;
     }
 
     @Override
@@ -66,6 +70,8 @@ public class LocalLMServiceImpl implements ModelService {
                 return cozeClient.buildChatCompletion(response, sseEmitter, chatId, conversationId, isWs, uid, chatMessages, prompt, version, modelDTO);
             case GITEE_AI:
                 return giteeClient.buildChatCompletion(response, sseEmitter, chatId, conversationId, isWs, uid, chatMessages, prompt, version, modelDTO);
+            case Dify:
+                return difyClient.buildChatCompletion(response, sseEmitter, chatId, conversationId, isWs, uid, chatMessages, prompt, version, modelDTO);
             default:
                 throw new BusinessException("未知的模型类型，功能未接入");
         }

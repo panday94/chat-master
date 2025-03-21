@@ -1,11 +1,13 @@
 package com.master.chat.llm.internlm;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.common.constant.AuthConstant;
+import com.master.chat.common.exception.ValidateException;
 import com.master.chat.llm.base.key.KeyUpdater;
 import com.master.chat.llm.internlm.constant.ApiConstant;
 import com.master.chat.llm.internlm.entity.ModelsList;
@@ -43,13 +45,16 @@ public class InternlmClient implements KeyUpdater {
     @NotNull
     @Getter
     @Setter
-    private String token;
+    private String apiKey;
 
     @Getter
     private OkHttpClient okHttpClient;
 
     private InternlmClient(Builder builder) {
-        token = builder.token;
+        if (StrUtil.isBlank(builder.apiKey)) {
+            throw new ValidateException("构造错误: apiKey不能为空");
+        }
+        apiKey = builder.apiKey;
         if (Objects.isNull(builder.okHttpClient)) {
             log.info("提示：禁止在生产环境使用BODY级别日志，可以用：NONE,BASIC,HEADERS");
             if (Objects.isNull(builder.logLevel)) {
@@ -69,7 +74,7 @@ public class InternlmClient implements KeyUpdater {
     public ResponseInfo<ModelsList> listModels() {
         try {
             Request request = new Request.Builder().url(ApiConstant.CHAT_LIST_MODELS_URL)
-                    .addHeader(AuthConstant.JWT_TOKEN_HEADER, AuthConstant.JWT_TOKEN_PREFIX + this.token).build();
+                    .addHeader(AuthConstant.JWT_TOKEN_HEADER, AuthConstant.JWT_TOKEN_PREFIX + this.apiKey).build();
             Response response = okHttpClient.newCall(request).execute();
             String body = response.body().string();
             return ResponseInfo.success(JSON.parseObject(body, ModelsList.class));
@@ -89,7 +94,7 @@ public class InternlmClient implements KeyUpdater {
     public ResponseInfo<ChatResponse> chat(ChatCompletion chat) {
         try {
             Request request = new Request.Builder().url(ApiConstant.CHAT_COMPLETION_URL)
-                    .addHeader(AuthConstant.JWT_TOKEN_HEADER, AuthConstant.JWT_TOKEN_PREFIX + this.token)
+                    .addHeader(AuthConstant.JWT_TOKEN_HEADER, AuthConstant.JWT_TOKEN_PREFIX + this.apiKey)
                     .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()),
                             new ObjectMapper().writeValueAsString(chat))).build();
             Response response = okHttpClient.newCall(request).execute();
@@ -111,7 +116,7 @@ public class InternlmClient implements KeyUpdater {
         chat.stream = true;
         try {
             Request request = new Request.Builder().url(ApiConstant.CHAT_COMPLETION_URL)
-                    .addHeader(AuthConstant.JWT_TOKEN_HEADER, AuthConstant.JWT_TOKEN_PREFIX + this.token)
+                    .addHeader(AuthConstant.JWT_TOKEN_HEADER, AuthConstant.JWT_TOKEN_PREFIX + this.apiKey)
                     .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()),
                             new ObjectMapper().writeValueAsString(chat))).build();
             Response callResponse = okHttpClient.newCall(request).execute();
@@ -157,11 +162,11 @@ public class InternlmClient implements KeyUpdater {
 
     @Override
     public void updateKey(KeyModel keyModel) {
-        this.setToken(keyModel.getAppSecret());
+        this.setApiKey(keyModel.getAppKey());
     }
 
     public static final class Builder {
-        private @NotNull String token;
+        private @NotNull String apiKey;
 
         private OkHttpClient okHttpClient;
         private HttpLoggingInterceptor.Level logLevel;
@@ -169,8 +174,8 @@ public class InternlmClient implements KeyUpdater {
         public Builder() {
         }
 
-        public Builder token(@NotNull String val) {
-            token = val;
+        public Builder apiKey(@NotNull String val) {
+            apiKey = val;
             return this;
         }
 

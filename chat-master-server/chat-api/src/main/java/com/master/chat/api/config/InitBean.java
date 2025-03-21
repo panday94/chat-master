@@ -49,7 +49,7 @@ public class InitBean {
     public OpenAiClient openAiClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.OPENAI.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到OpenAI模型token数据");
+            log.error("未加载到OpenAItoken数据");
             return new OpenAiClient();
         }
         BaseInfoDTO baseInfo = baseConfigService.getBaseConfigByName(BaseConfigConstant.BASE_INFO, BaseInfoDTO.class);
@@ -83,7 +83,7 @@ public class InitBean {
     public DeepSeekClient deepSeekClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.DEEPSEEK.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到DeepSeek模型token数据");
+            log.error("未加载到DeepSeektoken数据");
             return new DeepSeekClient();
         }
         return DeepSeekClient
@@ -103,12 +103,12 @@ public class InitBean {
     public WenXinClient wenXinClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.WENXIN.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到文心一言模型token数据");
+            log.error("未加载到文心一言token数据");
             return new WenXinClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
         if (ValidatorUtil.isNull(openkey.getAppKey()) || ValidatorUtil.isNull(openkey.getAppSecret())) {
-            log.error("未获取到文心一言模型token数据");
+            log.error("未加载到文心一言token数据");
             return new WenXinClient();
         }
         return WenXinClient.builder().logLevel(HttpLoggingInterceptor.Level.BASIC)
@@ -124,11 +124,15 @@ public class InitBean {
     public TongYiClient tongYiClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.TONGYI.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到通义千问模型token数据");
+            log.error("未加载到通义千问token数据");
             return new TongYiClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
-        return new TongYiClient(openkey.getAppKey());
+        if (ValidatorUtil.isNull(openkey.getAppKey())) {
+            log.error("未加载到通义千问token数据");
+            return new TongYiClient();
+        }
+        return TongYiClient.builder().apiKey(openkey.getAppKey()).build();
     }
 
     /**
@@ -140,11 +144,15 @@ public class InitBean {
     public SparkClient sparkClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.SPARK.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到智谱清言模型token数据，请添加后需要重启系统");
+            log.error("未加载到讯飞星火token数据");
             return new SparkClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
-        return new SparkClient(openkey.getAppId(), openkey.getAppKey(), openkey.getAppSecret());
+        if (ValidatorUtil.isNull(openkey.getAppKey())) {
+            log.error("未加载到讯飞星火token数据");
+            return new SparkClient();
+        }
+        return SparkClient.builder().appId(openkey.getAppId()).appKey(openkey.getAppKey()).appSecret(openkey.getAppSecret()).build();
     }
 
     /**
@@ -156,15 +164,15 @@ public class InitBean {
     public ChatGLMClient chatGLMClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.CHATGLM.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到智谱清言模型token数据，请添加后需要重启系统");
+            log.error("未加载到智谱清言token数据");
             return new ChatGLMClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
         if (ValidatorUtil.isNull(openkey.getAppKey())) {
-            log.error("未获取到智谱清言模型token数据");
+            log.error("未加载到智谱清言token数据");
             return new ChatGLMClient();
         }
-        return ChatGLMClient.builder().appKey(openkey.getAppKey()).appSecret(openkey.getAppSecret()).apiSecretKey(openkey.getAppKey()).build();
+        return ChatGLMClient.builder().apiKey(openkey.getAppKey()).appSecret(openkey.getAppSecret()).apiSecretKey(openkey.getAppKey()).build();
     }
 
     /**
@@ -176,12 +184,12 @@ public class InitBean {
     public MoonshotClient moonshotClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.MOONSHOT.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到月之暗面模型token数据，请添加后需要重启系统");
+            log.error("未加载到月之暗面token数据");
             return new MoonshotClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
         if (ValidatorUtil.isNull(openkey.getAppKey())) {
-            log.error("未获取到月之暗面模型token数据");
+            log.error("未加载到月之暗面token数据");
             return new MoonshotClient();
         }
         return MoonshotClient.builder().apiKey(openkey.getAppKey()).build();
@@ -196,10 +204,15 @@ public class InitBean {
     public DouBaoClient douBaoClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.DOUBAO.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到豆包模型token数据，请添加后需要重启系统");
+            log.error("未加载到豆包token数据");
             return new DouBaoClient();
         }
-        return DouBaoClient.builder().apiKey(openkeys.get(0).getAppKey()).build();
+        OpenkeyVO openkey = openkeys.get(0);
+        if (ValidatorUtil.isNull(openkey.getAppKey())) {
+            log.error("未加载到豆包token数据");
+            return new DouBaoClient();
+        }
+        return DouBaoClient.builder().apiKey(openkey.getAppKey()).build();
     }
 
     /**
@@ -211,15 +224,15 @@ public class InitBean {
     public InternlmClient internlmClient() {
         List<OpenkeyVO> openkeys = openkeyMapper.listOpenkeyByModel(ChatModelEnum.INTERNLM.getValue());
         if (ValidatorUtil.isNullIncludeArray(openkeys)) {
-            log.error("未加载到书生浦语模型token数据，请添加后需要重启系统");
+            log.error("未加载到书生浦语模型token数据");
             return new InternlmClient();
         }
         OpenkeyVO openkey = openkeys.get(0);
         if (ValidatorUtil.isNull(openkey.getAppKey())) {
-            log.error("未获取到书生浦语模型token数据");
+            log.error("未加载到书生浦语模型token数据");
             return new InternlmClient();
         }
-        return InternlmClient.builder().token(openkey.getAppKey()).build();
+        return InternlmClient.builder().apiKey(openkey.getAppKey()).build();
     }
 
     /**
