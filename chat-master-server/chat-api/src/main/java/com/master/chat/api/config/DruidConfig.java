@@ -1,8 +1,10 @@
 package com.master.chat.api.config;
 
-import com.alibaba.druid.spring.boot.autoconfigure.properties.DruidStatProperties;
-import com.alibaba.druid.support.http.StatViewServlet;
+import com.alibaba.druid.spring.boot3.autoconfigure.properties.DruidStatProperties;
+import com.alibaba.druid.support.jakarta.StatViewServlet;
+import com.alibaba.druid.support.jakarta.WebStatFilter;
 import com.alibaba.druid.util.Utils;
+import jakarta.servlet.*;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +13,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.servlet.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
@@ -44,18 +45,27 @@ public class DruidConfig {
      * @return
      */
     @Bean
-    public ServletRegistrationBean druidStatViewServlet() {
-        //先配置管理后台的servLet，访问的入口为/druid/
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(
-                new StatViewServlet(), "/druid/*");
-        // IP白名单 (没有配置或者为空，则允许所有访问)
-        servletRegistrationBean.addInitParameter("allow", "");
-        // IP黑名单 (存在共同时，deny优先于allow)
-        servletRegistrationBean.addInitParameter("deny", "");
-        servletRegistrationBean.addInitParameter("loginUsername", "admin");
-        servletRegistrationBean.addInitParameter("loginPassword", "123456");
-        servletRegistrationBean.addInitParameter("resetEnable", "false");
-        return servletRegistrationBean;
+    public ServletRegistrationBean<StatViewServlet> druidStatViewServlet() {
+        ServletRegistrationBean<StatViewServlet> registrationBean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
+        // 白名单，默认允许所有访问
+        registrationBean.addInitParameter("allow", "");
+        // 黑名单，与白名单同时存在时，deny优先于allow
+        registrationBean.addInitParameter("deny", "");
+        // 登录用户名
+        registrationBean.addInitParameter("loginUsername", "admin");
+        // 登录密码
+        registrationBean.addInitParameter("loginPassword", "123456");
+        // 禁用HTML页面上的“Reset All”功能
+        registrationBean.addInitParameter("resetEnable", "false");
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<WebStatFilter> druidWebStatFilter() {
+        FilterRegistrationBean<WebStatFilter> registrationBean = new FilterRegistrationBean<>(new WebStatFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"); // 忽略资源
+        return registrationBean;
     }
 
     /**
@@ -75,7 +85,7 @@ public class DruidConfig {
         // 创建filter进行过滤
         Filter filter = new Filter() {
             @Override
-            public void init(javax.servlet.FilterConfig filterConfig) throws ServletException {
+            public void init(FilterConfig filterConfig) throws ServletException {
             }
 
             @Override

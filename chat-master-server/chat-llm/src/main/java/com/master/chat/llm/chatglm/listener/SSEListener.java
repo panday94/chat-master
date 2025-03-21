@@ -20,12 +20,12 @@ import com.master.chat.llm.base.websocket.constant.FunctionCodeConstant;
 import com.master.chat.llm.base.websocket.entity.WebSocketData;
 import com.zhipu.oapi.service.v4.model.*;
 import io.reactivex.Flowable;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

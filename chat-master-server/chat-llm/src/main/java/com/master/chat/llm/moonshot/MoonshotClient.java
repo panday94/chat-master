@@ -16,6 +16,7 @@ import com.master.chat.llm.moonshot.entity.response.ChatResponse;
 import com.master.chat.llm.moonshot.interceptor.MoonshotInterceptor;
 import com.master.chat.llm.moonshot.interceptor.MoonshotLogger;
 import com.master.chat.llm.moonshot.listener.SSEListener;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,8 +25,7 @@ import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

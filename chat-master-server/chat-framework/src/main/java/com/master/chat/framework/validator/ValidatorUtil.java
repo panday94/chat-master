@@ -4,10 +4,10 @@ import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.common.exception.BusinessException;
 import com.master.chat.common.exception.ValidateException;
 import com.master.chat.framework.util.NumberUtil;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;

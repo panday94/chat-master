@@ -26,10 +26,10 @@ import com.master.chat.sys.mapper.LoginLogMapper;
 import com.master.chat.sys.pojo.entity.LoginLog;
 import com.master.chat.sys.pojo.vo.LoginLogVO;
 import com.master.chat.sys.service.ILoginLogService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 

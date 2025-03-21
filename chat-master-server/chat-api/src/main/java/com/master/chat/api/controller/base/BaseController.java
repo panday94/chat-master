@@ -10,9 +10,8 @@ import com.master.chat.framework.util.IPUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.sys.pojo.entity.SysUser;
 import com.master.chat.sys.service.ISysUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 基础接口抽象类

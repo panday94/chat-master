@@ -15,6 +15,7 @@ import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.framework.util.IPUtil;
 import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.sys.pojo.entity.SysLog;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
@@ -25,8 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;

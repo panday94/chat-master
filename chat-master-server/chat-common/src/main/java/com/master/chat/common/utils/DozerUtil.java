@@ -22,7 +22,7 @@ public class DozerUtil {
     /**
      * 持有Dozer单例, 避免重复创建DozerMapper消耗资源.
      */
-    private static Mapper MAPPER = DozerBeanMapperBuilder.buildDefault();
+    private static Mapper MAPPER;
 
     public static void init(Mapper mapper) {
         DozerUtil.MAPPER = mapper;

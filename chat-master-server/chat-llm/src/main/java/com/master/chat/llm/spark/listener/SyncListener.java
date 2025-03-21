@@ -8,7 +8,7 @@ import com.master.chat.llm.spark.entity.response.ChatUsage;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 讯飞星火同步回答监听

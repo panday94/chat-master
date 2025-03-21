@@ -24,7 +24,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+        <spring-boot.version>3.3.5</spring-boot.version>
         <master-common.version>1.3.0</master-common.version>
 
         <gson.version>2.8.9</gson.version>
@@ -33,10 +33,11 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <httpclient.version>4.5.2</httpclient.version>
         <hutool.version>5.6.5</hutool.version>
-        <dozer.version>6.5.2</dozer.version>
-        <mybatis-plus.version>3.5.1</mybatis-plus.version>
-        <mysql.version>5.1.48</mysql.version>
-        <alibaba.druid.version>1.2.11</alibaba.druid.version>
+        <dozer.version>7.0.0</dozer.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mybatis-plus-dynamic.version>4.3.1</mybatis-plus-dynamic.version>
+        <mysql.version>8.3.0</mysql.version>
+        <alibaba.druid.version>1.2.23</alibaba.druid.version>
         <alibaba.fastjson.version>1.2.72</alibaba.fastjson.version>
         <alibaba.oss.version>3.10.2</alibaba.oss.version>
         <alibaba.easyexcel.version>3.1.1</alibaba.easyexcel.version>
@@ -153,25 +154,25 @@
             <!--Mybatis-plus插件-->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <!--Mybatis-多数据源插件-->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
+                <version>${mybatis-plus-dynamic.version}</version>
             </dependency>
             <!--mysql驱动 -->
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
             <!-- 阿里数据库连接池 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
                 <version>${alibaba.druid.version}</version>
             </dependency>
             <!--Alibaba json工具类 -->
@@ -252,6 +253,9 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

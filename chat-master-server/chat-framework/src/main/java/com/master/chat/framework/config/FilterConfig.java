@@ -2,6 +2,7 @@ package com.master.chat.framework.config;
 
 import com.master.chat.framework.filter.RepeatableFilter;
 import com.master.chat.framework.xss.XssFilter;
+import jakarta.servlet.DispatcherType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -9,7 +10,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.DispatcherType;
 import java.util.HashMap;
 import java.util.Map;
 

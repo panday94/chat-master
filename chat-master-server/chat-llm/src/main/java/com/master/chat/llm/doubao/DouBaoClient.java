@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 豆包client

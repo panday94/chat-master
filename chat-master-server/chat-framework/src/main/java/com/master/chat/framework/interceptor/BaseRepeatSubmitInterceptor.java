@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.master.chat.common.annotation.RepeatSubmit;
 import com.master.chat.common.api.ResponseInfo;
 import com.master.chat.framework.util.ApplicationContextUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 /**

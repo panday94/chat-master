@@ -3,7 +3,7 @@ package com.master.chat.core.pojo.command;
 import com.master.chat.common.api.CommonCommand;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**

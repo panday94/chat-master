@@ -3,10 +3,10 @@ package com.master.chat.framework.util;
 import com.master.chat.common.constant.HttpConstant;
 import com.master.chat.common.constant.StringPoolConstant;
 import com.master.chat.framework.validator.ValidatorUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 

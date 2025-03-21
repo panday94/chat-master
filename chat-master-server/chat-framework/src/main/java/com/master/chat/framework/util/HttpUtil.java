@@ -1,11 +1,11 @@
 package com.master.chat.framework.util;
 
+import jakarta.servlet.ServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javax.net.ssl.*;
-import javax.servlet.ServletRequest;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;

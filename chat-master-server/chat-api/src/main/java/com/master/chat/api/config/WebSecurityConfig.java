@@ -7,16 +7,22 @@ import com.master.chat.framework.util.JWTPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * 安全配置类
@@ -29,36 +35,48 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity
+public class WebSecurityConfig {
     @Autowired
     private UserDetailsServiceImpl userDatailService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //关闭csrf
-                .csrf().disable()
-                //不通过Session获取SecurityContext
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                //对应登录接口允许匿名访问
-                .antMatchers(HttpConstant.SLASH).permitAll()
-                //除上面接口全都需要鉴权访问
-                .anyRequest().authenticated();
+                //  禁用basic明文验证
+                .httpBasic(Customizer.withDefaults())
+                // 关闭csrf
+                .csrf(AbstractHttpConfigurer::disable)
+                // 不通过Session获取SecurityContext
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        //  允许所有 OPTIONS 请求
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // 对应登录接口允许匿名访问
+                        .requestMatchers(HttpConstant.SLASH).permitAll()
+                        // 除上面接口全都需要鉴权访问
+                        .anyRequest().authenticated()
+                );
         //添加过滤器
-        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
-        //允许跨域
-        http.cors();
+        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(http)), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(
+    /**
+     * 因为有自定义拦截器，需在这边配置放行。
+     * @return
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
                 "/global/**", "/static/**", "/images/**", "/druid/**",
                 "/oauth/token", "/logout", "/captchaImage", "/files/**", "/api/**", "/app/api/**", "/v1/chat/websocket/**",
                 "/common/**", "/sys-user/register");
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return userDatailService;
     }
 
     /**
@@ -70,24 +88,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JWTPasswordEncoder();
     }
 
-    /**
-     * 指定自定义身份认证和密码加密方式
-     *
-     * @param auth
-     * @throws Exception
-     */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                // 从数据库读取的用户进行身份认证
-                .userDetailsService(userDatailService)
-                .passwordEncoder(passwordEncoder());
-    }
-
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userDatailService).passwordEncoder(passwordEncoder());
+        return authenticationManagerBuilder.build();
     }
 
 }

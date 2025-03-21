@@ -2,11 +2,11 @@ package com.master.chat.sys.pojo.command;
 
 import com.master.chat.common.api.CommonCommand;
 import com.master.chat.framework.validator.group.UpdateGroup;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**

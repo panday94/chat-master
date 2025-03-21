@@ -19,6 +19,7 @@ import com.master.chat.llm.moonshot.entity.response.ChatStreamResponse;
 import com.master.chat.llm.moonshot.entity.response.Usage;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -26,7 +27,6 @@ import okhttp3.ResponseBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
