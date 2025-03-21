@@ -23,13 +23,13 @@ spring:
       datasource:
         # 数据库1
         master:
-          driver-class-name: com.mysql.jdbc.Driver
+          driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/chat_master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
           username: chat_master
           password: chat_master
         # 数据库2
         slave_1:
-          driver-class-name: com.mysql.jdbc.Driver
+          driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/chat_master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
           username: chat_master
           password: chat_master
