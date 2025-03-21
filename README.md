@@ -4,7 +4,7 @@
     <a href="#联系我们"><img src="https://img.shields.io/badge/MasterAII-blue" alt="公众号"></a>
 </p>
 
-![](https://img.shields.io/badge/SpringBoot-2.3.7-brightgreen.svg) [![star](https://gitcode.com/panday94/chat-master/star/badge.svg)](https://gitcode.com/panday94/chat-master)
+![](https://img.shields.io/badge/SpringBoot-3.3.5-brightgreen.svg) [![star](https://gitcode.com/panday94/chat-master/star/badge.svg)](https://gitcode.com/panday94/chat-master)
 
 
 > 声明：此项目发布于码云、GitCode和GitHub，基于 Apache 协议，免费且作为开源学习使用，禁止转卖、谨防受骗。如需商用必须保留版权信息，请自觉遵守。确保合法合规使用，在运营过程中产生的一切任何后果自负，与作者无关。
