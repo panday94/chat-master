@@ -17,12 +17,6 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
---
--- 数据库： `chat_master`
---
-CREATE DATABASE IF NOT EXISTS `chat_master` DEFAULT CHARACTER SET utf8mb4;
-USE `chat_master`;
-
 -- ----------------------------
 -- Table structure for gpt_agreement
 -- ----------------------------
@@ -245,11 +239,13 @@ BEGIN;
 INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (1, 'System', '2023-12-01 01:23:51', 'System', '2024-09-14 15:52:55', 'ChatGPT', '', 'ChatGPT', 0, '', '', 'gpt-3.5-turbo-0613', 0, 1, 0);
 INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (2, 'System', '2023-12-01 01:24:43', 'System', '2024-09-14 15:52:55', '文心一言', '', 'WENXIN', 0, '', '', 'ERNIE_Bot_turbo', 0, 1, 0);
 INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (3, 'System', '2023-12-01 01:25:18', 'System', '2024-09-14 15:52:55', '通义千问', '', 'QIANWEN', 0, '', '', 'qwen-turbo', 0, 1, 0);
-INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (4, 'System', '2023-12-01 01:25:29', 'System', '2025-02-08 14:49:57', '讯飞星火', '', 'SPARK', 0, '', '', 'v1.1', 0, 1, 0);
+INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (4, 'System', '2023-12-01 01:25:29', 'System', '2025-02-08 14:49:57', '讯飞星火', '', 'SPARK', 0, '', '', 'lite', 0, 1, 0);
 INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (5, 'System', '2023-12-27 00:38:20', 'admin', '2024-09-14 15:52:55', '智谱清言', '', 'ChatGLM', 0, '', '', 'chatGLM_6b_SSE', 0, 1, 0);
 INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (6, 'System', '2024-05-23 21:30:06', 'admin', '2025-02-10 16:29:00', '月之暗面', '', 'Moonshot', 0, '', '', 'moonshot-v1-8k', 0, 1, 0);
 INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (7, 'System', '2024-05-23 21:30:13', 'admin', '2025-02-10 16:28:56', '书生·浦语', '', 'Internlm', 0, '', '', 'internlm2-latest', 0, 1, 0);
 INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (8, 'admin', '2024-09-14 16:02:10', 'admin', '2025-02-10 16:29:07', '本地模型', '', 'LocalLM', 1, 'http://127.0.0.1:7861', '', 'chatglm3-6b', 0, 1, 0);
+INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (9, 'System', '2025-02-20 15:10:45', 'System', '2025-02-20 15:12:37', '豆包', '', 'Doubao', 0, '', '', '', 0, 1, 0);
+INSERT INTO `gpt_model` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `name`, `icon`, `model`, `local_model_type`, `model_url`, `knowledge`, `version`, `sort`, `status`, `deleted`) VALUES (10, 'System', '2025-02-27 10:34:02', 'System', '2025-02-27 10:34:21', 'DeepSeek', '', 'DeepSeek', 0, '', '', 'deepseek-chat', 0, 1, 0);
 COMMIT;
 
 -- ----------------------------
@@ -289,6 +285,8 @@ INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `u
 INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `model`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `remark`, `deleted`) VALUES (6, 'System', '2024-05-23 21:30:53', 'System', '2025-02-10 16:27:39', 'Moonshot', '', '', '', 100000, 0, 0, 1, '', 0);
 INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `model`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `remark`, `deleted`) VALUES (7, 'System', '2024-05-23 21:31:02', 'System', '2025-02-10 16:27:39', 'Internlm', '', '', '', 100000, 0, 0, 1, '', 0);
 INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `model`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `remark`, `deleted`) VALUES (8, 'admin', '2024-09-19 15:58:35', 'admin', '2025-02-10 16:27:53', 'LocalLM', '', '', '', 100000, 0, 0, 1, '', 0);
+INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `model`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `remark`, `deleted`) VALUES (9, 'System', '2025-02-20 15:12:42', 'System', '2025-02-20 15:13:19', 'Doubao', '', '', '', 100000, 0, 0, 1, '', 0);
+INSERT INTO `gpt_openkey` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `model`, `app_id`, `app_key`, `app_secret`, `total_tokens`, `used_tokens`, `surplus_tokens`, `status`, `remark`, `deleted`) VALUES (10, 'System', '2025-02-27 10:34:36', 'System', '2025-02-27 10:44:43', 'DeepSeek', '', '', '', 100000, 0, 0, 1, '', 0);
 COMMIT;
 
 -- ----------------------------
@@ -619,6 +617,11 @@ INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `upda
 INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (56, 'admin', '2024-09-14 15:51:20', 'admin', '2024-09-14 15:51:20', 'GiteeAI', '3', 'gpt_local_model', '', 'default', 0, 3, 1, 0, '');
 INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (57, 'admin', '2024-09-19 15:58:02', 'System', '2024-09-19 15:58:02', '扣子', '4', 'gpt_local_model', '', 'default', 0, 4, 1, 0, '');
 INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (58, 'admin', '2024-09-19 15:58:13', 'System', '2024-09-19 15:58:13', 'FastGPT', '5', 'gpt_local_model', '', 'default', 0, 5, 1, 0, '');
+INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (59,'System', '2024-10-09 10:33:20', 'System', '2024-10-09 10:34:22', 'Claude', 'Claude', 'gpt_model_type', '', 'success', 0, 8, 1, 0, '');
+INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (60,'System', '2025-02-17 12:05:41', 'System', '2025-02-17 12:05:58', 'Dify', '6', 'gpt_local_model', '', 'default', 0, 6, 1, 0, '');
+INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (61,'System', '2025-02-17 12:06:19', 'System', '2025-02-17 12:06:39', 'LinkAI', '7', 'gpt_local_model', '', 'default', 0, 7, 1, 0, '');
+INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (62,'System', '2025-02-17 12:06:52', 'System', '2025-02-17 12:07:33', '豆包', 'Doubao', 'gpt_model_type', '', 'primary', 0, 9, 1, 0, '');
+INSERT INTO `sys_dict` (`id`, `create_user`, `create_time`, `update_user`, `update_time`, `label`, `value`, `dict_type`, `css_class`, `list_class`, `is_default`, `sort`, `status`, `deleted`, `remark`) VALUES (63,'System', '2025-02-17 12:07:04', 'System', '2025-02-17 12:07:36', 'DeepSeek', 'DeepSeek', 'gpt_model_type', '', 'Error', 0, 10, 1, 0, '');
 COMMIT;
 
 -- ----------------------------

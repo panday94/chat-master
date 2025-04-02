@@ -1,0 +1,84 @@
+version: '3.7'
+
+# Service
+services:
+  # Database MySQL
+  chat-master-mysql:
+    image: mysql:5.7
+    restart: always
+    container_name: chat-master-mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345678
+      - MYSQL_DATABASE=chat_master
+      - MYSQL_USER=chat_master
+      - MYSQL_PASSWORD=chat_master
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/logs:/logs
+      - ./mysql/init.d:/docker-entrypoint-initdb.d/
+    ports:
+      - "3306:3306"
+    networks:
+      - chat-master-network
+  # Database Redis
+  chat-master-redis:
+    image: redis:latest
+    restart: always
+    container_name: chat-master-redis
+    volumes:
+      - ./redis/conf:/etc/redis
+      - ./redis/data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - chat-master-network
+  # chat-master-server
+  chat-master-server:
+    # 自己构建镜像,需将jar包放置./server/target/目录下
+    # build:
+    #   context: ./server
+    #   dockerfile: Dockerfile
+    # image: chat-master-server:latest
+    # 使用作者构建好的镜像
+    image: registry.cn-beijing.aliyuncs.com/chat-master/master-server:latest
+    container_name: chat-master-server
+    ports:
+      - "8088:8088"
+    environment: # Pass environment variables to the service
+      #PARAMS: --spring.config.location=/application.yml
+      - SPRING_CONFIG_LOCATION=/application.yml
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime
+      - ./server/logs/chat-master:/logs/chat-master
+      - ./server/application.yml:/application.yml
+    depends_on:
+      - chat-master-mysql
+      - chat-master-redis
+    networks:
+      - chat-master-network
+  # chat-master-nginx(前端文件及转发)
+  chat-master-nginx:
+    # 自己构建镜像，将chat-master-admin和chat-master-web分别打包上传至./nginx/html/admin和./nginx/html目录下
+    # build: 
+    #   context: ./nginx
+    #   dockerfile: Dockerfile
+    # image: chat-master-nginx:latest
+    # 使用作者构建好的镜像
+    image: registry.cn-beijing.aliyuncs.com/chat-master/master-nginx:latest
+    container_name: chat-master-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/cert:/usr/local/data/nginx/cert
+      #- ./nginx/html:/usr/local/data/nginx/html
+    depends_on:
+      - chat-master-server
+    networks:
+      - chat-master-network
+# Network
+networks:
+  chat-master-network:

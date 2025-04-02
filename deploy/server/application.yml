@@ -34,7 +34,7 @@ management:
 spring:
   # 环境 dev|test|prod
   profiles:
-    active: test
+    active: dev
   # 应用名称
   application:
     name: chat-master
@@ -54,6 +54,67 @@ spring:
   # 指定静态资源的路径
   resources:
     static-locations: classpath:/static/,classpath:/templates/
+    # 缓存
+  redis:
+    open: true  # 是否开启redis缓存  true开启   false关闭
+    database: 0
+    host: chat-master-redis
+    port: 6379
+    password:  # 密码（默认为空）
+    timeout: 6000  # 连接超时时长（毫秒
+    lettuce:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
+  #指定数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    #多数据源配置
+    dynamic:
+      primary: master
+      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        # 数据库1
+        master:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://chat-master-mysql:3306/chat_master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: chat_master
+          password: chat_master
+        # 数据库2
+        slave_1:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://chat-master-mysql:3306/chat_master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+          username: chat_master
+          password: chat_master
+      druid:
+        # 初始连接数
+        initialSize: 5
+        # 最小连接池数量
+        minIdle: 10
+        # 最大连接池数量
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        # 配置一个连接在池中最大生存的时间，单位是毫秒
+        maxEvictableIdleTimeMillis: 900000
+        # 配置检测连接是否有效
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        filters: stat,wall,slf4j,config
+        useGlobalDataSourceStat: true
+        stat:
+          log-slow-sql: true
+          merge-sql: true
+          slow-sql-millis: 10000
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
@@ -94,3 +155,8 @@ xss:
   excludes: /notice
   # 匹配链接
   urlPatterns: /monitor/*,/tool/*
+# 系统配置参数
+system:
+  upload-path: /usr/local/data/upload/
+url:
+  base: http://127.0.0.1:8088/chat-master

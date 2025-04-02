@@ -165,7 +165,7 @@ public class LLMService {
             case DOUBAO:
                 return new DouBaoServiceImpl(douBaoClient);
             case LOCALLM:
-                return new LocalLMServiceImpl(langchainClient, ollamaClient, cozeClient, gptService, giteeClient, difyClient);
+                return new LocalLMServiceImpl(gptService, langchainClient, ollamaClient, cozeClient, giteeClient, difyClient);
             default:
                 return null;
         }

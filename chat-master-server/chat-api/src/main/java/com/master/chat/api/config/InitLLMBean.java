@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Configuration
-public class InitBean {
+public class InitLLMBean {
     @Resource
     private OpenkeyMapper openkeyMapper;
     @Resource

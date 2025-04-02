@@ -117,22 +117,17 @@ sudo systemctl start docker
 systemctl enable docker
 
 ```
-
-### 安装Docker For Redis 或自行安装
-
-> 需要将./redis/redis.conf 配置文件 上传到自己服务器/usr/local/data/redis/conf/目录下。 该目录在创建容器的时候可自行修改，ChatMaster服务默认未设置redis密码，如需需要设置密码，请自行修改redis.conf文件中的requirepass配置和重新打包。
-
+> 定位自己的工作目录，如/usr/local/data/，如没有data文件夹，可创建。
 ```shell
-# 拉取Redis镜像
-docker pull redis:latest
-
-# 创建容器
-docker run --network="host" -d --name redis --restart always -p 6379:6379 -v /usr/local/data/redis/conf:/etc/redis -v /usr/local/data/redis/data:/data redis redis-server /etc/redis/redis.conf  --appendonly yes
+# 创建目录
+mkdir -p /usr/local/data/
+# 进入文件夹
+cd /usr/local/data/
 ```
 
 ### 安装Docker For Mysql5.7 或自行安装
 
-> 1、需要将./mysql/my.cnf 配置文件 上传到自己服务器/usr/local/data/mysql/conf/目录下。 该目录在创建容器的时候可自行修改，ChatMaster数据库默认账号密码都为`chat_master`，请勿擅自修改，否则会导致服务连接不上数据库。
+> 1、需要将./mysql/conf/my.cnf 配置文件 上传到自己服务器/usr/local/data/mysql/conf/目录下。 该目录在创建容器的时候可自行修改，ChatMaster数据库默认账号密码都为`chat_master`，请勿擅自修改，否则会导致服务连接不上数据库。
 
 > 2、将./mysql/init.d/ 下的sql文件上传到自己服务器/usr/local/data/mysql/init.d/目录下。 
 
@@ -151,6 +146,18 @@ root@74442a33569c:/# mysql -uroot -p
 mysql> grant all privileges on *.* to 'root'@'%';
 # 刷新权限
 flush privileges;
+```
+
+### 安装Docker For Redis 或自行安装
+
+> 需要将./redis/conf/redis.conf 配置文件 上传到自己服务器/usr/local/data/redis/conf/目录下。 该目录在创建容器的时候可自行修改，ChatMaster服务默认未设置redis密码，如需需要设置密码，请自行修改redis.conf文件中的requirepass配置和重新打包。
+
+```shell
+# 拉取Redis镜像
+docker pull redis:latest
+
+# 创建容器
+docker run --network="host" -d --name redis --restart always -p 6379:6379 -v /usr/local/data/redis/conf:/etc/redis -v /usr/local/data/redis/data:/data redis redis-server /etc/redis/redis.conf  --appendonly yes
 ```
 
 ### 运行ChatMaster服务端
@@ -196,7 +203,42 @@ a684fe52d5c6   mysql:5.7                                                        
 
 ## Docker Compose 一键部署（推荐）
 
-> 待实现
+### 安装Docker
+- [安装教程](#docker部署)
+
+### 安装DockerCompose
+> 安装教程以Linux系统为例，Windows系统可下载DockerDesktop安装包，并安装。
+
+- 根据自己的系统下载对应版本的DockerCompose压缩包，如下面命令不成功，可选择手动下载。[下载地址](https://github.com/docker/compose/releases)
+```shell
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+- 如手动下载，将文件上传到/usr/local/bin 目录，并重命名
+```shell
+mv docker-compose-linux-x86_64 docker-compose
+```
+- 应用可执行权限
+```shell
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+- 测试是否安装成功
+```shell
+docker-compose --version
+[root@localhost ~]# docker-compose --version
+Docker Compose version v2.34.0
+```
+
+### 运行DockerCompose
+> 将当前文件夹及deploy/下所有文件传到服务器/usr/local/data/ 目录下。
+
+```shell
+cd /usr/local/data
+# 启动docker-compose
+docker-compose up -d
+```
+
+
 
 ## 手动部署
 

@@ -40,7 +40,7 @@ public class LocalLMServiceImpl implements ModelService {
     private static DifyClient difyClient;
 
     @Autowired
-    public LocalLMServiceImpl(LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient, GptService gptService,
+    public LocalLMServiceImpl(GptService gptService, LangchainClient langchainClient, OllamaClient ollamaClient, CozeClient cozeClient,
                               GiteeClient giteeClient, DifyClient difyClient) {
         LocalLMServiceImpl.langchainClient = langchainClient;
         LocalLMServiceImpl.ollamaClient = ollamaClient;

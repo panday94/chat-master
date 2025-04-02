@@ -3,7 +3,7 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <!--设置存储路径变量-->
-    <property name="LOG_HOME" value="../logs/chat-master"/>
+    <property name="LOG_HOME" value="./logs/chat-master"/>
 
     <!--控制台输出appender-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
