@@ -4,11 +4,11 @@ import com.master.chat.client.model.dto.ChatMessageDTO;
 import com.master.chat.client.model.dto.ModelDTO;
 import com.master.chat.framework.validator.ValidatorUtil;
 import com.master.chat.llm.locallm.LocalLMClient;
-import com.master.chat.llm.locallm.coze.enums.ContentTypeEnum;
 import com.master.chat.llm.locallm.dify.constant.ApiConstant;
 import com.master.chat.llm.locallm.dify.entity.ChatCompletion;
 import com.master.chat.llm.locallm.dify.enums.ModelEnum;
 import com.master.chat.llm.locallm.dify.listener.SSEListener;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
