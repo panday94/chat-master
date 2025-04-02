@@ -1,11 +1,9 @@
 package com.master.chat.llm.locallm;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master.chat.client.enums.ChatModelEnum;
 import com.master.chat.common.constant.AuthConstant;
-import com.master.chat.common.exception.ValidateException;
 import com.master.chat.llm.base.key.KeyUpdater;
 import com.master.chat.llm.locallm.base.entity.BaseChatCompletion;
 import com.master.chat.llm.locallm.base.interceptor.LocalLMInterceptor;
