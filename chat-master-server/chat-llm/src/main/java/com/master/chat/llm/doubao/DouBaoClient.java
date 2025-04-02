@@ -73,7 +73,7 @@ public class DouBaoClient implements KeyUpdater {
         Flowable<ChatCompletionChunk> chunks =  service.streamChatCompletion(request);
         Boolean flag = sseListener.streamChat(chunks);
         // shutdown service
-        service.shutdownExecutor();
+//        service.shutdownExecutor();
         return flag;
     }
 

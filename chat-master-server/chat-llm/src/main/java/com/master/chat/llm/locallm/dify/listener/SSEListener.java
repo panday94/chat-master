@@ -83,7 +83,7 @@ public class SSEListener {
         }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpStatus.OK.value());
-        log.info("coze建立sse连接...");
+        log.info("Dify建立sse连接...");
     }
 
     /**
@@ -95,7 +95,6 @@ public class SSEListener {
         ChatResponse chatMessageAccumulator = mapStreamToAccumulator(response)
                 .doOnNext(accumulator -> {
                     if (accumulator.getAnswer() != null) {
-                        log.info("dify返回，数据：{}", accumulator.getAnswer());
                         output.append(accumulator.getAnswer()).toString();
                         // 向客户端发送信息
                         output();
@@ -145,6 +144,9 @@ public class SSEListener {
                     continue;
                 }
                 log.info("Dify返回数据：" + line);
+                if ("event: ping".equals(line)) {
+                    continue;
+                }
                 ChatResponse streamResponse = JSON.parseObject(line.replaceAll("^data: ", "").replaceAll("\n\n$", ""), ChatResponse.class);
                 if (streamResponse.getEvent().equals(MessageTypeEnum.ERROR.getValue())) {
                     emitter.onError(new ErrorException("Error: " + streamResponse.getMessage()));
