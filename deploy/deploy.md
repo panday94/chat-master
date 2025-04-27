@@ -230,15 +230,21 @@ Docker Compose version v2.34.0
 ```
 
 ### 运行DockerCompose
-> 将当前文件夹及deploy/下所有文件传到服务器/usr/local/data/ 目录下。
+
+- 下载 Chat-Master代码
+> 如有需要可自行修改/server/application.yml及nginx/nginx.conf配置文件
 
 ```shell
-cd /usr/local/data
+git clone https://gitee.com/panday94/chat-master
+```
+
+- 启动
+
+```shell
+cd deploy/
 # 启动docker-compose
 docker-compose up -d
 ```
-
-
 
 ## 手动部署
 

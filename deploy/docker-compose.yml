@@ -47,7 +47,6 @@ services:
     ports:
       - "8088:8088"
     environment: # Pass environment variables to the service
-      #PARAMS: --spring.config.location=/application.yml
       - SPRING_CONFIG_LOCATION=/application.yml
     volumes:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime

@@ -145,10 +145,9 @@ public class SSEListener extends EventSourceListener {
         if (ValidatorUtil.isNull(finishReason) && ValidatorUtil.isNotNull(completionResponse.getChoices().get(0).getFinishReason())) {
             finishReason = completionResponse.getChoices().get(0).getFinishReason();
         }
-        if (ValidatorUtil.isNull(content)) {
-            content = StringPoolConstant.EMPTY;
+        if (content != null) {
+            output.append(content).toString();
         }
-        output.append(content).toString();
         return output.toString();
     }
 

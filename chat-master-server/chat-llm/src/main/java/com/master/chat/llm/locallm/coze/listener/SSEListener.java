@@ -96,7 +96,7 @@ public class SSEListener {
     public Boolean streamChat(Response response) {
         ChatResponse chatMessageAccumulator = mapStreamToAccumulator(response)
                 .doOnNext(accumulator -> {
-                    if (ValidatorUtil.isNull(accumulator.getContent())) {
+                    if (accumulator.getContent() == null) {
                         return;
                     }
                     if (!isCompleted) {
