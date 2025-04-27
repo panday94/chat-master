@@ -26,12 +26,12 @@ import com.master.chat.sys.pojo.command.SysConfigCommand;
 import com.master.chat.sys.pojo.entity.SysConfig;
 import com.master.chat.sys.pojo.vo.SysConfigVO;
 import com.master.chat.sys.service.ISysConfigService;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

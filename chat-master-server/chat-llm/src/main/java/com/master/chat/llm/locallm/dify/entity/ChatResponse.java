@@ -3,7 +3,6 @@ package com.master.chat.llm.locallm.dify.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.ToString;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.io.Serializable;
 

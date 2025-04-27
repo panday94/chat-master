@@ -20,6 +20,7 @@ import com.master.chat.quartz.pojo.entity.SysJob;
 import com.master.chat.quartz.pojo.vo.SysJobVO;
 import com.master.chat.quartz.service.ISysJobService;
 import com.master.chat.quartz.util.ScheduleUtils;
+import jakarta.annotation.PostConstruct;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
@@ -28,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
