@@ -5,5 +5,5 @@ package com.master.chat.llm.openai.constant;
  */
 public class OpenAIConst {
 
-    public final static String OPENAI_HOST = "https://api.openai.com/";
+    public final static String OPENAI_HOST = "https://api.pandarobot.chat/";
 }

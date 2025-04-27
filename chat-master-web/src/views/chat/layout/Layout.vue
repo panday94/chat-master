@@ -27,7 +27,7 @@ const getMobileClass = computed(() => {
 const getContainerClass = computed(() => {
   return [
     "h-full",
-    !isMobile.value && !collapsed.value ? "pl-[280px]" : "pl-[80px]"
+    !isMobile.value && !collapsed.value ? "pl-[280px]" : "pl-[0px]"
   ];
 });
 const getFontColor = computed(() => {
@@ -52,7 +52,7 @@ const getFontColor = computed(() => {
           :y-offset="60"
           :rotate="-15"
         />
-        <Logo />
+        <Logo v-if="!isMobile" />
         <Sider />
         <NLayoutContent class="h-full">
           <RouterView v-slot="{ Component, route }">

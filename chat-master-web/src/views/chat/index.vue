@@ -101,23 +101,23 @@ window.addEventListener("resize", () => {
 });
 
 // 禁止代码调试
-(() => {
-  function block() {
-    if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-      document.body.innerHTML = "检测到非法调试,请关闭后刷新重试!";
-    }
-    setInterval(() => {
-      (function () {
-        return false;
-      }
-      ['constructor']('debugger')
-      ['call']());
-    }, 50);
-  }
-  try {
-    block();
-  } catch (err) { }
-})();
+// (() => {
+//   function block() {
+//     if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+//       document.body.innerHTML = "检测到非法调试,请关闭后刷新重试!";
+//     }
+//     setInterval(() => {
+//       (function () {
+//         return false;
+//       }
+//       ['constructor']('debugger')
+//       ['call']());
+//     }, 50);
+//   }
+//   try {
+//     block();
+//   } catch (err) { }
+// })();
 
 onMounted(() => {
   if (inputRef.value && !isMobile.value) {
@@ -429,7 +429,7 @@ function jumpToXieyi(type: number) {
 
 <template>
   <div class="flex w-full h-full bg-slate-50 dark:bg-[#18181c]">
-    <div class="flex flex-col h-full m-auto" :class="indexClass">
+    <div class="flex flex-col h-full m-auto px-3" :class="indexClass">
       <main class="w-full pt-4 mb-8 flex-1 overflow-hidden">
         <div
           id="scrollRef"

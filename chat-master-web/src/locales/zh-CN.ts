@@ -34,7 +34,7 @@ export default {
   },
   login: {
     title: '多模型对话，畅所欲言',
-    subTitle: '基于ChatGPT、DeepSeek、文心一言、通义千问、讯飞星火、ChatGLM、Kimi、书生浦语等主流大模型开发，支持多轮对话，具备内容创作、信息归纳总结等能力',
+    subTitle: '基于ChatGPT、DeepSeek、文心一言、通义千问、讯飞星火、ChatGLM、Kimi、书生浦语、模力方舟等主流大模型开发，支持多轮对话，具备内容创作、信息归纳总结等能力',
     quickStart: '快速开始',
     telPlaceholder: '请输入手机号',
     passwordPlaceholder: '请输入密码',

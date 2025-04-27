@@ -1,64 +1,10 @@
 <template>
     <div class="app-container">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="基础信息" name="baseInfo"></el-tab-pane>
             <el-tab-pane label="应用信息" name="appInfo"></el-tab-pane>
             <el-tab-pane label="微信信息" name="wxInfo"></el-tab-pane>
             <el-tab-pane label="Oss/Sms信息" name="extraInfo"></el-tab-pane>
         </el-tabs>
-        <el-form v-if="activeName == 'baseInfo'" ref="form" :model="baseInfo" label-width="130px">
-            <el-form-item label="站点名称">
-                <el-input style="width: 200px" placeholder="请填写站点名称" v-model="baseInfo.siteTitle"></el-input>
-            </el-form-item>
-            <el-form-item label="站点logo">
-                <imageUpload v-model="baseInfo.siteLogo" :limit="1" />
-            </el-form-item>
-            <el-form-item label="站点关键词">
-                <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false"
-                    @close="handleClose(tag)">
-                    {{ tag }}
-                </el-tag>
-                <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                    @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
-                </el-input>
-                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新标签</el-button>
-            </el-form-item> 
-            <el-form-item label="内容安全审查接口">
-                <el-switch v-model="baseInfo.contentSecurity" active-text="开启" :active-value="1" :inactive-value="0"
-                    inactive-text="关闭">
-                </el-switch>
-                <div>如开启，需配置小程序appid和secret（使用小程序的接口，多端通用）</div>
-            </el-form-item>
-            <el-form-item label="代理方案">
-                <el-select v-model="baseInfo.proxyType" placeholder="请选择套代理方案">
-                    <el-option v-for="item in proxyTypes" :key="item.value" :label="item.label"
-                        :value="item.value"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="反代服务器" v-if="baseInfo.proxyType == 2">
-                <el-input style="width: 260px" placeholder="请填写反代服务器地址" v-model="baseInfo.proxyServer">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="代理地址" v-if="baseInfo.proxyType == 3">
-                <el-input style="width: 260px" placeholder="请填写代理地址，如'127.0.0.1:8088'" v-model="baseInfo.proxyAddress">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="绑定域名">
-                <el-input style="width: 260px" placeholder="请填写访问域名" v-model="baseInfo.domain">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="站点版权">
-                <el-input style="width: 500px" placeholder="请填写站点版权" v-model="baseInfo.copyright">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="站点描述">
-                <el-input type="textarea" :rows="4" style="width: 500px" placeholder="请填写站点描述" v-model="baseInfo.descrip">
-                </el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button v-hasPermi="['sys:base:config:save']" type="primary" @click="onSubmit('baseInfo', baseInfo)">保存</el-button>
-            </el-form-item>
-        </el-form>
         <el-form v-if="activeName == 'appInfo'" ref="form" :model="appInfo" label-width="140px">
             <el-form-item label="是否无限制访问GPT">
                 <el-switch v-model="appInfo.isGptLimit" active-text="开启" :active-value="1" :inactive-value="0"
@@ -229,7 +175,7 @@ export default {
     dicts: ['sys_oss_type', 'sys_sms_type'],
     data() {
         return {
-            activeName: "baseInfo",
+            activeName: "appInfo",
             dynamicTags: [],
             inputVisible: false,
             inputValue: '',

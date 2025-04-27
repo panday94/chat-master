@@ -1,9 +1,16 @@
 <script setup lang='ts'>
 import { computed, onMounted, ref } from "vue";
 import {
-  NTabs, NTabPane,
-  NForm, FormInst, NFormItem, FormItemRule, NInput,
-  NCheckbox, NButton, useMessage
+  NTabs,
+  NTabPane,
+  NForm,
+  FormInst,
+  NFormItem,
+  FormItemRule,
+  NInput,
+  NCheckbox,
+  NButton,
+  useMessage
 } from "naive-ui";
 import { fetchVerify } from "@/api/user";
 import { fetchChatConfig, fetchSms } from "@/api/common";
@@ -136,7 +143,7 @@ function handleUpdateTab(value: number) {
 /** 发送验证码 */
 async function handleVerify() {
   if (!loginValue.value.tel) {
-    ms.error("请填写正确的手机号")
+    ms.error("请填写正确的手机号");
     return;
   }
   fetchSms<any>({ tel: loginValue.value.tel }).then(async res => {
@@ -239,13 +246,19 @@ const getMobileClass = computed(() => {
 </style>
 
 <template>
-  <div class="bg-[#ebf3fe] w-full h-full overflow-auto">
+  <div class="bg-[#fff] w-full h-full overflow-auto">
     <div class="w-full h-full relative box-border">
-      <video autoplay loop muted class="w-full h-full absolute object-cover top-0 left-0">
+      <video
+        v-if="!isMobile"
+        autoplay
+        loop
+        muted
+        class="w-full h-full absolute object-cover top-0 left-0"
+      >
         <source :src="indexBack" type="video/mp4" />
       </video>
       <div class="w-full h-full z-1 fixed">
-        <div v-if="!isMobile" class="w-full flex items-center pt-6 pl-6">
+        <div v-if="!isMobile" class="w-full flex items-center py-12 px-12 fixed">
           <img
             :src="baseInfo && baseInfo.siteLogo ? baseInfo.siteLogo : logo"
             class="w-[122px] h-[122px]"
@@ -255,93 +268,98 @@ const getMobileClass = computed(() => {
             $t('common.siteTitle') }}
           </span>
         </div>
-        <div class="w-full h-full flex mt-[100px]">
-          <div v-if="!isMobile" class="ml-[260px] max-w-[740px]">
-            <!-- <div class="flex items-center"><span class="text-[50px] font-medium">{{ $t('common.siteTitle') }}</span></div> -->
-            <div class="text-[70px] font-bold">{{ '一键切换' }}</div>
-            <div class="text-[70px] font-bold">{{ $t('login.title') }}</div>
-            <div class="text-[20px] font-light">{{ $t('login.subTitle') }}</div>
-            <div
-              class="w-[196px] h-[60px] mt-[80px] bg-[#2454ff] text-white text-[22px] flex items-center justify-center rounded-lg cursor-pointer hover:bg-blue-700"
-              @click="handlePress"
-            >{{ $t('login.quickStart') }}</div>
-          </div>
-          <div v-if="visible">
-            <div class="py-6 px-10 bg-white rounded-xl" :class="getMobileClass">
-              <NForm ref="formRef" :model="loginValue" :rules="rules">
-                <div class="flex justify-center items-center mb-[18px] h-[65px]">
-                  <img
-                    :src="baseInfo && baseInfo.siteLogo ? baseInfo.siteLogo : logo"
-                    class="w-[80px] h-[80px]"
-                  />
-                  <span class="text-[40px] font-medium">
-                    {{ baseInfo && baseInfo.siteTitle ? baseInfo.siteTitle :
-                    $t('common.siteTitle') }}
-                  </span>
-                </div>
-                <div v-if="appInfo.isSms == 1">
-                  <NTabs type="line" animated @update:value="handleUpdateTab">
-                    <NTabPane name="4" tab="账号密码登录"></NTabPane>
-                    <NTabPane name="3" tab="验证码登录"></NTabPane>
-                  </NTabs>
-                </div>
-                <div>
-                  <NFormItem label="手机号" path="tel">
-                    <NInput class="login-form" v-model:value="loginValue.tel" placeholder="请输入手机号" />
-                  </NFormItem>
-                </div>
-                <div v-if="loginValue.loginType == 3">
-                  <NFormItem label="验证码" path="code">
-                    <NInput
-                      class="login-form mr-3"
-                      v-model:value="loginValue.code"
-                      placeholder="请输入验证码"
+        <div class="w-full h-full flex justify-center items-center">
+          <div class="flex items-center w-[1440px] h-[600px]">
+            <div v-if="!isMobile" class="w-[740px]">
+              <div class="text-[70px] font-bold">{{ '一键切换' }}</div>
+              <div class="text-[70px] font-bold">{{ $t('login.title') }}</div>
+              <div class="text-[20px] font-light">{{ $t('login.subTitle') }}</div>
+              <div
+                class="w-[196px] h-[60px] mt-[80px] bg-[#2454ff] text-white text-[22px] flex items-center justify-center rounded-lg cursor-pointer hover:bg-blue-700"
+                @click="handlePress"
+              >{{ $t('login.quickStart') }}</div>
+            </div>
+            <div v-if="visible">
+              <div class="py-6 px-10 bg-white rounded-xl" :class="getMobileClass">
+                <NForm ref="formRef" :model="loginValue" :rules="rules">
+                  <div class="flex justify-center items-center mb-[18px] h-[65px]">
+                    <img
+                      :src="baseInfo && baseInfo.siteLogo ? baseInfo.siteLogo : logo"
+                      class="w-[80px] h-[80px]"
                     />
-                    <NButton
-                      :disabled="captchaDisabled"
-                      type="primary"
-                      @click="handleVerify"
-                    >{{ captchaBtnText }}</NButton>
-                  </NFormItem>
-                </div>
-                <div v-if="loginValue.loginType == 4">
-                  <NFormItem label="密码" path="password">
-                    <NInput
-                      class="login-form"
-                      v-model:value="loginValue.password"
-                      type="password"
-                      placeholder="请输入密码"
-                    />
-                  </NFormItem>
-                </div>
-                <div class="mb-1">
-                  <NFormItem :show-label="false" path="checked">
-                    <NCheckbox v-model:checked="loginValue.checked" />
-                    <span class="ml-2 text-slate-700">
-                      {{ $t('login.checkTips') }}
-                      <span
-                        @click="jumpToXieyi(1)"
-                        class="text-blue-600 cursor-pointer"
-                      >
-                        {{ $t('common.userXieyi')
-                        }}
-                      </span> 与
-                      <span @click="jumpToXieyi(2)" class="text-blue-600 cursor-pointer">
-                        {{ $t('common.privacyZhengce')
-                        }}
-                      </span>
+                    <span class="text-[40px] font-medium">
+                      {{ baseInfo && baseInfo.siteTitle ? baseInfo.siteTitle :
+                      $t('common.siteTitle') }}
                     </span>
-                  </NFormItem>
-                </div>
-                <NButton
-                  class="login-form"
-                  block
-                  type="primary"
-                  :disabled="disabled"
-                  :loading="loading"
-                  @click="handleLogin"
-                >{{ $t('login.login') }}</NButton>
-              </NForm>
+                  </div>
+                  <div v-if="appInfo.isSms == 1">
+                    <NTabs type="line" animated @update:value="handleUpdateTab">
+                      <NTabPane name="4" tab="账号密码登录"></NTabPane>
+                      <NTabPane name="3" tab="验证码登录"></NTabPane>
+                    </NTabs>
+                  </div>
+                  <div>
+                    <NFormItem label="手机号" path="tel">
+                      <NInput
+                        class="login-form"
+                        v-model:value="loginValue.tel"
+                        placeholder="请输入手机号"
+                      />
+                    </NFormItem>
+                  </div>
+                  <div v-if="loginValue.loginType == 3">
+                    <NFormItem label="验证码" path="code">
+                      <NInput
+                        class="login-form mr-3"
+                        v-model:value="loginValue.code"
+                        placeholder="请输入验证码"
+                      />
+                      <NButton
+                        :disabled="captchaDisabled"
+                        type="primary"
+                        @click="handleVerify"
+                      >{{ captchaBtnText }}</NButton>
+                    </NFormItem>
+                  </div>
+                  <div v-if="loginValue.loginType == 4">
+                    <NFormItem label="密码" path="password">
+                      <NInput
+                        class="login-form"
+                        v-model:value="loginValue.password"
+                        type="password"
+                        placeholder="请输入密码"
+                      />
+                    </NFormItem>
+                  </div>
+                  <div class="mb-1">
+                    <NFormItem :show-label="false" path="checked">
+                      <NCheckbox v-model:checked="loginValue.checked" />
+                      <span class="ml-2 text-slate-700">
+                        {{ $t('login.checkTips') }}
+                        <span
+                          @click="jumpToXieyi(1)"
+                          class="text-blue-600 cursor-pointer"
+                        >
+                          {{ $t('common.userXieyi')
+                          }}
+                        </span> 与
+                        <span @click="jumpToXieyi(2)" class="text-blue-600 cursor-pointer">
+                          {{ $t('common.privacyZhengce')
+                          }}
+                        </span>
+                      </span>
+                    </NFormItem>
+                  </div>
+                  <NButton
+                    class="login-form"
+                    block
+                    type="primary"
+                    :disabled="disabled"
+                    :loading="loading"
+                    @click="handleLogin"
+                  >{{ $t('login.login') }}</NButton>
+                </NForm>
+              </div>
             </div>
           </div>
         </div>
