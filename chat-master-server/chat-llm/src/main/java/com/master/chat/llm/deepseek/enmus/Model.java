@@ -7,7 +7,7 @@ import lombok.Getter;
  * @author: Yang
  * @date: 2025/2/17
  * @version: 1.2.4
- * Copyright Ⓒ 2024 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2024 熊扬软件开发工作室 Computer Corporation Limited All rights reserved.
  */
 @Getter
 public enum Model {

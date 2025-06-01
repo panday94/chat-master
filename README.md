@@ -2,6 +2,9 @@
 
 <p>
     <a href="#联系我们"><img src="https://img.shields.io/badge/MasterAII-blue" alt="公众号"></a>
+    <a href="https://gitee.com/panday94/chat-master" target="_blank">
+    	<img src="https://svg.hamm.cn/gitee.svg?type=star&user=panday94&project=chat-master"/>
+    </a>
 </p>
 
 ![](https://img.shields.io/badge/SpringBoot-3.3.5-brightgreen.svg) [![star](https://gitcode.com/panday94/chat-master/star/badge.svg)](https://gitcode.com/panday94/chat-master)
@@ -10,9 +13,11 @@
 > 声明：此项目发布于码云、GitCode和GitHub，基于 Apache 协议，免费且作为开源学习使用，禁止转卖、谨防受骗。如需商用必须保留版权信息，请自觉遵守。确保合法合规使用，在运营过程中产生的一切任何后果自负，与作者无关。
 
 # 项目简介
-ChatMASTER，基于AI大模型api实现的自建后端对话服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换DeepSeek(支持满血版R1模型)、月之暗面（Kimi）、豆包、OpenAI、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型，并且支持使用Ollama和Langchain进行加载本地模型及知识库问答，同时支持扣子(Coze)、Dify、Gitee AI（模力方舟）等在线api接口，LinkAI、FastGPT对接中。
+ChatMASTER，基于AI大模型api实现的自建后端对话服务，支出同步响应及流式响应，完美呈现打印机效果。支持一键切换DeepSeek(支持满血版R1模型)、月之暗面（Kimi）、豆包、OpenAI、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型，并且支持使用Ollama和Langchain进行加载本地模型及知识库问答，同时支持扣子(Coze)、Dify、Gitee AI（模力方舟）、FastGPT等在线api接口，LinkAI对接中。
 
 > 项目包含java服务端、网页端、移动端及管理后台配置。Java服务端master分支默认使用Jdk8，SpringBoot3分支使用Jdk17/20，[SpringBoot3](https://gitee.com/panday94/chat-master/tree/springboot3)
+
+> 项目基于后台管理系统配置密钥模型相关信息，无需配置配置文件。
 
 > 如果觉得项目好用，请点个Star吧！如需ChatGPT或者Claude支持，可[联系作者](#联系我们)获取。如期待更多模型支持，欢迎提交Issues👏
 
@@ -27,9 +32,10 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 欢迎小伙伴或有合作意向一起加入交流群[添加微信](#扫码进群)或提Issues。使用参考下面具体介绍：
 
-* 支持一键切换DeepSeek R1、月之暗面（Kimi）、豆包、ChatGPT(3.5、4.0)、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语等主流模型。
-* 不仅支持国内外官方模型接口，并且支持使用[Ollama](https://ollama.com/)、[Langchain-chatchat](https://github.com/chatchat-space/Langchain-Chatchat)加载本地模型调用，同时支持[扣子(Coze)](https://www.coze.cn/home)、[Gitee AI（模力方舟)](https://ai.gitee.com/)等在线api接口，Dify、LinkAI、FastGPT对接中。
+* 支持一键切换DeepSeek R1、月之暗面（Kimi）、豆包、ChatGPT(3.5、4.0)、Claude3、文心一言、通义千问、讯飞星火、智谱清言(ChatGLM)、书生浦语、腾讯混元等主流模型。
+* 不仅支持国内外官方模型接口，并且支持使用[Ollama](https://ollama.com/)、[Langchain-chatchat](https://github.com/chatchat-space/Langchain-Chatchat)加载本地模型调用，同时支持[扣子(Coze)](https://www.coze.cn/home)、[Gitee AI（模力方舟)](https://ai.gitee.com/)、[Dify](https://cloud.dify.ai/explore/apps)、[FastGPT](https://cloud.fastgpt.cn/)、[RagFlow](https://ragflow.io/)等在线api接口，[LinkAI](https://link-ai.tech/home)对接中。
 * 免费提供多种类型助手按指定prompt输出，也可在管理后台创建自定义助手模版。如需更多万花筒信息可关注公众号[扫码获取](#联系我们)获取.
+* 提供深度思考及联网搜索能力，支持Coze、Dify、FastGPT多智能体/工作流对接，同时支持文档对话。
 * 管理端端采用Vue2、Element UI，ChatMASTER网页端使用Vue3、TypeScript、NaiveUI进行开发。
 * 服务端采用Spring Boot、Spring Security + JWT、Mybatis-Plus、Lombok、 Mysql & Redis，代码通俗易懂，上手即用。
 * 完善的权限控制，权限认证使用Jwt，支持多终端认证系统。
@@ -40,9 +46,9 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 演示
 
-网页端演示地址：https://gpt.panday94.xyz 移动端可关注公众号[扫码体验](#联系我们)
+网页端演示地址：https://chatmaster.top 移动端可关注公众号[扫码体验](#联系我们)
 
-管理端演示地址：https://gpt.panday94.xyz/admin/#  密码：master chatmaster
+管理端演示地址：https://chatmaster.top/admin/#  密码：master chatmaster
 
 ![cover](./doc/file/app.png)
 ![cover](./doc/file/login.jpg)
@@ -74,12 +80,12 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 5. 支持按使用次数或者开通会员使用，也可全局判断不校验使用次数及会员，电量赠送次数或者不校验电量可在[chat-master-admin](#)中进行配置
 6. 支持配置网站信息，支持对接GPT代理地址及本地代理，支持配置微信公众号、小程序及微信支付信息，支持腾讯oss/sms和阿里云oss/sms
 7. 移动端websocket支持
+8. 支持文档/图片对话
 
 ## 待实现功能
-1. 文档对话
-2. MJ/SD
-3. 语音对话
-4. 视频生成
+1. MJ/SD
+2. 语音对话
+3. 视频生成
 
 ## 模型功能对比
 
@@ -143,7 +149,7 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 <div style="display: flex; gap: 20px;">
 	<div style="text-align: center">
-		<img style="max-width: 100%" src="doc/file/wepay.jpg" alt="微信" />
+		<img style="max-width: 100%" src="./doc/file/wepay.jpg" alt="微信" />
 		<p>WeChat Pay</p>
 	</div>
 </div>
@@ -155,11 +161,11 @@ GitHub直通车[点我传送](https://github.com/panday94/chatgpt-master)
 
 ## 扫码进群
 <div style="display: flex; gap: 20px;">
-    <img style="max-width: 100%" src="https://gpt.panday94.xyz/files/wx_group.jpg" alt="微信群" />
+    <img style="max-width: 100%" src="https://chatmaster.top/files/wx_group.jpg" alt="微信群" />
 </div>
 
 ## 许可证
 
 [Apache License 2.0](./LICENSE)
 
-Copyright (c) 2023 曜栋网络科技工作室 Limited All rights reserved
+Copyright (c) 2023 熊扬软件开发工作室 Limited All rights reserved

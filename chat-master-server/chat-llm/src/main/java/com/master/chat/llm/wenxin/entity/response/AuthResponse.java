@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * @author: Yang
  * @date: 2024/5/30
  * @version: 1.1.7
- * Copyright Ⓒ 2024 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2024 熊扬软件开发工作室 Computer Corporation Limited All rights reserved.
  */
 @Data
 @NoArgsConstructor

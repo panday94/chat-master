@@ -9,7 +9,7 @@ import lombok.Data;
  * @author: Yang
  * @date: 2024/9/19
  * @version: 1.1.8
- * Copyright Ⓒ 2024 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2024 熊扬软件开发工作室 Computer Corporation Limited All rights reserved.
  */
 @Data
 public class Usage {

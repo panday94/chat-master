@@ -1,100 +1,17 @@
-# ChatMASTER 运行部署教程
+# ChatMASTER 部署运行教程
 
-> 若需要二开建议您参考运行教程，若您是小白只想直接使用，可以查看[一键部署教程](#部署)
+> 若需要本地运行及开发建议您参考[运行](#运行适用于windowsmaclinux)教程，若您是小白只想直接使用，可以查看[一键部署](#docker-compose-一键部署推荐)
 - 后台管理系统默认密码为admin 123456 
 - 客户端账号密码自行注册，登录即注册
 
+## 目录
+- 安装Docker
+- Docker Compose [一键部署](#docker-compose-一键部署推荐)（推荐）
+- docker[部署](#docker部署)
+- 手动[部署](#手动部署)
+- 本地[运行](#运行适用于windowsmaclinux)
 
-## 运行（适用于windows/mac/linux）
-
-### 运行服务端（chat-master-server）
-- 环境安装（选择下方的下载链接或自行百度下载）
-    - Jdk1.8（[Windows](https://www.oracle.com/java/technologies/downloads/#java8) / [Linux、Mac](https://www.oracle.com/java/technologies/downloads/#java8)）
-    - Mysql5.7（[Windows](https://dev.mysql.com/downloads/installer/) / [Linux、Mac](https://dev.mysql.com/downloads/mysql/5.7.html)）
-    - Redis（[Windows](https://github.com/microsoftarchive/redis/releases) / [Linux、Mac](https://redis.io/download)）
-    - Maven（[Windows](https://maven.apache.org/download.cgi) / [Linux、Mac](https://maven.apache.org/download.cgi)）
-
-- 运行
-
-1. idea导入chat-master项目，请更换spring.profiles.active为dev
-2. 使用navicat或其他数据库管理工具导入../chat-master-server/sql/chat_master全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
-3. 版本更新时候需执行doc/sql/update.sql或者查看版本更新记录获取最新sql
-4. 更改application-dev中redis连接和mysql连接配置
-5. 启动ChatApplication中main方法
-
-- 主要实现
-    - com.master.chat.api.config.InitBean 初始化模型
-    - com.master.chat.llm.base.service.LLMService 模型接口实现
-
-### 运行管理端（chat-master-admin）
-> 如不更改配置无需运行管理端，修改密钥可在mysql数据库直接更改。
-
-> node 要求建议14.20或14.21，建议使用nvm 安装node版本，可进行切换多版本控制，[安装nvm](https://github.com/nvm-sh/nvm) 或直接安装node，[安装node](https://nodejs.org/zh-cn/download)
-
-
-```shell
-# 使用nvm安装node
-nvm install 14.21
-
-# 切换不同node版本
-nvm use 14 
-或
-nvm use 18
-
-# 前提已安装好node，进入目录
-cd chat-master-admin
-
-# 安装依赖
-npm i
-
-# 运行管理端项目
-npm run dev
-```
-
-### 运行客户端（chat-master-web）
-> 因客户端使用vue3，node 需要 `^14 || ^16 || ^18 || ^19` 版本（`node >= 14` 需要安装 [fetch polyfill](https://github.com/developit/unfetch#usage-as-a-polyfill)），建议使用nvm 安装node版本，可进行切换多版本控制，[安装nvm](https://github.com/nvm-sh/nvm) 或直接安装node，[安装node](https://nodejs.org/zh-cn/download)
-
-```shell
-# 使用nvm安装node
-nvm install 18
-
-# 切换不同node版本
-nvm use 14 
-或
-nvm use 18
-
-# 前提已安装好node，进入目录
-cd chat-master-web
-
-# 如果你没有安装过 `pnpm`
-npm install pnpm -g
-```
-- pnpm和npm 命令二选一， 安装pnpm时
-
-```shell
-# 安装依赖
-pnpm bootstrap
-
-# 运行客户端项目
-pnpm dev
-```
-- 没安装pnpm时
-
-```shell
-# 安装依赖
-npm i
-
-# 运行客户端项目
-npm run dev
-```
-
-## 部署
-
-1. docker[部署](#docker部署)
-
-2. Docker Compose [一键部署](#docker-compose-一键部署推荐)（推荐）
-
-## docker部署
+## 安装Docker
 
 > 数据库名称chat_master，账号chat_master 密码chat_master
 
@@ -124,6 +41,59 @@ mkdir -p /usr/local/data/
 # 进入文件夹
 cd /usr/local/data/
 ```
+
+## Docker Compose 一键部署（推荐）
+
+### 安装Docker
+- [安装教程](#docker部署)
+
+### 安装DockerCompose
+> 安装教程以Linux系统为例，Windows系统可下载DockerDesktop安装包，并安装。
+
+- 根据自己的系统下载对应版本的DockerCompose压缩包，如下面命令不成功，可选择手动下载。[下载地址](https://github.com/docker/compose/releases)
+```shell
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+- 如手动下载，将文件上传到/usr/local/bin 目录，并重命名
+```shell
+mv docker-compose-linux-x86_64 docker-compose
+```
+- 应用可执行权限
+```shell
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+- 测试是否安装成功
+```shell
+docker-compose --version
+[root@localhost ~]# docker-compose --version
+Docker Compose version v2.34.0
+```
+
+### 运行DockerCompose
+
+- 下载 Chat-Master代码
+> 如有需要可自行修改/server/application.yml及nginx/nginx.conf配置文件
+
+```shell
+git clone https://gitee.com/panday94/chat-master
+```
+
+- 启动
+
+```shell
+cd deploy/
+# 启动docker-compose
+docker-compose up -d
+```
+
+### 访问
+
+- 打开ChatMaster客户端，访问地址：http://你的ip
+
+- 打开ChatMaster管理端，访问地址：http://你的ip/admin
+
+## Docker部署
 
 ### 安装Docker For Mysql5.7 或自行安装
 
@@ -201,51 +171,6 @@ a684fe52d5c6   mysql:5.7                                                        
 
 - 打开ChatMaster管理端，访问地址：http://你的ip/admin
 
-## Docker Compose 一键部署（推荐）
-
-### 安装Docker
-- [安装教程](#docker部署)
-
-### 安装DockerCompose
-> 安装教程以Linux系统为例，Windows系统可下载DockerDesktop安装包，并安装。
-
-- 根据自己的系统下载对应版本的DockerCompose压缩包，如下面命令不成功，可选择手动下载。[下载地址](https://github.com/docker/compose/releases)
-```shell
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.34.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-```
-- 如手动下载，将文件上传到/usr/local/bin 目录，并重命名
-```shell
-mv docker-compose-linux-x86_64 docker-compose
-```
-- 应用可执行权限
-```shell
-sudo chmod +x /usr/local/bin/docker-compose
-```
-
-- 测试是否安装成功
-```shell
-docker-compose --version
-[root@localhost ~]# docker-compose --version
-Docker Compose version v2.34.0
-```
-
-### 运行DockerCompose
-
-- 下载 Chat-Master代码
-> 如有需要可自行修改/server/application.yml及nginx/nginx.conf配置文件
-
-```shell
-git clone https://gitee.com/panday94/chat-master
-```
-
-- 启动
-
-```shell
-cd deploy/
-# 启动docker-compose
-docker-compose up -d
-```
-
 ## 手动部署
 
 ### 打包服务端（chat-master-server）
@@ -271,6 +196,86 @@ npm run build:prod
 cp .env.development .env.production
 # 修改生成环境配置信息
 pnpm build:prod
+```
+
+## 运行（适用于windows/mac/linux）
+
+### 运行服务端（chat-master-server）
+- 环境安装（选择下方的下载链接或自行百度下载）
+    - Jdk1.8（[Windows](https://www.oracle.com/java/technologies/downloads/#java8) / [Linux、Mac](https://www.oracle.com/java/technologies/downloads/#java8)）
+    - Mysql5.7（[Windows](https://dev.mysql.com/downloads/installer/) / [Linux、Mac](https://dev.mysql.com/downloads/mysql/5.7.html)）
+    - Redis（[Windows](https://github.com/microsoftarchive/redis/releases) / [Linux、Mac](https://redis.io/download)）
+    - Maven（[Windows](https://maven.apache.org/download.cgi) / [Linux、Mac](https://maven.apache.org/download.cgi)）
+
+- 运行
+
+1. idea导入chat-master项目，请更换spring.profiles.active为dev
+2. 使用navicat或其他数据库管理工具导入../chat-master-server/sql/chat_master全量sql文件，在gpt_model配置可运行模型信息，在gpt_openkey配置模型密钥信息
+3. 版本更新时候需执行doc/sql/update.sql或者查看版本更新记录获取最新sql
+4. 更改application-dev中redis连接和mysql连接配置
+5. 启动ChatApplication中main方法
+
+- 主要实现
+    - com.master.chat.api.config.InitBean 初始化模型
+    - com.master.chat.llm.base.service.LLMService 模型接口实现
+
+### 运行管理端（chat-master-admin）
+> 如不更改配置无需运行管理端，修改密钥可在mysql数据库直接更改。
+
+> node 建议18，建议使用nvm 安装node版本，可进行切换多版本控制，[安装nvm](https://github.com/nvm-sh/nvm) 或直接安装node，[安装node](https://nodejs.org/zh-cn/download)
+
+```shell
+# 使用nvm安装node
+nvm install 18
+
+# 切换不同node版本
+nvm use 18
+
+# 前提已安装好node，进入目录
+cd chat-master-admin
+
+# 安装依赖
+npm i
+
+# 运行管理端项目
+npm run dev
+```
+
+### 运行客户端（chat-master-web）
+> 因客户端使用vue3，node 需要 `^14 || ^16 || ^18 || ^19` 版本（`node >= 14` 需要安装 [fetch polyfill](https://github.com/developit/unfetch#usage-as-a-polyfill)），建议使用nvm 安装node版本，可进行切换多版本控制，[安装nvm](https://github.com/nvm-sh/nvm) 或直接安装node，[安装node](https://nodejs.org/zh-cn/download)
+
+> 避免出现不必要问题，建议使用 node 18
+
+```shell
+# 使用nvm安装node
+nvm install 18
+
+# 切换不同node版本
+nvm use 18
+
+# 前提已安装好node，进入目录
+cd chat-master-web
+
+# 如果你没有安装过 `pnpm`
+npm install pnpm -g
+```
+- pnpm和npm 命令二选一， 安装pnpm时
+
+```shell
+# 安装依赖
+pnpm bootstrap
+
+# 运行客户端项目
+pnpm dev
+```
+- 没安装pnpm时
+
+```shell
+# 安装依赖
+npm i
+
+# 运行客户端项目
+npm run dev
 ```
 
 ## 防止爬虫抓取

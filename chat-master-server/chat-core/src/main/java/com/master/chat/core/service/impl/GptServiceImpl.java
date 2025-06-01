@@ -44,8 +44,8 @@ import java.util.List;
  * @author: Yang
  * @date: 2023/5/5
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * https://chatmaster.top
+ * Copyright Ⓒ 2023 熊扬软件开发工作室 Limited All rights reserved.
  */
 @Slf4j
 @Service

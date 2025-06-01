@@ -1,9 +1,9 @@
 {
   "name": "chat-master",
-  "version": "1.1.0",
+  "version": "1.2.2",
   "private": false,
   "description": "ChatMaster",
-  "author": "panday <suzui94@gmail.com>",
+  "author": "熊扬软件开发工作室",
   "keywords": [
     "ChatGPT",
     "Deepseek",
@@ -15,7 +15,7 @@
     "讯飞星火",
     "Kimi",
     "月之暗面",
-    "腾讯会员"
+    "腾讯混元"
   ],
   "scripts": {
     "dev": "vite",

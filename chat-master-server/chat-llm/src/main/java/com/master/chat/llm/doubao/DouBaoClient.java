@@ -22,8 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author: Yang
  * @date: 2025/2/16
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * https://chatmaster.top
+ * Copyright Ⓒ 2023 熊扬软件开发工作室 Limited All rights reserved.
  */
 @Data
 public class DouBaoClient implements KeyUpdater {

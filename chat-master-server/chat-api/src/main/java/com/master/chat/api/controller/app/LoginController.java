@@ -36,8 +36,8 @@ import java.util.Set;
  * @author: Yang
  * @date: 2023/5/4
  * @version: 1.0.0
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * https://chatmaster.top
+ * Copyright Ⓒ 2023 熊扬软件开发工作室 Limited All rights reserved.
  */
 @RestController(value = "appLoginController")
 @RequestMapping("/app")

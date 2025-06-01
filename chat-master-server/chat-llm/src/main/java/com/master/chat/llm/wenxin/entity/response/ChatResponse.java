@@ -11,8 +11,8 @@ import java.io.Serializable;
  *
  * @author: Yang
  * @date: 2023/9/7
- * https://www.panday94.xyz
- * Copyright Ⓒ 2023 曜栋网络科技工作室 Limited All rights reserved.
+ * https://chatmaster.top
+ * Copyright Ⓒ 2023 熊扬软件开发工作室 Limited All rights reserved.
  */
 @Data
 @ToString

@@ -6,7 +6,7 @@ package com.master.chat.client.service;
  * @author: Yang
  * @date: 2024/5/29
  * @version: 1.0.0
- * Copyright Ⓒ 2024 Master Computer Corporation Limited All rights reserved.
+ * Copyright Ⓒ 2024 熊扬软件开发工作室 Computer Corporation Limited All rights reserved.
  */
 public interface BaseConfigService {
 
